@@ -1,0 +1,44 @@
+{
+  "project_info": {
+    "project_number": "861114963652",
+    "firebase_url": "https://ootd-2ea21.firebaseio.com",
+    "project_id": "ootd-2ea21",
+    "storage_bucket": "ootd-2ea21.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:861114963652:android:fc42e6ca4af08513",
+        "android_client_info": {
+          "package_name": "itmediaengineering.duksung.ootd"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "861114963652-auc5de0uqt77vc3q0aq2gtcs4m9ovpb0.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "itmediaengineering.duksung.ootd",
+            "certificate_hash": "abf72b5176f46ac6977abe7d5758c0e288792d63"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDwEPuwtOtAl7sLy7tGzg9mzY7bm6ScZwg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "861114963652-bv1aptkblv0r5p73hqkqhonhj8stj9bt.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
