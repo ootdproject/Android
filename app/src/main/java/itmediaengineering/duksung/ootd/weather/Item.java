@@ -14,21 +14,15 @@ public class Item {
     @SerializedName("category")
     @Expose
     private String category;
-    @SerializedName("fcstDate")
-    @Expose
-    private Integer fcstDate;
-    @SerializedName("fcstTime")
-    @Expose
-    private Integer fcstTime;
-    @SerializedName("fcstValue")
-    @Expose
-    private Integer fcstValue;
     @SerializedName("nx")
     @Expose
     private Integer nx;
     @SerializedName("ny")
     @Expose
     private Integer ny;
+    @SerializedName("obsrValue")
+    @Expose
+    private Double obsrValue;
 
     public Integer getBaseDate() {
         return baseDate;
@@ -54,30 +48,6 @@ public class Item {
         this.category = category;
     }
 
-    public Integer getFcstDate() {
-        return fcstDate;
-    }
-
-    public void setFcstDate(Integer fcstDate) {
-        this.fcstDate = fcstDate;
-    }
-
-    public Integer getFcstTime() {
-        return fcstTime;
-    }
-
-    public void setFcstTime(Integer fcstTime) {
-        this.fcstTime = fcstTime;
-    }
-
-    public Integer getFcstValue() {
-        return fcstValue;
-    }
-
-    public void setFcstValue(Integer fcstValue) {
-        this.fcstValue = fcstValue;
-    }
-
     public Integer getNx() {
         return nx;
     }
@@ -92,6 +62,14 @@ public class Item {
 
     public void setNy(Integer ny) {
         this.ny = ny;
+    }
+
+    public Double getObsrValue() {
+        return obsrValue;
+    }
+
+    public void setObsrValue(Double obsrValue) {
+        this.obsrValue = obsrValue;
     }
 
 }

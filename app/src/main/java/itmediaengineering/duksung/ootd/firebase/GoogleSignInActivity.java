@@ -41,6 +41,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 import itmediaengineering.duksung.ootd.BaseActivity;
+import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 
 /**
@@ -55,6 +56,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     // [START declare_auth]
     private FirebaseAuth mAuth;
     // [END declare_auth]
+
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     //private GoogleApiClient mGoogleApiClient;
     private GoogleSignInClient mGoogleSignInClient;
@@ -77,6 +80,25 @@ public class GoogleSignInActivity extends BaseActivity implements
         findViewById(R.id.signOutButton).setOnClickListener(this);
         findViewById(R.id.disconnectButton).setOnClickListener(this);
 
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    // User is signed in
+                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                    Intent intent = new Intent(GoogleSignInActivity.this, MainActivity.class);
+                    //intent.putExtra("Token", getString(R.string.WEATHER_API_KEY));
+                    startActivity(intent);
+                    finish();
+                } else {
+                    // User is signed out
+                    Log.d(TAG, "onAuthStateChanged:signed_out");
+                }
+                // ...
+            }
+        };
+
         // [START initialize_auth]
         mAuth = FirebaseAuth.getInstance();
         // [END initialize_auth]
@@ -96,6 +118,7 @@ public class GoogleSignInActivity extends BaseActivity implements
     @Override
     public void onStart() {
         super.onStart();
+        mAuth.addAuthStateListener(mAuthListener);
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);

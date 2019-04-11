@@ -1,5 +1,6 @@
 package itmediaengineering.duksung.ootd;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -10,21 +11,21 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.kwabenaberko.openweathermaplib.constants.Lang;
-import com.kwabenaberko.openweathermaplib.constants.Units;
-import com.kwabenaberko.openweathermaplib.implementation.OpenWeatherMapHelper;
-import com.kwabenaberko.openweathermaplib.implementation.callbacks.CurrentWeatherCallback;
-import com.kwabenaberko.openweathermaplib.models.currentweather.CurrentWeather;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import itmediaengineering.duksung.ootd.api.WeatherGridChange;
+import itmediaengineering.duksung.ootd.main.presenter.LocationContract;
+import itmediaengineering.duksung.ootd.main.presenter.LocationPresenter;
+import itmediaengineering.duksung.ootd.main.presenter.WeatherPresenter;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity{
 
     public static final String TAG = "TAG MESSAGE";
 
@@ -32,10 +33,19 @@ public class MainActivity extends AppCompatActivity {
     Button button1;
     @BindView(R.id.txtResult)
     TextView txtResult;
+    @BindView(R.id.locationView)
+    TextView locationView;
 
-    private int cnt = 1;
+    protected WeatherPresenter weatherPresenter;
+    protected LocationPresenter locationPresenter;
+
+    private WeatherGridChange gridChange;
+
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private static final int MIN_DISTANCE = 50;
+    private int cnt = 1;
+    private Date today;
+    private SimpleDateFormat date;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +53,25 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        final OpenWeatherMapHelper helper = new OpenWeatherMapHelper(getString(R.string.OPEN_WEATHER_MAP_API_KEY));
-        helper.setUnits(Units.METRIC);
-        helper.setLang(Lang.KOREAN);
+        locationPresenter = new LocationPresenter();
+        weatherPresenter = new WeatherPresenter();
+
+        gridChange = new WeatherGridChange();
+        //weatherPresenter.attachView(this);
+
+        today = new Date();
+        date = new SimpleDateFormat("yyyyMMdd kk:mm");
+        final String nowDate = date.format(today).split(" ")[0];
+        final String nowTime;
+        String tmpTime1 = date.format(today).split(" ")[1].split(":")[0];
+        String tmpTime2 = date.format(today).split(" ")[1].split(":")[1];
+        if(Integer.valueOf(tmpTime2) < 30){
+            int tmp = Integer.valueOf(tmpTime1)-1;
+            nowTime = String.valueOf(tmp) + "00";
+        }else{
+            nowTime = tmpTime1 + "00";
+        }
+
 
         final LocationManager locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         final String locationProvider = LocationManager.NETWORK_PROVIDER;
@@ -54,8 +80,8 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if ( Build.VERSION.SDK_INT >= 26 &&
-                        ContextCompat.checkSelfPermission( getApplicationContext(), android.Manifest.permission.ACCESS_FINE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-                    ActivityCompat.requestPermissions( MainActivity.this, new String[] {  android.Manifest.permission.ACCESS_FINE_LOCATION  },
+                        ContextCompat.checkSelfPermission( getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
+                    ActivityCompat.requestPermissions( MainActivity.this, new String[] {  Manifest.permission.ACCESS_COARSE_LOCATION  },
                             0 );
                 }
                 else{
@@ -65,28 +91,28 @@ public class MainActivity extends AppCompatActivity {
                     double latitude = lastKnownLocation.getLatitude();
                     double altitude = lastKnownLocation.getAltitude();
 
-                    txtResult.setText("위치정보 : " + provider + "\n" +
+                    WeatherGridChange.LatXLngY latXLngY = gridChange.convertGRID_GPS(0, latitude, longitude);
+
+                    locationPresenter.getLocation(String.valueOf(longitude), String.valueOf(latitude));
+                    locationView.setText("위치 정보 표시 할 곳");
+
+                    txtResult.setText(
+                            "시간 정보\n" +
+                            "오늘 날짜 : " + nowDate + "\n" +
+                            "현재 시간 : " + nowTime + "\n\n" +
+                            "위치정보 : " + provider + "\n" +
                             "위도 : " + longitude + "\n" +
                             "경도 : " + latitude + "\n" +
                             "고도  : " + altitude + "\n" +
-                            "위치정보 호출횟수  : " + cnt);
-
-                    helper.getCurrentWeatherByGeoCoordinates(latitude, longitude, new CurrentWeatherCallback() {
-                        @Override
-                        public void onSuccess(CurrentWeather currentWeather) {
-                            Log.v(TAG, "Coordinates: " + currentWeather.getCoord().getLat() + ", "+currentWeather.getCoord().getLon() +"\n"
-                                    +"Weather Description: " + currentWeather.getWeather().get(0).getDescription() + "\n"
-                                    +"Temperature: " + currentWeather.getMain().getTempMax()+"\n"
-                                    +"Wind Speed: " + currentWeather.getWind().getSpeed() + "\n"
-                                    +"City, Country: " + currentWeather.getName() + ", " + currentWeather.getSys().getCountry()
+                            "위치정보 호출횟수  : " + cnt + "\n" +
+                            "변환된 위도 : " + latXLngY.getX() + "\n" +
+                            "변환된 경도 : " + latXLngY.getY()
                             );
-                        }
 
-                        @Override
-                        public void onFailure(Throwable throwable) {
-                            Log.v(TAG, throwable.getMessage());
-                        }
-                    });
+                    weatherPresenter.getWeather(nowDate,
+                            nowTime,
+                            String.valueOf(latXLngY.getX()),
+                            String.valueOf(latXLngY.getY()));
 
                     // Register the listener with the Location Manager to receive location updates
                     /*locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,
@@ -98,7 +124,6 @@ public class MainActivity extends AppCompatActivity {
                             TWO_MINUTES,
                             MIN_DISTANCE,
                             locationListener);
-
                 }
 
                 // Remove the listener you previously added

@@ -4,18 +4,10 @@
     <string name="default_web_client_id">861114963652-bv1aptkblv0r5p73hqkqhonhj8stj9bt.apps.googleusercontent.com</string>
 
     <string name="OPEN_WEATHER_MAP_API_KEY">c80c463cb124732acd07fb082ed0eb9e</string>
+    <string name="WEATHER_API_KEY">YiQAt0qslOK7ouRDTtsC8dQUQFbz932VYRiQnBgBYJttueOdXIPEP0CdD1ugDxuKnwyE6gGwNrCGXtA5fC32pA%3D%3D</string>
 
     <string name="label_google_sign_in">Firebase + Google Sign In</string>
     <string name="desc_google_sign_in">Use a Google Sign In credential to authenticate with Firebase.</string>
-
-    <string name="label_facebook_login">Firebase + Facebook Login</string>
-    <string name="desc_facebook_login">Use a Facebook Login credential to authenticate with Firebase.</string>
-
-    <string name="label_twitter_login">Firebase + Twitter Login</string>
-    <string name="desc_twitter_login">Use a Twitter Login credential to authenticate with Firebase.</string>
-
-    <string name="label_emailpassword">Email/Password Authentication</string>
-    <string name="desc_emailpassword">Use an email and password to authenticate with Firebase.</string>
 
     <string name="label_passwordless">Passwordless Authentication</string>
     <string name="desc_passwordless">Use only an email to authenticate with Firebase.</string>
@@ -65,23 +57,6 @@
 
     <string name="google_status_fmt">Google User: %s</string>
     <string name="google_title_text">Google Sign In</string>
-
-    <string name="facebook_status_fmt">Facebook User: %s</string>
-    <string name="facebook_title_text">Facebook Login</string>
-
-    <string name="emailpassword_status_fmt">Email User: %1$s (verified: %2$b)</string>
-    <string name="emailpassword_title_text">Email and Password</string>
-
-    <string name="passwordless_status_fmt">Email User: %1$s (verified: %2$b)</string>
-    <string name="passwordless_title_text">Passwordless Sign In</string>
-    <string name="status_email_not_sent">Send link to your email to get started.</string>
-    <string name="status_email_sent">Link sent, check your email to continue.</string>
-    <string name="status_link_found">Link received, enter email to sign in.</string>
-
-    <string name="phone_title_text">Phone Number</string>
-
-    <string name="twitter_status_fmt">Twitter User: %s</string>
-    <string name="twitter_title_text">Twitter Login</string>
 
     <string name="firebaseui_status_fmt">Firebase User: %s</string>
     <string name="firebaseui_title_text">FirebaseUI Auth</string>

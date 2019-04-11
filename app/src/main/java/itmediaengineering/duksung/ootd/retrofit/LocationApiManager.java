@@ -5,14 +5,14 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class WeatherApiManager {
-    private static String url = "http://newsky2.kma.go.kr/";
+public class LocationApiManager {
+    private static String url = "https://dapi.kakao.com/";
     private static Retrofit retrofit = null;
-    private static WeatherApi weatherApi;
+    private static LocationApi locationApi;
 
     // called every time while " setting up a Retrofit interface "
-    public static WeatherApi getWeatherRetrofitInstance() {
-        if (weatherApi == null) {
+    public static LocationApi getLocationRetrofitInstance() {
+        if (locationApi == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -25,23 +25,9 @@ public class WeatherApiManager {
                     .client(okHttpClient)
                     .build();
             // create an instance of our WeatherApi interface.
-            return weatherApi = retrofit.create(WeatherApi.class);
+            return locationApi = retrofit.create(LocationApi.class);
         }
-        return weatherApi;
+        return locationApi;
     }
+
 }
-
-/*public class OpenWeatherMapClient {
-    private static final String BASE_URL = "http://api.openweathermap.org";
-    private static Retrofit retrofit = null;
-    public static Retrofit getClient(){
-        if (retrofit == null){
-            retrofit = new Retrofit.Builder()
-                    .baseUrl(BASE_URL)
-                    .addConverterFactory(GsonConverterFactory.create())
-                    .build();
-        }
-        return retrofit;
-    }
-
-}*/
