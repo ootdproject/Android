@@ -1,11 +1,13 @@
 package itmediaengineering.duksung.ootd.main.presenter;
 
-public class LocationContract {
+import itmediaengineering.duksung.ootd.location.Document;
+
+public interface LocationContract {
     interface View {
         void toast(String msg);
         void onUnauthorizedError();
         void onUnknownError();
-        void onSuccessGetLocation();
+        void onSuccessGetLocation(Document document);
         void onConnectFail();
         //void startDetailActivity(Data item);
         void onNotFound();

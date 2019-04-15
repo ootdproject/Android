@@ -1,17 +1,13 @@
 package itmediaengineering.duksung.ootd.main.model;
 
-import android.util.Log;
-
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.location.Document;
-import itmediaengineering.duksung.ootd.location.LocationResponse;
+import itmediaengineering.duksung.ootd.data.location.Document;
+import itmediaengineering.duksung.ootd.data.location.LocationResponse;
 import itmediaengineering.duksung.ootd.retrofit.LocationApi;
 import itmediaengineering.duksung.ootd.retrofit.LocationApiManager;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
-import itmediaengineering.duksung.ootd.retrofit.WeatherApi;
-import itmediaengineering.duksung.ootd.retrofit.WeatherApiManager;
-import itmediaengineering.duksung.ootd.weather.WeatherResponse;
+import itmediaengineering.duksung.ootd.data.weather.WeatherResponse;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;

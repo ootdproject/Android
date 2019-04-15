@@ -34,7 +34,7 @@ public class WeatherPresenter
         if (code == 200 && items != null) {
             Log.d(TAG, items.get(3).getCategory() + items.get(3).getObsrValue());
             //adapterModel.addItems(new ArrayList(data));
-            //view.onSuccessGetList();
+            view.onSuccessGetWeather(items.get(3));
             return;
         }
         view.onUnknownError();

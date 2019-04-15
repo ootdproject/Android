@@ -1,0 +1,4 @@
+package itmediaengineering.duksung.ootd.feed.model;
+
+public class FeedRetrofitModel {
+}

@@ -21,11 +21,15 @@ import java.util.Date;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.api.WeatherGridChange;
+import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.main.presenter.LocationContract;
 import itmediaengineering.duksung.ootd.main.presenter.LocationPresenter;
+import itmediaengineering.duksung.ootd.main.presenter.WeatherContract;
 import itmediaengineering.duksung.ootd.main.presenter.WeatherPresenter;
+import itmediaengineering.duksung.ootd.data.weather.Item;
 
-public class MainActivity extends AppCompatActivity{
+public class MainActivity extends AppCompatActivity
+                        implements LocationContract.View, WeatherContract.View {
 
     public static final String TAG = "TAG MESSAGE";
 
@@ -35,6 +39,8 @@ public class MainActivity extends AppCompatActivity{
     TextView txtResult;
     @BindView(R.id.locationView)
     TextView locationView;
+    @BindView(R.id.now_weather_Info)
+    TextView nowWeatherInfo;
 
     protected WeatherPresenter weatherPresenter;
     protected LocationPresenter locationPresenter;
@@ -54,7 +60,9 @@ public class MainActivity extends AppCompatActivity{
         ButterKnife.bind(this);
 
         locationPresenter = new LocationPresenter();
+        locationPresenter.attachView(this);
         weatherPresenter = new WeatherPresenter();
+        weatherPresenter.attachView(this);
 
         gridChange = new WeatherGridChange();
         //weatherPresenter.attachView(this);
@@ -160,4 +168,39 @@ public class MainActivity extends AppCompatActivity{
         public void onProviderDisabled(String provider) {
         }
     };
+
+    @Override
+    public void toast(String msg) {
+
+    }
+
+    @Override
+    public void onUnauthorizedError() {
+
+    }
+
+    @Override
+    public void onUnknownError() {
+
+    }
+
+    @Override
+    public void onSuccessGetWeather(Item item) {
+        nowWeatherInfo.setText("현재 온도 : "+String.valueOf(item.getObsrValue()));
+    }
+
+    @Override
+    public void onSuccessGetLocation(Document document) {
+        locationView.setText(document.getAddressName());
+    }
+
+    @Override
+    public void onConnectFail() {
+
+    }
+
+    @Override
+    public void onNotFound() {
+
+    }
 }

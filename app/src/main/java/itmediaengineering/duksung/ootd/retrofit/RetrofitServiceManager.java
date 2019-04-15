@@ -5,14 +5,14 @@ import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class LocationApiManager {
-    private static String url = "https://dapi.kakao.com/";
+public class RetrofitServiceManager {
+    private static String url = "우리 서버 url";
     private static Retrofit retrofit = null;
-    private static LocationApi locationApi;
+    private static RetrofitService retrofitService;
 
     // called every time while " setting up a Retrofit interface "
-    public static LocationApi getLocationRetrofitInstance() {
-        if (locationApi == null) {
+    public static RetrofitService getRetrofitInstance() {
+        if (retrofitService == null) {
             OkHttpClient.Builder builder = new OkHttpClient.Builder();
             HttpLoggingInterceptor interceptor = new HttpLoggingInterceptor();
             interceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
@@ -25,17 +25,8 @@ public class LocationApiManager {
                     .client(okHttpClient)
                     .build();
             // create an instance of our WeatherApi interface.
-            return locationApi = retrofit.create(LocationApi.class);
+            return retrofitService = retrofit.create(RetrofitService.class);
         }
-        return locationApi;
+        return retrofitService;
     }
-
-    /*public static void setUrl(String url) {
-        LocationApiManager.url = url;
-    }
-
-    public static <S> S createService(Class<S> serviceClass) {
-        return retrofit.create(serviceClass);
-    }*/
-
 }

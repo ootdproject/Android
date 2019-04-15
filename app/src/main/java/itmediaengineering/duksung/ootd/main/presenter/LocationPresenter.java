@@ -31,6 +31,7 @@ public class LocationPresenter
             return;
         }*/
         if (code == 200 && documents != null) {
+            view.onSuccessGetLocation(documents.get(0));
             Log.d(TAG, documents.get(0).getAddressName());
             //adapterModel.addItems(new ArrayList(data));
             //view.onSuccessGetLocation();
@@ -50,12 +51,12 @@ public class LocationPresenter
     }
 
     @Override
-        public void attachView(LocationContract.View view) {
+    public void attachView(LocationContract.View view) {
             this.view = view;
         }
 
-        @Override
-        public void detachView() {
+    @Override
+    public void detachView() {
             this.view = null;
         }
 }

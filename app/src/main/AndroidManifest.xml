@@ -1,16 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
           package="itmediaengineering.duksung.ootd">
-    
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <!-- NETWORK_PROVIDER 만 지원 -->
-    <uses-feature android:name="android.hardware.location.network" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- NETWORK_PROVIDER & GPS_PROVIDER 둘다 지원 -->
-    <!--<uses-feature android:name="android.hardware.location.network" />
-    <uses-feature android:name="android.hardware.location.gps" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />-->
+
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.INTERNET"/> <!-- NETWORK_PROVIDER 만 지원 -->
+    <uses-feature android:name="android.hardware.location.network"/>
+
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
     <application
         android:allowBackup="true"
@@ -19,6 +15,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+        <activity android:name=".feed.view.FeedActivity">
+        </activity>
         <activity android:name=".firebase.GoogleSignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
@@ -27,7 +25,6 @@
             </intent-filter>
         </activity>
         <activity android:name=".MainActivity">
-
         </activity>
     </application>
 

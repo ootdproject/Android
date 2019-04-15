@@ -1,18 +1,12 @@
 package itmediaengineering.duksung.ootd.retrofit;
 
-import itmediaengineering.duksung.ootd.location.LocationResponse;
-import itmediaengineering.duksung.ootd.weather.WeatherResponse;
-import okhttp3.MultipartBody;
+import itmediaengineering.duksung.ootd.data.weather.WeatherResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
-import retrofit2.http.Header;
-import retrofit2.http.Multipart;
-import retrofit2.http.POST;
-import retrofit2.http.Part;
 import retrofit2.http.Query;
 
 public interface WeatherApi {
-    String WEATHER_SUB_URL = "service/SecndSrtpdFrcstInfoService2/ForecastGrib";
+    String WEATHER_SUB_URL = "service/SecndSrtpFrcstInfoService2/ForecastGridb";
 
     @GET(WEATHER_SUB_URL)
     Call<WeatherResponse> getNowWeather(
