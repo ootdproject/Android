@@ -4,7 +4,7 @@ import android.util.Log;
 
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.location.Document;
+import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.main.model.LocationCallback;
 import itmediaengineering.duksung.ootd.main.model.LocationRetrofitModel;
 

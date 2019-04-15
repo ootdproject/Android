@@ -1,6 +1,6 @@
 package itmediaengineering.duksung.ootd.main.presenter;
 
-import itmediaengineering.duksung.ootd.location.Document;
+import itmediaengineering.duksung.ootd.data.location.Document;
 
 public interface LocationContract {
     interface View {

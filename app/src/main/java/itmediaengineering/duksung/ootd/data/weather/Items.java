@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.weather;
+package itmediaengineering.duksung.ootd.data.weather;
 
 import java.util.List;
 import com.google.gson.annotations.Expose;

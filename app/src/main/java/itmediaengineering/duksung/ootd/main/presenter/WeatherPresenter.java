@@ -6,7 +6,7 @@ import java.util.List;
 
 import itmediaengineering.duksung.ootd.main.model.WeatherCallback;
 import itmediaengineering.duksung.ootd.main.model.WeatherRetrofitModel;
-import itmediaengineering.duksung.ootd.weather.Item;
+import itmediaengineering.duksung.ootd.data.weather.Item;
 
 public class WeatherPresenter
         implements WeatherContract.Presenter, WeatherCallback.RetrofitCallback {

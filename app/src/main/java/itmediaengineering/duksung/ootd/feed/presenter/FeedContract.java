@@ -1,4 +1,25 @@
 package itmediaengineering.duksung.ootd.feed.presenter;
 
-public class FeedContract {
+import itmediaengineering.duksung.ootd.feed.adapter.FeedAdapterContract;
+
+public interface FeedContract {
+    interface View {
+        void toast(String msg);
+        //void onUnauthorizedError();
+        //void onUnknownError();
+        void onSuccessGetList();
+        //void onConnectFail();
+        //void startDetailActivity(Post post);
+        //void onNotFound();
+    }
+
+    interface Presenter {
+        void getFeeds(String search, int sort);
+        //void getCreatedParties();
+        //void getLikedFeeds();
+        void attachView(View view);
+        void detachView();
+        void setAdapterView(FeedAdapterContract.View adapterView);
+        void setAdapterModel(FeedAdapterContract.Model adapterModel);
+    }
 }

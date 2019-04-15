@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.weather;
+package itmediaengineering.duksung.ootd.data.weather;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

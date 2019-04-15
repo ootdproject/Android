@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.location;
+package itmediaengineering.duksung.ootd.data.location;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

@@ -1,6 +1,6 @@
 package itmediaengineering.duksung.ootd.main.presenter;
 
-import itmediaengineering.duksung.ootd.weather.Item;
+import itmediaengineering.duksung.ootd.data.weather.Item;
 
 public interface WeatherContract {
     interface View {
