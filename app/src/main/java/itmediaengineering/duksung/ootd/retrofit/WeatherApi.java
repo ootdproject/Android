@@ -6,7 +6,7 @@ import retrofit2.http.GET;
 import retrofit2.http.Query;
 
 public interface WeatherApi {
-    String WEATHER_SUB_URL = "service/SecndSrtpFrcstInfoService2/ForecastGridb";
+    String WEATHER_SUB_URL = "service/SecndSrtpdFrcstInfoService2/ForecastGrib";
 
     @GET(WEATHER_SUB_URL)
     Call<WeatherResponse> getNowWeather(

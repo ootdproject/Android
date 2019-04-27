@@ -10,20 +10,6 @@ public class WeatherGridChange extends AppCompatActivity {
 
     public static int TO_GRID = 0;
     //public static int TO_GPS = 1;
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-
-        LatXLngY tmp = convertGRID_GPS(TO_GRID, 37.579871128849334, 126.98935225645432);
-        LatXLngY tmp2 = convertGRID_GPS(TO_GRID, 35.101148844565955, 129.02478725562108);
-        LatXLngY tmp3 = convertGRID_GPS(TO_GRID, 33.500946412305076, 126.54663058817043);
-
-        Log.e(">>", "x = " + tmp.x + ", y = " + tmp.y);
-        Log.e(">>", "x = " + tmp2.x + ", y = " + tmp2.y);
-        Log.e(">>", "x = " + tmp3.x + ", y = " + tmp3.y);
-    }
-
 
     public LatXLngY convertGRID_GPS(int mode, double lat_X, double lng_Y)
     {

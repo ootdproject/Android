@@ -1,20 +1,23 @@
 package itmediaengineering.duksung.ootd.main.presenter;
 
 import itmediaengineering.duksung.ootd.data.location.Document;
+import itmediaengineering.duksung.ootd.data.weather.Item;
 
-public interface LocationContract {
+public interface MainContract {
     interface View {
         void toast(String msg);
         void onUnauthorizedError();
         void onUnknownError();
         void onSuccessGetLocation(Document document);
+        void onSuccessGetWeather(Item item);
         void onConnectFail();
         //void startDetailActivity(Data item);
         void onNotFound();
     }
 
     interface Presenter {
-        void getLocation(String x, String y);
+        void getData(String x, String y);
+        //void getWeather(String baseDate, String baseTime, String nx, String ny);
         void attachView(View view);
         void detachView();
     }

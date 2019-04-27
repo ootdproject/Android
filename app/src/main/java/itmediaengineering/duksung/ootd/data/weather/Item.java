@@ -10,7 +10,7 @@ public class Item {
     private Integer baseDate;
     @SerializedName("baseTime")
     @Expose
-    private Integer baseTime;
+    private String baseTime;
     @SerializedName("category")
     @Expose
     private String category;
@@ -32,11 +32,11 @@ public class Item {
         this.baseDate = baseDate;
     }
 
-    public Integer getBaseTime() {
+    public String getBaseTime() {
         return baseTime;
     }
 
-    public void setBaseTime(Integer baseTime) {
+    public void setBaseTime(String baseTime) {
         this.baseTime = baseTime;
     }
 
