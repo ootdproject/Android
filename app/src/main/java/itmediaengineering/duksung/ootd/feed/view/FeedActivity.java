@@ -1,10 +1,11 @@
 package itmediaengineering.duksung.ootd.feed.view;
 
+import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,8 +22,8 @@ public class FeedActivity extends AppCompatActivity
 
     protected FeedAdapter adapter;
     protected FeedPresenter presenter;
-    private int sort = 0;
-    private String searchStr = "";
+    //private int sort = 0;
+    //private String searchStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,7 +34,35 @@ public class FeedActivity extends AppCompatActivity
         adapter = new FeedAdapter(this);
         postRecyclerView.setLayoutManager(new LinearLayoutManager(this));
         postRecyclerView.setAdapter(adapter);
+
         presenter = new FeedPresenter();
+        presenter.attachView(this);
+        presenter.setAdapterModel(adapter);
+        presenter.setAdapterView(adapter);
+
+        presenter.getFeed();
+
+        //galleryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
+        //galleryAdapter = new GalleryAdapter(getContext());
+
+        /*galleryAdapter.setOnItemClickListener((holder, view, position) -> {
+            GalleryItem item = galleryAdapter.getItem(position);
+
+            if (item.isPhoto()) {
+                Intent intent = new Intent(getContext(), GalleryViewActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                intent.putExtra("url", item.getMediaUrl());
+                startActivity(intent);
+            } else {
+                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getMediaUrl()));
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+
+                startActivity(intent);
+            }
+        });*/
+
+        //galleryRecyclerView.setAdapter(galleryAdapter);
     }
 
     @Override

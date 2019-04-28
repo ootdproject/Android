@@ -19,9 +19,9 @@ public class FeedPresenter
     private FeedRetrofitModel retrofitModel;
     private FeedAdapterContract.View adapterView;
     private FeedAdapterContract.Model adapterModel;
-    private String search;
-    private int sort;
-    private int page;
+    //private String search;
+    //private int sort;
+    //private int page;
 
     public FeedPresenter(){
         retrofitModel = new FeedRetrofitModel();
@@ -29,22 +29,22 @@ public class FeedPresenter
     }
 
     @Override
-    public void getFeeds(String search, int sort) {
-        this.search = search;
-        this.sort = sort;
-        page = 1;
+    public void getFeed() {
+        //this.search = search;
+        //this.sort = sort;
+        //page = 1;
         adapterModel.clearFeed();
-        retrofitModel.getPosts(search, sort, page);
+        retrofitModel.getPosts();
     }
 
-    @Override
+    /*@Override
     public void onLoad(int page) {
         if (this.page == page)
             return;
         this.page = page;
         Log.d(TAG, "page : " + page);
         retrofitModel.getPosts(search, sort, page);
-    }
+    }*/
 
     @Override
     public void onSuccess(int code, List<Post> posts) {
@@ -60,7 +60,7 @@ public class FeedPresenter
 
         if (code == ResponseCode.SUCCESS && posts != null) {
             //Log.d(TAG, posts.get(0).toString());
-            adapterModel.addFeeds(new ArrayList(posts));
+            adapterModel.addPosts(new ArrayList(posts));
             view.onSuccessGetList();
             return;
         }

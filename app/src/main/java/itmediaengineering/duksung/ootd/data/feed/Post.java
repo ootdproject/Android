@@ -4,6 +4,10 @@ import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 public class Post {
+    public Post(String memberId, String postUrl) {
+        this.memberId = memberId;
+        this.postUrl = postUrl;
+    }
 
     @SerializedName("post_id")
     @Expose
@@ -11,6 +15,9 @@ public class Post {
     @SerializedName("member_id")
     @Expose
     private String memberId;
+    @SerializedName("postUrl")
+    @Expose
+    private String postUrl;
     @SerializedName("post_created_at")
     @Expose
     private String postCreatedAt;
@@ -36,6 +43,10 @@ public class Post {
     public void setMemberId(String memberId) {
         this.memberId = memberId;
     }
+
+    public String getPostUrl() { return postUrl; }
+
+    public void setPostUrl(String postUrl) { this.postUrl = postUrl; }
 
     public String getPostCreatedAt() {
         return postCreatedAt;

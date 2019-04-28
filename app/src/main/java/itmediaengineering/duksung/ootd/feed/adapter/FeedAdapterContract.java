@@ -9,9 +9,9 @@ public interface FeedAdapterContract {
     }
 
     interface Model {
-        ArrayList getFeeds();
-        void setFeeds(ArrayList items);
-        void addFeeds(ArrayList items);
+        //void getPosts();
+        //void setFeeds(ArrayList items);
+        void addPosts(ArrayList items);
         void clearFeed();
     }
 }

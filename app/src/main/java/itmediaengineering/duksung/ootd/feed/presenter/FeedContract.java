@@ -14,8 +14,8 @@ public interface FeedContract {
     }
 
     interface Presenter {
-        void getFeeds(String search, int sort);
-        //void getCreatedParties();
+        void getFeed();
+        //void getCreatedPosts();
         //void getLikedFeeds();
         void attachView(View view);
         void detachView();

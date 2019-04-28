@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
@@ -14,6 +15,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         implements FeedAdapterContract.View, FeedAdapterContract.Model{
     private static final String TAG = FeedAdapter.class.getSimpleName();
     private ArrayList<Post> items;
+    private AdapterView.OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
     private Context context;
 
@@ -25,7 +27,7 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
     @NonNull
     @Override
     public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        return new FeedViewHolder(context, parent);
+        return new FeedViewHolder(context, parent, onItemClickListener);
     }
 
     @Override
@@ -52,21 +54,16 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         notifyDataSetChanged();
     }
 
-    @Override
-    public ArrayList getFeeds() {
-        return items;
-    }
-
-    @Override
+    /*@Override
     public void setFeeds(ArrayList items) {
         Log.d(TAG, "setItems");
         this.items.clear();
         this.items = items;
         notifyDataSetChanged();
-    }
+    }*/
 
     @Override
-    public void addFeeds(ArrayList items) {
+    public void addPosts(ArrayList items) {
         this.items.addAll(items);
         notifyDataSetChanged();
     }
