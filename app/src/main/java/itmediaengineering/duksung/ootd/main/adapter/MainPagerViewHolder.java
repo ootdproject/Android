@@ -1,6 +1,7 @@
 package itmediaengineering.duksung.ootd.main.adapter;
 
 import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -63,6 +64,8 @@ public class MainPagerViewHolder extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.recommend_list_item, container, false);
         ButterKnife.bind(this, rootView);
 
+        //recommendImg.setImageDrawable(getActivity().getDrawable(R.drawable.recmd_img_2));
+
         //Bundle bundle = getArguments();
 
         /*if(bundle !=null) {
@@ -86,4 +89,5 @@ public class MainPagerViewHolder extends Fragment {
 
         return rootView;
     }
+
 }

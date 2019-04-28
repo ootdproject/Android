@@ -24,6 +24,12 @@ public class MainPagerAdapter extends FragmentStatePagerAdapter {
         return items.get(position);
     }
 
+    /*@Override
+    public float getPageWidth(int position) {
+        return (0.9f);
+//        return super.getPageWidth(position);
+    }*/
+
     @Override
     public int getCount() {
         return items.size();

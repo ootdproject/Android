@@ -97,8 +97,8 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             pagerAdapter.addItem(MainPagerViewHolder.newInstance());
         }
 
-        viewPager.setPadding(40, 0, 40, 0);
-        viewPager.setPageMargin(getResources().getDisplayMetrics().widthPixels / -9);
+        //viewPager.setPadding(150, 0, 150, 0);
+        //viewPager.setPageMargin(getResources().getDisplayMetrics().widthPixels / -9);
 
         fm.beginTransaction()
                 .add(R.id.pager, MainRecommendFragment.newInstance(), "mainFragment")

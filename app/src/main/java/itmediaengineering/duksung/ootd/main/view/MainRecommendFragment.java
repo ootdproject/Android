@@ -62,8 +62,8 @@ public class MainRecommendFragment extends Fragment {
             pagerAdapter.addItem(MainPagerViewHolder.newInstance());
         }
 
-        viewPager.setPadding(40, 0, 40, 0);
-        viewPager.setPageMargin(getResources().getDisplayMetrics().widthPixels / -9);
+        viewPager.setPadding(100, 0, 100, 0);
+        viewPager.setPageMargin(getResources().getDisplayMetrics().widthPixels / 9);
 
         return rootView;
     }

@@ -16,7 +16,7 @@ public class FeedRetrofitModel {
     private RetrofitService retrofitService;
 
     public FeedRetrofitModel() {
-        retrofitService = RetrofitServiceManager.getRetrofitInstance();
+        //retrofitService = RetrofitServiceManager.getRetrofitInstance();
     }
 
     public void setCallback(FeedRetrofitCallback.RetrofitCallback callback) {

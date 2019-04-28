@@ -58,15 +58,12 @@
             android:id="@+id/now_weather_Info"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
             android:fontFamily="sans-serif-condensed-light"
             android:textColor="@android:color/white"
             android:textSize="56sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/imageView"
             app:layout_constraintTop_toBottomOf="@+id/time_info"
             tools:text="날씨 정보"/>
 
@@ -88,14 +85,34 @@
         <android.support.v4.view.ViewPager
             android:id="@+id/pager"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="350dp"
             android:layout_marginTop="40dp"
+            android:layout_gravity="bottom"
+            android:overScrollMode="never"
             android:clipToPadding="false"
+            android:paddingEnd="60dp"
+            android:paddingLeft="60dp"
+            android:paddingRight="60dp"
+            android:paddingStart="60dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/now_weather_Info">
         </android.support.v4.view.ViewPager>
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="89dp"
+            android:layout_height="79dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="8dp"
+            android:tint="#ffffff"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.352"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/time_info"
+            app:srcCompat="@drawable/cloudy1"/>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>
