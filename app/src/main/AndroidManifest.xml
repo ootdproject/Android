@@ -15,7 +15,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".feed.view.FeedActivity">
+        <activity android:name=".main.tab.feed.view.FeedActivity">
         </activity>
         <activity android:name=".firebase.GoogleSignInActivity">
             <intent-filter>

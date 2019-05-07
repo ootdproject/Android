@@ -9,14 +9,14 @@
     android:orientation="horizontal"
     cardview:cardBackgroundColor="#00FFFFFF"
     cardview:cardCornerRadius="6dp"
-    cardview:cardElevation="5dp"
+    cardview:cardElevation="0dp"
     cardview:cardPreventCornerOverlap="true"
     cardview:cardUseCompatPadding="true"
     cardview:contentPadding="15dp">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical">
 
@@ -36,7 +36,7 @@
             android:fontFamily="sans-serif-condensed"
             android:text="당신을 위한 추천"
             android:textAlignment="center"
-            android:textSize="24sp"/>
+            android:textSize="18sp"/>
 
     </LinearLayout>
 
