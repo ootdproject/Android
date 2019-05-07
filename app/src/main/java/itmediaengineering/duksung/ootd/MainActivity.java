@@ -31,7 +31,8 @@ import itmediaengineering.duksung.ootd.main.presenter.MainContract;
 import itmediaengineering.duksung.ootd.data.weather.Item;
 import itmediaengineering.duksung.ootd.main.view.MainRecommendFragment;
 
-public class MainActivity extends AppCompatActivity implements MainContract.View {
+public class MainActivity extends AppCompatActivity
+        implements MainContract.View {
 
     public static final String TAG = "TAG MESSAGE";
 
@@ -70,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         locationProvider = LocationManager.NETWORK_PROVIDER;
 
         //가짜 온도
-        nowWeatherInfo.setText("18" + "\u00B0");
+        nowWeatherInfo.setText("14" + "\u00B0");
 
         //가짜 위치
-        locationView.setText("송파구");
+        locationView.setText("도봉구 쌍문동");
 
         button1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -131,14 +132,14 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             // 호출 잠시 중단
             //mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
 
-            txtResult.setText(
+            /*txtResult.setText(
                     "시간 정보\n" +
                             "위치정보 : " + provider + "\n" +
                             "경도 : " + latitude + "\n" +
                             "위도 : " + longitude + "\n" +
                             //"고도  : " + altitude + "\n" +
                             "위치정보 호출횟수  : " + cnt + "\n"
-            );
+            );*/
 
             locationManager.requestLocationUpdates(
                     locationProvider,
@@ -159,11 +160,11 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             double latitude = location.getLatitude();
             double altitude = location.getAltitude();
 
-            txtResult.setText("바뀐위치정보 : " + provider + "\n" +
+            /*txtResult.setText("바뀐위치정보 : " + provider + "\n" +
                     "위도 : " + longitude + "\n" +
                     "경도 : " + latitude + "\n" +
                     "고도  : " + altitude + "\n" +
-                    "위치정보 호출횟수  : " + cnt);
+                    "위치정보 호출횟수  : " + cnt);*/
         }
 
         public void onStatusChanged(String provider, int status, Bundle extras) { }

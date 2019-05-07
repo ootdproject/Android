@@ -87,10 +87,7 @@ public class GoogleSignInActivity extends BaseActivity implements
                 if (user != null) {
                     // User is signed in
                     Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                    Intent intent = new Intent(GoogleSignInActivity.this, MainActivity.class);
-                    //intent.putExtra("Token", getString(R.string.WEATHER_API_KEY));
-                    startActivity(intent);
-                    finish();
+
                 } else {
                     // User is signed out
                     Log.d(TAG, "onAuthStateChanged:signed_out");
@@ -218,11 +215,15 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+            Intent intent = new Intent(GoogleSignInActivity.this, MainActivity.class);
+            //intent.putExtra("Token", getString(R.string.WEATHER_API_KEY));
+            startActivity(intent);
+            finish();
+            /*mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.signInButton).setVisibility(View.GONE);
-            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
+            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);*/
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
