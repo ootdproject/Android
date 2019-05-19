@@ -60,6 +60,10 @@ public class MainFragment extends Fragment
     private static final int MIN_DISTANCE = 50;
     private int cnt = 1;
 
+    public static MainFragment newInstance(){
+        return new MainFragment();
+    }
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -77,15 +81,12 @@ public class MainFragment extends Fragment
         //가짜 위치
         locationView.setText("도봉구 쌍문동");
 
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 호출 중단
-                //onResume();
+        button1.setOnClickListener(v -> {
+            // 호출 중단
+            //onResume();
 
-                // Remove the listener you previously added
-                //locationManager.removeUpdates(locationListener);
-            }
+            // Remove the listener you previously added
+            //locationManager.removeUpdates(locationListener);
         });
 
         CardPagerAdapter pagerAdapter = new CardPagerAdapter(getActivity().getSupportFragmentManager());

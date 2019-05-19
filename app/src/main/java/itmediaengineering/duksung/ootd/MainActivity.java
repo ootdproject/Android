@@ -14,6 +14,7 @@ import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.main.adapter.MainPagerAdapter;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 import itmediaengineering.duksung.ootd.main.tab.home.view.MainFragment;
+import itmediaengineering.duksung.ootd.main.tab.mypage.MyPageFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,10 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
     private void setupViewPager(ViewPager viewPager) {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(new MainFragment(), "First");
-        adapter.addFragment(new FeedFragment(), "Second");
-        adapter.addFragment(new MainFragment(), "Third");
-        adapter.addFragment(new MainFragment(), "Fourth");
+        adapter.addFragment(MainFragment.newInstance(), "First");
+        adapter.addFragment(FeedFragment.newInstance(), "Second");
+        adapter.addFragment(new FeedFragment(), "Third");
+        adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
+        viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(adapter);
     }
 

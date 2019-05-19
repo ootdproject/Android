@@ -1,20 +1,4 @@
-package itmediaengineering.duksung.ootd.firebase;
-
-/**
- * Copyright 2016 Google Inc. All Rights Reserved.
- *
- * Licensed under the Apache License, Version 2.0 (the "License");
- * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS,
- * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- * See the License for the specific language governing permissions and
- * limitations under the License.
- */
+package itmediaengineering.duksung.ootd.login;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -24,13 +8,11 @@ import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
-import com.google.android.gms.auth.api.Auth;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.common.api.ApiException;
-import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -40,13 +22,15 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnCheckedChanged;
+import butterknife.OnClick;
 import itmediaengineering.duksung.ootd.BaseActivity;
 import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
+import itmediaengineering.duksung.ootd.intro.IntroActivity;
 
-/**
- * Demonstrate Firebase Authentication using a Google ID Token.
- */
 public class GoogleSignInActivity extends BaseActivity implements
         View.OnClickListener {
 
@@ -57,70 +41,79 @@ public class GoogleSignInActivity extends BaseActivity implements
     private FirebaseAuth mAuth;
     // [END declare_auth]
 
+    // ?
     private FirebaseAuth.AuthStateListener mAuthListener;
 
     //private GoogleApiClient mGoogleApiClient;
     private GoogleSignInClient mGoogleSignInClient;
-    private TextView mStatusTextView;
-    private TextView mDetailTextView;
+
+    @BindView(R.id.status)
+    TextView mStatusTextView;
+    @BindView(R.id.detail)
+    TextView mDetailTextView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google);
+        ButterKnife.bind(this);
 
+        // ?
         FirebaseApp.initializeApp(GoogleSignInActivity.this);
-
-        // Views
-        mStatusTextView = findViewById(R.id.status);
-        mDetailTextView = findViewById(R.id.detail);
 
         // Button listeners
         findViewById(R.id.signInButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
         findViewById(R.id.disconnectButton).setOnClickListener(this);
 
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // User is signed in
-                    Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-
-                } else {
-                    // User is signed out
-                    Log.d(TAG, "onAuthStateChanged:signed_out");
-                }
-                // ...
+        // ?
+        mAuthListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // User is signed in
+                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
+                /*Intent intent = new Intent(GoogleSignInActivity.this, IntroActivity.class);
+                intent.putExtra("userId", user.getUid());
+                startActivity(intent);
+                finish();*/
+            } else {
+                // User is signed out
+                Log.d(TAG, "onAuthStateChanged:signed_out");
             }
+            // ...
         };
-
-        // [START initialize_auth]
-        mAuth = FirebaseAuth.getInstance();
-        // [END initialize_auth]
 
         // [START config_signin]
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                // 여기서 전달하는 정보는 firebase 와 android app 사이의 인증 토큰
                 .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         // [END config_signin]
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+
+        // [START initialize_auth]
+        mAuth = FirebaseAuth.getInstance();
+        // [END initialize_auth]
     }
 
     // [START on_start_check_user]
     @Override
     public void onStart() {
         super.onStart();
-        mAuth.addAuthStateListener(mAuthListener);
+        //mAuth.addAuthStateListener(mAuthListener);
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
     // [END on_start_check_user]
+
+    @Override public void onStop() {
+        super.onStop();
+        // if (mAuthListener != null) mAuth.removeAuthStateListener(mAuthListener);
+    }
 
     // [START onactivityresult]
     @Override
@@ -154,25 +147,22 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         mAuth.signInWithCredential(credential)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        // [END_EXCLUDE]
+                .addOnCompleteListener(this, task -> {
+                    if (task.isSuccessful()) {
+                        // Sign in success, update UI with the signed-in user's information
+                        Log.d(TAG, "signInWithCredential:success");
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        updateUI(user);
+                    } else {
+                        // If sign in fails, display a message to the user.
+                        Log.w(TAG, "signInWithCredential:failure", task.getException());
+                        Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                        updateUI(null);
                     }
+
+                    // [START_EXCLUDE]
+                    hideProgressDialog();
+                    // [END_EXCLUDE]
                 });
     }
     // [END auth_with_google]
@@ -190,12 +180,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         // Google sign out
         mGoogleSignInClient.signOut().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
+                task -> updateUI(null));
     }
 
     private void revokeAccess() {
@@ -204,19 +189,14 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         // Google revoke access
         mGoogleSignInClient.revokeAccess().addOnCompleteListener(this,
-                new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        updateUI(null);
-                    }
-                });
+                task -> updateUI(null));
     }
 
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            Intent intent = new Intent(GoogleSignInActivity.this, MainActivity.class);
-            //intent.putExtra("Token", getString(R.string.WEATHER_API_KEY));
+            Intent intent = new Intent(GoogleSignInActivity.this, IntroActivity.class);
+            intent.putExtra("userId", user.getUid());
             startActivity(intent);
             finish();
             /*mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));

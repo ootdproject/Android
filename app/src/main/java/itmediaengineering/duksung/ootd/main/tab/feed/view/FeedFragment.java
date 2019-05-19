@@ -17,8 +17,7 @@ import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapter;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedContract;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedPresenter;
 
-public class FeedFragment extends Fragment
-        implements FeedContract.View {
+public class FeedFragment extends Fragment implements FeedContract.View {
 
     @BindView(R.id.post_recycler_view)
     RecyclerView postRecyclerView;
@@ -27,6 +26,10 @@ public class FeedFragment extends Fragment
     protected FeedPresenter presenter;
     //private int sort = 0;
     //private String searchStr = "";
+
+    public static FeedFragment newInstance(){
+        return new FeedFragment();
+    }
 
     @Nullable
     @Override
