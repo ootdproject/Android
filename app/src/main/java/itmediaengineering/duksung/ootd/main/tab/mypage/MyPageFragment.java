@@ -25,17 +25,20 @@ import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.MyPagePresenter
 public class MyPageFragment extends Fragment implements MyPageContract.View {
     private static final String TAG = MyPageFragment.class.getSimpleName();
 
-    @BindView(R.id.mypage_user_image)
+    /*@BindView(R.id.mypage_user_image)
     ImageView userImg;
     @BindView(R.id.mypage_user_nickname)
     TextView userNick;
     @BindView(R.id.mypage_user_description)
-    TextView userDscrp;
+    TextView userDscrp;*/
     @BindView(R.id.mypage_recycler_view)
     RecyclerView myPageRecyclerView;
 
     protected MyPageGalleryAdapter adapter;
     protected MyPagePresenter presenter;
+
+    private final int TYPE_HEADER = 0;
+    private final int TYPE_ITEM = 1;
 
     public static MyPageFragment newInstance(){
         return new MyPageFragment();
@@ -49,8 +52,25 @@ public class MyPageFragment extends Fragment implements MyPageContract.View {
                 .inflate(R.layout.fragment_my_page, container, false);
         ButterKnife.bind(this, rootView);
 
-        adapter = new MyPageGalleryAdapter(getContext());//, items);
-        myPageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
+        adapter = new MyPageGalleryAdapter();//, items);
+
+        GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 3);
+        layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
+            @Override
+            public int getSpanSize(int i) {
+                switch(adapter.getItemViewType(i)){
+                    case TYPE_HEADER:
+                        return 3;
+                    case TYPE_ITEM:
+                        return 1;
+                    default:
+                        return 1;
+                }
+            }
+        });
+
+        myPageRecyclerView.setLayoutManager(layoutManager);
+        //myPageRecyclerView.setLayoutManager(new GridLayoutManager(getActivity(), 3));
         myPageRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {

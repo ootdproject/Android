@@ -20,7 +20,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:focusableInTouchMode="false"
+        android:focusedByDefault="false"
         android:textColor="@drawable/selector_click_tab"
-        android:textIsSelectable="true"
+        android:textIsSelectable="false"
         android:textSize="12sp"/>
 </LinearLayout>
