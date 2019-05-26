@@ -15,6 +15,7 @@ import itmediaengineering.duksung.ootd.main.adapter.MainPagerAdapter;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 import itmediaengineering.duksung.ootd.main.tab.home.view.MainFragment;
 import itmediaengineering.duksung.ootd.main.tab.mypage.MyPageFragment;
+import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -42,7 +43,7 @@ public class MainActivity extends AppCompatActivity {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(MainFragment.newInstance(), "First");
         adapter.addFragment(FeedFragment.newInstance(), "Second");
-        adapter.addFragment(new FeedFragment(), "Third");
+        adapter.addFragment(UploadFragment.newInstance(), "Third");
         adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
         viewPager.setOffscreenPageLimit(4);
         viewPager.setAdapter(adapter);
@@ -83,5 +84,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+    }
+
+    public interface onKeyBackPressedListener{
+        void onBack();
+    }
+
+    private onKeyBackPressedListener onKeyBackPressedListener;
+    public void setOnBackPressedListener(onKeyBackPressedListener listener){
+        onKeyBackPressedListener = listener;
     }
 }

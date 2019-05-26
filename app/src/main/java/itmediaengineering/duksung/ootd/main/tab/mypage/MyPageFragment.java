@@ -11,8 +11,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import butterknife.BindView;
@@ -25,12 +23,6 @@ import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.MyPagePresenter
 public class MyPageFragment extends Fragment implements MyPageContract.View {
     private static final String TAG = MyPageFragment.class.getSimpleName();
 
-    /*@BindView(R.id.mypage_user_image)
-    ImageView userImg;
-    @BindView(R.id.mypage_user_nickname)
-    TextView userNick;
-    @BindView(R.id.mypage_user_description)
-    TextView userDscrp;*/
     @BindView(R.id.mypage_recycler_view)
     RecyclerView myPageRecyclerView;
 
@@ -60,9 +52,9 @@ public class MyPageFragment extends Fragment implements MyPageContract.View {
             public int getSpanSize(int i) {
                 switch(adapter.getItemViewType(i)){
                     case TYPE_HEADER:
-                        return 3;
+                        return 3;       // 3개로 나눈 영역 중에 3개를 합쳐 사용하겠다
                     case TYPE_ITEM:
-                        return 1;
+                        return 1;       // 3개로 나눈 영역 중에 1개를 사용하겠다
                     default:
                         return 1;
                 }

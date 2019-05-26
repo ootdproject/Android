@@ -52,7 +52,7 @@ public class MainRecommendFragment extends Fragment {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.recommned_list, container, false);
         ButterKnife.bind(this, rootView);
 
-        CardPagerAdapter pagerAdapter = new CardPagerAdapter(getActivity().getSupportFragmentManager());
+        /*CardPagerAdapter pagerAdapter = new CardPagerAdapter(getActivity().getSupportFragmentManager());
         viewPager.setAdapter(pagerAdapter);
         viewPager.setOffscreenPageLimit(5);
 
@@ -62,7 +62,7 @@ public class MainRecommendFragment extends Fragment {
 
         viewPager.setPadding(100, 0, 100, 0);
         viewPager.setPageMargin(getResources().getDisplayMetrics().widthPixels / 9);
-
+*/
         return rootView;
     }
 }

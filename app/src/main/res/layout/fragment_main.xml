@@ -63,15 +63,21 @@
         android:layout_width="match_parent"
         android:layout_height="270dp"
         android:layout_gravity="bottom"
-        android:layout_marginTop="16dp"
         android:clipToPadding="false"
         android:overScrollMode="never"
-        android:paddingStart="60dp"
-        android:paddingEnd="60dp"
+        android:paddingStart="30dp"
+        android:paddingEnd="30dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline4"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/now_weather_Info">
+        app:layout_constraintStart_toStartOf="parent">
     </android.support.v4.view.ViewPager>
+
+    <android.support.constraint.Guideline
+        android:id="@+id/guideline4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.85"/>
 
 </android.support.constraint.ConstraintLayout>
