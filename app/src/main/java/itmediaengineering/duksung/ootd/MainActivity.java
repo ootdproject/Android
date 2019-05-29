@@ -17,6 +17,11 @@ import itmediaengineering.duksung.ootd.main.tab.home.view.MainFragment;
 import itmediaengineering.duksung.ootd.main.tab.mypage.MyPageFragment;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 
+/*
+탭을 구현하는 MainActivity
+탭과 함께 뷰페이져 구성하여 각 탭들의 상태유지를 생각해야 함
+*/
+
 public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG MESSAGE";

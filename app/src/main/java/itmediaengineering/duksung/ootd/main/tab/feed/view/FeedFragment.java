@@ -17,6 +17,12 @@ import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapter;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedContract;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedPresenter;
 
+/*
+FeedFragment는 모든 사용자들에 대한 포스트를 요청하고 보여주는 탭
+recyclerView를 관리해야하고
+현재 서버와 포스트를 통신하는 구조가 완료되지 않았음
+*/
+
 public class FeedFragment extends Fragment implements FeedContract.View {
 
     @BindView(R.id.post_recycler_view)

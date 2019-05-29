@@ -23,6 +23,11 @@ import itmediaengineering.duksung.ootd.intro.presenter.IntroConnectContract;
 import itmediaengineering.duksung.ootd.intro.presenter.IntroConnectPresenter;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 
+/*
+구글 로그인 이후 받아오는 아이디 값과 사용자가 입력한 정보를 서버에 넘겨야 하는 액티비티
+서버와 연결이 안된 관계로 presenter의 로그인 함수 호출 없이 main 액티비티로 넘어가도록 설정되어 있음
+*/
+
 public class IntroActivity extends AppCompatActivity implements IntroConnectContract.View{//, ObserverCallback {
 
     private static final String TAG = IntroActivity.class.getSimpleName();
@@ -47,6 +52,7 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
         setContentView(R.layout.activity_intro);
         ButterKnife.bind(this);
 
+        // 구글 로그인 이후 사용자 아이디가 생성된 것을 전달받으면 인텐트에 실어서 보냄
         Intent intent = getIntent();
         userId = intent.getStringExtra("userId");
 
@@ -74,10 +80,13 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
         }
 
         Log.d("test",nickName + " " + gender);
+
         // 일단은 서버 저장 없이 진행했을 때
         //presenter.login(userId, nickName, gender);
+
         Intent intent = new Intent(IntroActivity.this, MainActivity.class);
         startActivity(intent);
+        Toast.makeText(this, "가입을 축하합니다!", Toast.LENGTH_SHORT).show();
         finish();
     }
 

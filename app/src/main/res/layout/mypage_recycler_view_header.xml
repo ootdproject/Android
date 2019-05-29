@@ -24,7 +24,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="54dp"
         android:layout_marginEnd="24dp"
-        android:text="Nickname"
+        android:text="Duksung"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/mypage_user_image"
         app:layout_constraintTop_toTopOf="parent"/>
@@ -37,7 +37,7 @@
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:maxLines="3"
-        android:text="WHO AM I"
+        android:text="아미공 사학년이에오"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toEndOf="@+id/mypage_user_image"

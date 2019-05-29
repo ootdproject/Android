@@ -3,6 +3,10 @@ package itmediaengineering.duksung.ootd.data.location;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
+/*
+카카오 api를 통해 법정동 행정동 및 한글 위치 정보를 받을 수 있도록 구성한 객체
+*/
+
 public class Document {
 
     @SerializedName("region_type")

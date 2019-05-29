@@ -103,7 +103,7 @@ public class FeedViewHolder extends RecyclerView.ViewHolder
         feedItemLikeButton.setOnClickListener(v -> {
             if(feedItemLikeButton.isSelected())
                 feedItemLikeButton.setSelected(false);
-
+            else
             feedItemLikeButton.setSelected(true);
         });
 

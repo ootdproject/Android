@@ -31,6 +31,11 @@ import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.intro.IntroActivity;
 
+/*
+구글 로그인 및 자동로그인 담당하는 액티비티
+마이페이지에 로그아웃 기능을 구현해야 함
+*/
+
 public class GoogleSignInActivity extends BaseActivity implements
         View.OnClickListener {
 

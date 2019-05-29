@@ -20,6 +20,15 @@ import itmediaengineering.duksung.ootd.main.tab.mypage.adapter.MyPageGalleryAdap
 import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.MyPageContract;
 import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.MyPagePresenter;
 
+/*
+MyPageFragment에서는 사용자 정보 페이지(myPage) 탭을 보여줌
+서버에서 받아온 사용자 업로드 이미지를 갤러리 형식으로 보여주어야 하며
+로그아웃 및 사용자 자기소개를 수정할 수 있도록 구성하여야 함
+--------------------------------------------------------------------
+현재 플리커에서 받아오는 이미지를 recyclerView와 GridView를 통해서 보여주고 있음
+Recycler 뷰에 헤더를 달아서 사용자 정보 부분과 갤러리 부분을 통합하였음
+*/
+
 public class MyPageFragment extends Fragment implements MyPageContract.View {
     private static final String TAG = MyPageFragment.class.getSimpleName();
 

@@ -13,7 +13,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.view.LayoutInflater;
@@ -34,6 +33,14 @@ import itmediaengineering.duksung.ootd.main.tab.home.adapter.CardPagerAdapter;
 import itmediaengineering.duksung.ootd.main.tab.home.adapter.CardPagerViewHolder;
 import itmediaengineering.duksung.ootd.main.tab.home.presenter.MainContract;
 import itmediaengineering.duksung.ootd.main.tab.home.presenter.MainPresenter;
+
+/*MainFragment는 home 탭을 보여준다
+날씨정보와 위치정보 추천받은 이미지 카드뷰 페이저를 관리해야하며
+추가적으로 서버로 부터 받은 추천 데이터의 이미지와 해시태그 값에 대해 웹 검색을 연결해야 함
+-------------------------------------------------------------------------
+현재 위치정보와 날씨정보 요청은 날씨정보 트래픽 용량 부족으로 막아놓은 상태
+서버 추천알고리즘 미완성으로 통신 없이 가상 이미지만 뿌려주고 있음
+*/
 
 public class MainFragment extends Fragment
         implements MainContract.View {
@@ -76,7 +83,7 @@ public class MainFragment extends Fragment
         locationProvider = LocationManager.NETWORK_PROVIDER;
 
         //가짜 온도
-        nowWeatherInfo.setText("14" + "\u00B0");
+        nowWeatherInfo.setText("19" + "\u00B0");
 
         //가짜 위치
         locationView.setText("도봉구 쌍문동");

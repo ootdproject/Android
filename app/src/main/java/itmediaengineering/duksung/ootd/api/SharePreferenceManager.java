@@ -4,6 +4,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+/*
+이곳에는 앱 내에서 저장하고 있어야 할 목록을 관리
+- 사용자 token
+- 사용자 nickname
+- 사용자 자기소개?
+*/
 public class SharePreferenceManager {
     private static SharedPreferences sharedPreferences;
     private static SharedPreferences.Editor editor;

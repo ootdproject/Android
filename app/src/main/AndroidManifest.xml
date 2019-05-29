@@ -20,8 +20,6 @@
         android:theme="@style/AppTheme">
         <activity android:name=".intro.IntroActivity">
         </activity>
-        <activity android:name=".main.tab.feed.view.FeedActivity">
-        </activity>
         <activity android:name=".login.GoogleSignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>

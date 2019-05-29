@@ -26,6 +26,16 @@ import itmediaengineering.duksung.ootd.R;
 
 import static android.app.Activity.RESULT_OK;
 
+/*
+UploadFragment는 사용자가 이미지를 업로드하는 탭
+갤러리와 카메라를 통해서 업로드를 해야하고 사진을 뷰에 보여준뒤
+NEXT 버튼을 누르면 올려진 tflite 파일을 통해 자동태깅을 한 뒤
+서버로 태그값과 날씨값, 이미지를 함께 전달해야 함
+---------------------------------------------------
+카메라로 이미지 가져오기 아직 구현안되었음
+tflite 파일 올려서 실험해봐야함
+*/
+
 public class UploadFragment extends Fragment
                     implements MainActivity.onKeyBackPressedListener {
     public static final String TAG = UploadFragment.class.getSimpleName();
