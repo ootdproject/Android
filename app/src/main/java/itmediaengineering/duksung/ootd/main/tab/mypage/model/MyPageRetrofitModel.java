@@ -29,7 +29,7 @@ public class MyPageRetrofitModel {
 
     public void getGallery() {
 
-        Call<GalleryResponse> call = retrofitService.getGallery(
+        /*Call<GalleryResponse> call = retrofitService.getGallery(
                         API_KEY,
                         FETCH_RECENTS_METHOD,
                         "json",
@@ -55,6 +55,6 @@ public class MyPageRetrofitModel {
                 t.printStackTrace();
                 callback.onFailure();
             }
-        });
+        });*/
     }
 }

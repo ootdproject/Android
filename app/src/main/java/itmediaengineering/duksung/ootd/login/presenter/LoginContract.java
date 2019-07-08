@@ -1,17 +1,20 @@
-package itmediaengineering.duksung.ootd.intro.presenter;
+package itmediaengineering.duksung.ootd.login.presenter;
 
 import itmediaengineering.duksung.ootd.data.User;
 
-public interface IntroConnectContract {
+public interface LoginContract {
     interface View {
         void toast(String msg);
+        void startIntroActivity();
         void startMainActivity(int code);//, UserResponse response);
+        void onUnauthorizedError();
+        void onUnknownError();
         void connectFail();
     }
 
     interface Presenter {
         void attachView(View view);
         void detachView();
-        void join(User user);
+        void login(String userId);
     }
 }

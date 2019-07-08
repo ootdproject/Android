@@ -4,21 +4,18 @@ import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
 
-import java.util.concurrent.atomic.AtomicBoolean;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
+import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.intro.presenter.IntroConnectContract;
 import itmediaengineering.duksung.ootd.intro.presenter.IntroConnectPresenter;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
@@ -81,8 +78,9 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
 
         Log.d("test",nickName + " " + gender);
 
-        // 일단은 서버 저장 없이 진행했을 때
-        //presenter.login(userId, nickName, gender);
+        // 서버로 사용자 정보 전송
+        User user = new User(gender, nickName, null, userId, null);
+        presenter.join(user);
 
         Intent intent = new Intent(IntroActivity.this, MainActivity.class);
         startActivity(intent);
@@ -95,13 +93,14 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
         if (code == ResponseCode.BAD_REQUEST) {
             toast("아이디 / 비밀번호를 다시 확인해 주세요.");
             return;
+        } else if (code == ResponseCode.CREATED) {
+            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+            //intent.putExtra("Token", response.getResult().getToken());
+            //intent.putExtra("UserNickname", response.getResult().getUsername());
+            //intent.putExtra("UserGender", response.getResult().getProfile_picture());
+            startActivity(intent);
+            finish();
         }
-        Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-        //intent.putExtra("Token", response.getResult().getToken());
-        //intent.putExtra("UserNickname", response.getResult().getUsername());
-        //intent.putExtra("UserGender", response.getResult().getProfile_picture());
-        startActivity(intent);
-        finish();
     }
 
     @Override

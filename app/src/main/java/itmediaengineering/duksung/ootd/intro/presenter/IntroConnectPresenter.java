@@ -1,5 +1,6 @@
 package itmediaengineering.duksung.ootd.intro.presenter;
 
+import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.intro.model.IntroConnectCallback;
 import itmediaengineering.duksung.ootd.intro.model.IntroConnectRetrofitModel;
 
@@ -19,6 +20,16 @@ public class IntroConnectPresenter
         view.startMainActivity(code);//, response);
     }
 
+    /*@Override
+    public void onSuccessJoin(int code) {
+        view.startLoginActivity(code);
+    }
+
+    @Override
+    public void onFailure() {
+        view.setProgressbar(false);
+    }*/
+
     @Override
     public void onFailure() {
         view.connectFail();
@@ -35,7 +46,7 @@ public class IntroConnectPresenter
     }
 
     @Override
-    public void login(String userId, String email, String password) {
-        //retrofitModel.login(email, password);
+    public void join(User user) {
+        retrofitModel.join(user);
     }
 }
