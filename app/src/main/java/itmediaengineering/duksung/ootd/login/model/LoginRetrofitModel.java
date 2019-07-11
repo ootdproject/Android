@@ -34,7 +34,7 @@ public class LoginRetrofitModel {
                     callback.onSuccess(ResponseCode.NOT_FOUND);
                     return;
                 }
-                callback.onSuccess(ResponseCode.SUCCESS);
+                callback.onSuccess(ResponseCode.CREATED);
             }
 
             @Override

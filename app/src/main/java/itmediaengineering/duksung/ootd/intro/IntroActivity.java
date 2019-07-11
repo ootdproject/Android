@@ -79,7 +79,7 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
         Log.d("test",nickName + " " + gender);
 
         // 서버로 사용자 정보 전송
-        User user = new User(gender, nickName, null, userId, null);
+        User user = new User(gender, nickName, "GOOGLE", "userId", userId);
         presenter.join(user);
 
         Intent intent = new Intent(IntroActivity.this, MainActivity.class);

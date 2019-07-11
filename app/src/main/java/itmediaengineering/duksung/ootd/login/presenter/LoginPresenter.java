@@ -37,7 +37,7 @@ public class LoginPresenter
             return;
         }
 
-        if (code == ResponseCode.SUCCESS) {
+        if (code == ResponseCode.CREATED) {
             view.startMainActivity(code);
             return;
         }
