@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.home.adapter;
+package itmediaengineering.duksung.ootd.main.tab.category.adapter;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;

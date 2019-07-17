@@ -1,9 +1,9 @@
-package itmediaengineering.duksung.ootd.main.tab.home.presenter;
+package itmediaengineering.duksung.ootd.main.tab.category.presenter;
 
 import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.data.weather.Item;
 
-public interface MainContract {
+public interface CategoryContract {
     interface View {
         void toast(String msg);
         void onUnauthorizedError();

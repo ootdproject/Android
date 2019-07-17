@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.home.view;
+package itmediaengineering.duksung.ootd.main.tab.category.view;
 
 import android.content.Context;
 import android.os.Bundle;
@@ -13,10 +13,8 @@ import android.view.ViewGroup;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
-import itmediaengineering.duksung.ootd.main.tab.home.adapter.CardPagerAdapter;
-import itmediaengineering.duksung.ootd.main.tab.home.adapter.CardPagerViewHolder;
 
-public class MainRecommendFragment extends Fragment {
+public class CategoryRecommendFragment extends Fragment {
     //bundle = getArguments();
     //movieDataArrayList = bundle.getParcelableArrayList("movie_list_simple_data");
 
@@ -36,9 +34,9 @@ public class MainRecommendFragment extends Fragment {
     //수도 있다. 싱글턴(singleton) 패턴을 따를 경우，이 메서드는 인자 없이 항상
     //같은 객체를 반환한다.
     //newlnstance： getlnstance와 같지만 호출할 때마다 다른 객체를 반환한다.
-    public static MainRecommendFragment newInstance(){
+    public static CategoryRecommendFragment newInstance(){
 
-        MainRecommendFragment fragment = new MainRecommendFragment();
+        CategoryRecommendFragment fragment = new CategoryRecommendFragment();
         //Bundle args = new Bundle();
         //args.putParcelableArrayList("movie_list_simple_data", data);
         //fragment.setArguments(args);

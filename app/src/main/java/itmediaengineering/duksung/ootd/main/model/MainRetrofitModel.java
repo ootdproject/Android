@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.home.model;
+package itmediaengineering.duksung.ootd.main.model;
 
 import android.util.Log;
 
@@ -51,74 +51,21 @@ public class MainRetrofitModel {
                     Log.d("Parameter Error", response.body().getResponse().getHeader().getResultMsg());
                     return;
                 }*/
-//                if (response.code() == ResponseCode.UNAUTHORIZED) {
+//
+//                 if (response.code() == ResponseCode.UNAUTHORIZED) {
 //                    callback.onSuccess(ResponseCode.UNAUTHORIZED, null);
 //                    return;
 //                }
+                // 날씨 정보도 요청
                 List<Document> documents = response.body().getDocuments();
-                if(documents != null) {
+                /*if(documents != null) {
                     getWeather(nx, ny, documents);
-                }
-                //callback.onSuccess(ResponseCode.SUCCESS, documents);
+                }*/
+                callback.onSuccess(ResponseCode.SUCCESS, documents);
             }
 
             @Override
             public void onFailure(Call<LocationResponse> call, Throwable t) {
-                t.printStackTrace();
-                callback.onFailure();
-            }
-        });
-    }
-
-    public void getWeather(String latitude, String longitude, final List<Document> documents){
-        Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("yyyyMMdd kk:mm");
-        String nowDate = date.format(today).split(" ")[0];
-        String nowTime;
-        String tmpTime1 = date.format(today).split(" ")[1].split(":")[0];
-        String tmpTime2 = date.format(today).split(" ")[1].split(":")[1];
-        if(Integer.valueOf(tmpTime2) < 30){
-            int tmp = Integer.valueOf(tmpTime1)-1;
-            if(tmp < 10){
-                nowTime = "0" + String.valueOf(tmp) + "00";
-            }else {
-                nowTime = String.valueOf(tmp) + "00";
-            }
-        }else{
-            nowTime = tmpTime1 + "00";
-        }
-        WeatherGridChange gridChange = new WeatherGridChange();
-        WeatherGridChange.LatXLngY latXLngY = gridChange.convertGRID_GPS(0,
-                Double.valueOf(latitude),
-                Double.valueOf(longitude));
-
-        Call<WeatherResponse> call = weatherApi.getNowWeather(
-                SERVICE_KEY,
-                nowDate,
-                nowTime,
-                String.valueOf(latXLngY.getX()),
-                String.valueOf(latXLngY.getY()),
-                TYPE);
-        call.enqueue(new Callback<WeatherResponse>() {
-            @Override
-            public void onResponse(Call<WeatherResponse> call, Response<WeatherResponse> response) {
-
-                // 아직 응답 종류 파악 못했음..
-                if (response.body().getResponse().getHeader().getResultCode() == ResponseCode.PARAMETER_ERROR) {
-//                    callback.onSuccess(ResponseCode.PARAMETER_ERROR, null);
-                    Log.d("Parameter Error", response.body().getResponse().getHeader().getResultMsg());
-                    return;
-                }
-//                if (response.code() == ResponseCode.UNAUTHORIZED) {
-//                    callback.onSuccess(ResponseCode.UNAUTHORIZED, null);
-//                    return;
-//                }
-                List<Item> items = response.body().getResponse().getBody().getItems().getItem();
-                callback.onSuccess(ResponseCode.SUCCESS, items, documents);
-            }
-
-            @Override
-            public void onFailure(Call<WeatherResponse> call, Throwable t) {
                 t.printStackTrace();
                 callback.onFailure();
             }

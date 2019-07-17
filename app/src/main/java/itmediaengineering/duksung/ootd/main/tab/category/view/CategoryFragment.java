@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.home.view;
+package itmediaengineering.duksung.ootd.main.tab.category.view;
 
 import android.Manifest;
 import android.content.Context;
@@ -29,10 +29,10 @@ import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.data.weather.Item;
-import itmediaengineering.duksung.ootd.main.tab.home.adapter.CardPagerAdapter;
-import itmediaengineering.duksung.ootd.main.tab.home.adapter.CardPagerViewHolder;
-import itmediaengineering.duksung.ootd.main.tab.home.presenter.MainContract;
-import itmediaengineering.duksung.ootd.main.tab.home.presenter.MainPresenter;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.CardPagerAdapter;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.CardPagerViewHolder;
+import itmediaengineering.duksung.ootd.main.tab.category.presenter.CategoryContract;
+import itmediaengineering.duksung.ootd.main.tab.category.presenter.CategoryPresenter;
 
 /*MainFragment는 home 탭을 보여준다
 날씨정보와 위치정보 추천받은 이미지 카드뷰 페이저를 관리해야하며
@@ -42,8 +42,8 @@ import itmediaengineering.duksung.ootd.main.tab.home.presenter.MainPresenter;
 서버 추천알고리즘 미완성으로 통신 없이 가상 이미지만 뿌려주고 있음
 */
 
-public class MainFragment extends Fragment
-        implements MainContract.View {
+public class CategoryFragment extends Fragment
+        implements CategoryContract.View {
 
     public static final String TAG = "TAG MESSAGE";
 
@@ -59,7 +59,7 @@ public class MainFragment extends Fragment
     ViewPager viewPager;
 
     protected FragmentManager fm;
-    protected MainPresenter mainPresenter;
+    protected CategoryPresenter mainPresenter;
     private LocationManager locationManager;
     private String locationProvider;
 
@@ -67,8 +67,8 @@ public class MainFragment extends Fragment
     private static final int MIN_DISTANCE = 50;
     private int cnt = 1;
 
-    public static MainFragment newInstance(){
-        return new MainFragment();
+    public static CategoryFragment newInstance(){
+        return new CategoryFragment();
     }
 
     @Nullable
@@ -106,7 +106,7 @@ public class MainFragment extends Fragment
         }
 
         fm.beginTransaction()
-                .add(R.id.pager, MainRecommendFragment.newInstance(), "mainFragment")
+                .add(R.id.pager, CategoryRecommendFragment.newInstance(), "mainFragment")
                 .commit();
 
         return rootView;
@@ -115,14 +115,14 @@ public class MainFragment extends Fragment
     /*@Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         FragmentTransaction transaction = getChildFragmentManager().beginTransaction();
-        transaction.replace(R.id.pager, MainRecommendFragment.newInstance()).commit();
+        transaction.replace(R.id.pager, CategoryRecommendFragment.newInstance()).commit();
     }*/
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
         //spinner.setSelection(0, false);
-        mainPresenter = new MainPresenter();
+        mainPresenter = new CategoryPresenter();
         mainPresenter.attachView(this);
         //presenter.setAdapterModel(adapter);
         //presenter.setAdapterView(adapter);

@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.home.adapter;
+package itmediaengineering.duksung.ootd.main.tab.category.adapter;
 
 public interface CardPagerCallback {
     void changeTitle(String title);

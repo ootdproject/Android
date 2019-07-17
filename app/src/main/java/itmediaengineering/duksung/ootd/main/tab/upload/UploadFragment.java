@@ -127,7 +127,7 @@ public class UploadFragment extends Fragment
 
         selectedImg.setVisibility(View.INVISIBLE);
 
-        /*// MainFragment 로 교체
+        /*// CategoryFragment 로 교체
         getActivity().getFragmentManager().beginTransaction()
                 .replace(R.id.fragment_container, mainFragment).commit();*/
         // Activity 에서도 뭔가 처리하고 싶은 내용이 있다면 하단 문장처럼 호출해주면 됩니다.
