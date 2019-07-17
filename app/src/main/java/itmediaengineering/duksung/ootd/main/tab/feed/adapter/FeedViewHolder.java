@@ -19,21 +19,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.main.tab.mypage.adapter.MyPageGalleryViewHolder;
 
-public class FeedViewHolder extends RecyclerView.ViewHolder
-                    implements View.OnClickListener {
+public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+    private static final String TAG = FeedViewHolder.class.getSimpleName();
 
     //private AdapterView.OnItemClickListener onItemClickListener;
 
-    @BindView(R.id.user_thum_nail_img)
-    ImageView userThumNailImg;
-    @BindView(R.id.user_id_view)
-    TextView userIdView;
+    private Context context;
+
     @BindView(R.id.feed_content_img)
     ImageView feedContentImg;
     @BindView(R.id.feed_item_like_button)
     Button feedItemLikeButton;
-    private Context context;
+
 
     @Override
     public void onClick(View v) {
@@ -94,7 +93,7 @@ public class FeedViewHolder extends RecyclerView.ViewHolder
     }
 
     public void onBind(Post post, int position, int listSize){
-        userIdView.setText(post.getMemberId());
+        //userIdView.setText(post.getMemberId());
 
         Glide.with(context)
                 .load(post.getPostUrl())

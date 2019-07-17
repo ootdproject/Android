@@ -5,6 +5,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,6 +33,16 @@ public class MainActivity extends AppCompatActivity {
     TabLayout tabContent;
     @BindView(R.id.main_fullScreen)
     ConstraintLayout mainFullscreen;
+    @BindView(R.id.main_toolbar)
+    Toolbar mainToolbar;
+    @BindView(R.id.main_toolbar_title)
+    ConstraintLayout locationTitle;
+    @BindView(R.id.main_activity_location_view)
+    TextView locationView;
+    @BindView(R.id.main_activity_location_icon)
+    ImageView locationChangeBtn;
+    @BindView(R.id.main_activity_noti_btn)
+    ImageView notiBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,13 +52,48 @@ public class MainActivity extends AppCompatActivity {
 
         setupViewPager(viewpagerContent);
         tabContent.setupWithViewPager(viewpagerContent);
+        tabContent.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                switch (tab.getPosition()) {
+                    case 0:
+                        locationTitle.setClickable(true);
+                        locationView.setText("나의 위치");
+                        locationChangeBtn.setVisibility(View.VISIBLE);
+                        break;
+                    case 1:
+                        locationTitle.setClickable(false);
+                        locationView.setText("카테고리");
+                        locationChangeBtn.setVisibility(View.GONE);
+                        break;
+                    case 2:
+                        locationTitle.setClickable(false);
+                        locationView.setText("나의 물품 올리기");
+                        locationChangeBtn.setVisibility(View.GONE);
+                        break;
+                    case 3:
+                        locationTitle.setClickable(false);
+                        locationView.setText("마이 페이지");
+                        locationChangeBtn.setVisibility(View.GONE);
+                        break;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) { }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) { }
+        });
+
         setupTabIcons();
+
     }
 
     private void setupViewPager(ViewPager viewPager) {
         MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(MainFragment.newInstance(), "First");
-        adapter.addFragment(FeedFragment.newInstance(), "Second");
+        adapter.addFragment(FeedFragment.newInstance(), "First");
+        adapter.addFragment(MainFragment.newInstance(), "Second");
         adapter.addFragment(UploadFragment.newInstance(), "Third");
         adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
         viewPager.setOffscreenPageLimit(4);
@@ -75,8 +121,8 @@ public class MainActivity extends AppCompatActivity {
         imgThird.setImageResource(R.drawable.icn_add_outlined);
         imgFourth.setImageResource(R.drawable.icn_profile_inactive);
 
-        txtFirst.setText("Home");
-        txtSecond.setText("Feed");
+        txtFirst.setText("Feed");
+        txtSecond.setText("Category");
         txtThird.setText("Upload");
         txtFourth.setText("My Page");
 

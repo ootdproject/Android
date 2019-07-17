@@ -63,9 +63,9 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
         String gender;
 
         if(womenBtn.isChecked()) {
-            gender = "women";
+            gender = "woman";
         } else if(menBtn.isChecked()) {
-            gender = "men";
+            gender = "man";
         } else {
             toast("성별을 선택해주세요!");
             return;
@@ -79,7 +79,7 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
         Log.d("test",nickName + " " + gender);
 
         // 서버로 사용자 정보 전송
-        User user = new User(gender, nickName, "GOOGLE", "userId", userId);
+        User user = new User(gender, nickName, "GOOGLE", userId, "null");
         presenter.join(user);
 
         Intent intent = new Intent(IntroActivity.this, MainActivity.class);

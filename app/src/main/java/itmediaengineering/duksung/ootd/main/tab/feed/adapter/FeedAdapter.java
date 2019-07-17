@@ -3,12 +3,16 @@ package itmediaengineering.duksung.ootd.main.tab.feed.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 
 import java.util.ArrayList;
 
+import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.main.tab.mypage.adapter.MyPageGalleryViewHolder;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         implements FeedAdapterContract.View, FeedAdapterContract.Model{

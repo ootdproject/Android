@@ -30,6 +30,8 @@ public class MyPageGalleryViewHolder extends RecyclerView.ViewHolder{
     }
 
     public void bindDrawable(String url){
-        Glide.with(context).load(url).into(itemImageView);
+        Glide.with(context)
+                .load(url)
+                .into(itemImageView);
     }
 }

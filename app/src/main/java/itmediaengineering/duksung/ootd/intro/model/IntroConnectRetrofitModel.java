@@ -35,7 +35,7 @@ public class IntroConnectRetrofitModel {
         jsonObject.addProperty ("nickname", user.getNickname());
         jsonObject.addProperty ("providerType", "GOOGLE");
         jsonObject.addProperty ("providerUserId", user.getProviderUserId());
-        jsonObject.addProperty ("token", "toohhfghgoken");
+        jsonObject.addProperty ("token", "");
         Call<Void> call = retrofitService.createUser(jsonObject);
         call.enqueue(new Callback<Void>() {
             @Override

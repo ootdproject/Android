@@ -22,7 +22,7 @@ public interface RetrofitService {
 
     @POST("/members/login")
     Call<Void> login(
-            @Query("requestToken") String token
+            @Query("providerUserId") String token
     );
 
     /*@GET(FLICKR_SUB_URL)

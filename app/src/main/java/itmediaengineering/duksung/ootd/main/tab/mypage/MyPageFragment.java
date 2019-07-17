@@ -46,11 +46,8 @@ public class MyPageFragment extends Fragment implements MyPageContract.View {
     }
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        ViewGroup rootView = (ViewGroup) inflater
-                .inflate(R.layout.fragment_my_page, container, false);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_my_page, container, false);
         ButterKnife.bind(this, rootView);
 
         adapter = new MyPageGalleryAdapter();//, items);
