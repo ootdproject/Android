@@ -6,6 +6,10 @@ import android.util.Log;
 
 import itmediaengineering.duksung.ootd.R;
 
+/*
+network을 통한 경도와 위도 위치정보를 전달하면 공공 데이터 포탈에서 요청할 수 있는 위치정보를 반환 받는 클래스
+*/
+
 public class WeatherGridChange extends AppCompatActivity {
 
     public static int TO_GRID = 0;

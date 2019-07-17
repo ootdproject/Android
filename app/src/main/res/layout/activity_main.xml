@@ -1,143 +1,35 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_fullScreen"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context=".MainActivity">
 
-    <android.support.constraint.ConstraintLayout
+    <android.support.v4.view.ViewPager
+        android:id="@+id/viewpager_content"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/main_background"
-        android:orientation="vertical">
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/tab_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
 
-        <Button
-            android:id="@+id/button1"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="33dp"
-            android:background="@android:drawable/ic_popup_sync"
-            app:layout_constraintStart_toEndOf="@+id/location_view"
-            app:layout_constraintTop_toTopOf="parent"/>
+    <android.support.design.widget.TabLayout
+        android:id="@+id/tab_content"
+        android:layout_width="0dp"
+        android:layout_height="50dp"
+        android:elevation="3dp"
+        android:background="#ffffff"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:tabGravity="fill"
+        app:tabIndicatorColor="#03A9F4"
+        app:tabIndicatorHeight="3dp"
+        app:tabMode="fixed"/>
 
-        <TextView
-            android:id="@+id/location_view"
-            android:layout_width="wrap_content"
-            android:layout_height="0dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:textColor="#ffffff"
-            android:textSize="20sp"
-            android:textStyle="normal"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:text="위치정보"/>
-
-        <TextView
-            android:id="@+id/time_info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="2dp"
-            android:layout_marginEnd="8dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:textColor="#CFCFCF"
-            android:textSize="14sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/location_view"
-            tools:text="시간정보"/>
-
-        <TextView
-            android:id="@+id/now_weather_Info"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="4dp"
-            android:layout_marginTop="16dp"
-            android:fontFamily="sans-serif-condensed-light"
-            android:textColor="@android:color/white"
-            android:textSize="56sp"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/time_info"
-            tools:text="날씨 정보"/>
-
-        <TextView
-            android:id="@+id/txtResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:layout_marginEnd="8dp"
-            android:textSize="18sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/pager"/>
-
-        <android.support.v4.view.ViewPager
-            android:id="@+id/pager"
-            android:layout_width="match_parent"
-            android:layout_height="350dp"
-            android:layout_marginTop="40dp"
-            android:layout_gravity="bottom"
-            android:overScrollMode="never"
-            android:clipToPadding="false"
-            android:paddingEnd="60dp"
-            android:paddingLeft="60dp"
-            android:paddingRight="60dp"
-            android:paddingStart="60dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/now_weather_Info">
-        </android.support.v4.view.ViewPager>
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="89dp"
-            android:layout_height="79dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="8dp"
-            android:tint="#ffffff"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.352"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/time_info"
-            app:srcCompat="@drawable/cloudy1"/>
-
-        <ImageView
-            android:id="@+id/imageView2"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:elevation="5dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/txtResult"
-            android:background="#4A78C9"/>
-
-        <ImageView
-            android:id="@+id/imageView3"
-            android:layout_width="0dp"
-            android:layout_height="120dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginBottom="32dp"
-            android:elevation="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView2"
-            android:background="#679EE6"/>
-
-    </android.support.constraint.ConstraintLayout>
-</ScrollView>
+</android.support.constraint.ConstraintLayout>

@@ -1,62 +1,37 @@
 package itmediaengineering.duksung.ootd;
 
-import android.Manifest;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Build;
-import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.content.ContextCompat;
+import android.support.constraint.ConstraintLayout;
+import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
-import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.TextView;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.main.adapter.MainPagerAdapter;
-import itmediaengineering.duksung.ootd.main.adapter.MainPagerViewHolder;
-import itmediaengineering.duksung.ootd.main.presenter.MainPresenter;
-import itmediaengineering.duksung.ootd.main.presenter.MainContract;
-import itmediaengineering.duksung.ootd.data.weather.Item;
-import itmediaengineering.duksung.ootd.main.view.MainRecommendFragment;
+import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
+import itmediaengineering.duksung.ootd.main.tab.home.view.MainFragment;
+import itmediaengineering.duksung.ootd.main.tab.mypage.MyPageFragment;
+import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 
-public class MainActivity extends AppCompatActivity
-        implements MainContract.View {
+/*
+탭을 구현하는 MainActivity
+탭과 함께 뷰페이져 구성하여 각 탭들의 상태유지를 생각해야 함
+*/
+
+public class MainActivity extends AppCompatActivity {
 
     public static final String TAG = "TAG MESSAGE";
 
-    @BindView(R.id.button1)
-    Button button1;
-    @BindView(R.id.txtResult)
-    TextView txtResult;
-    @BindView(R.id.location_view)
-    TextView locationView;
-    @BindView(R.id.now_weather_Info)
-    TextView nowWeatherInfo;
-    @BindView(R.id.time_info)
-    TextView timeInfo;
-    @BindView(R.id.pager)
-    ViewPager viewPager;
-
-    private FragmentManager fm = getSupportFragmentManager();
-    protected MainPresenter mainPresenter;
-    private LocationManager locationManager;
-    private String locationProvider;
-
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final int MIN_DISTANCE = 50;
-    private int cnt = 1;
+    @BindView(R.id.viewpager_content)
+    ViewPager viewpagerContent;
+    @BindView(R.id.tab_content)
+    TabLayout tabContent;
+    @BindView(R.id.main_fullScreen)
+    ConstraintLayout mainFullscreen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,139 +39,64 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mainPresenter = new MainPresenter();
-        mainPresenter.attachView(this);
+        setupViewPager(viewpagerContent);
+        tabContent.setupWithViewPager(viewpagerContent);
+        setupTabIcons();
+    }
 
-        locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationProvider = LocationManager.NETWORK_PROVIDER;
+    private void setupViewPager(ViewPager viewPager) {
+        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
+        adapter.addFragment(MainFragment.newInstance(), "First");
+        adapter.addFragment(FeedFragment.newInstance(), "Second");
+        adapter.addFragment(UploadFragment.newInstance(), "Third");
+        adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
+        viewPager.setOffscreenPageLimit(4);
+        viewPager.setAdapter(adapter);
+    }
 
-        //가짜 온도
-        nowWeatherInfo.setText("14" + "\u00B0");
+    private void setupTabIcons() {
+        View viewFirst = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        View viewSecond = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        View viewThird = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        View viewFourth = getLayoutInflater().inflate(R.layout.custom_tab, null);
 
-        //가짜 위치
-        locationView.setText("도봉구 쌍문동");
+        ImageView imgFirst = viewFirst.findViewById(R.id.img_tab);
+        ImageView imgSecond = viewSecond.findViewById(R.id.img_tab);
+        ImageView imgThird = viewThird.findViewById(R.id.img_tab);
+        ImageView imgFourth = viewFourth.findViewById(R.id.img_tab);
 
-        button1.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 호출 중단
-                //onResume();
+        TextView txtFirst = viewFirst.findViewById(R.id.txt_tab);
+        TextView txtSecond = viewSecond.findViewById(R.id.txt_tab);
+        TextView txtThird = viewThird.findViewById(R.id.txt_tab);
+        TextView txtFourth = viewFourth.findViewById(R.id.txt_tab);
 
-                // Remove the listener you previously added
-                //locationManager.removeUpdates(locationListener);
-            }
-        });
+        imgFirst.setImageResource(R.drawable.icn_home_inactive);
+        imgSecond.setImageResource(R.drawable.icn_menu_outlined);
+        imgThird.setImageResource(R.drawable.icn_add_outlined);
+        imgFourth.setImageResource(R.drawable.icn_profile_inactive);
 
-        viewPager.setOffscreenPageLimit(3);
+        txtFirst.setText("Home");
+        txtSecond.setText("Feed");
+        txtThird.setText("Upload");
+        txtFourth.setText("My Page");
 
-        MainPagerAdapter pagerAdapter = new MainPagerAdapter(this.getSupportFragmentManager());
-        pagerAdapter.notifyDataSetChanged();
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setOffscreenPageLimit(3);
-
-        for (int i = 0; i < 3; i++) {
-            pagerAdapter.addItem(MainPagerViewHolder.newInstance());
-        }
-
-        //viewPager.setPadding(150, 0, 150, 0);
-        //viewPager.setPageMargin(getResources().getDisplayMetrics().widthPixels / -9);
-
-        fm.beginTransaction()
-                .add(R.id.pager, MainRecommendFragment.newInstance(), "mainFragment")
-                .commit();
-
+        tabContent.getTabAt(0).setCustomView(viewFirst);
+        tabContent.getTabAt(1).setCustomView(viewSecond);
+        tabContent.getTabAt(2).setCustomView(viewThird);
+        tabContent.getTabAt(3).setCustomView(viewFourth);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        Date today = new Date();
-        SimpleDateFormat date = new SimpleDateFormat("MM/dd kk:mm");
-        String nowMonth = date.format(today).split("/")[0];
-        String nowDay = date.format(today).split("/")[1].split(" ")[0];
-        String nowTime = date.format(today).split(" ")[1];
-
-        timeInfo.setText(nowMonth + "월 " + nowDay + "일 " + nowTime);
-
-        if ( Build.VERSION.SDK_INT >= 26 &&
-                ContextCompat.checkSelfPermission( getApplicationContext(), Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions( MainActivity.this, new String[] {  Manifest.permission.ACCESS_COARSE_LOCATION  },
-                    0 );
-        }
-        else{
-            Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-            String provider = lastKnownLocation.getProvider();
-            double longitude = lastKnownLocation.getLongitude();
-            double latitude = lastKnownLocation.getLatitude();
-
-            // 호출 잠시 중단
-            //mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
-
-            /*txtResult.setText(
-                    "시간 정보\n" +
-                            "위치정보 : " + provider + "\n" +
-                            "경도 : " + latitude + "\n" +
-                            "위도 : " + longitude + "\n" +
-                            //"고도  : " + altitude + "\n" +
-                            "위치정보 호출횟수  : " + cnt + "\n"
-            );*/
-
-            locationManager.requestLocationUpdates(
-                    locationProvider,
-                    TWO_MINUTES,
-                    MIN_DISTANCE,
-                    locationListener);
-        }
     }
 
-    // 이 부분은 사용자가 새로고침 눌렀을 때 실행되도록 하자!
-    final LocationListener locationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            //네트워크 위치 제공자에 의해 새 위치가 인식되었을 경우
-            //makeUseOfNewLocation(location);
-            cnt++;
-            String provider = location.getProvider();
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-            double altitude = location.getAltitude();
-
-            /*txtResult.setText("바뀐위치정보 : " + provider + "\n" +
-                    "위도 : " + longitude + "\n" +
-                    "경도 : " + latitude + "\n" +
-                    "고도  : " + altitude + "\n" +
-                    "위치정보 호출횟수  : " + cnt);*/
-        }
-
-        public void onStatusChanged(String provider, int status, Bundle extras) { }
-
-        public void onProviderEnabled(String provider) { }
-
-        public void onProviderDisabled(String provider) { }
-    };
-
-    @Override
-    public void toast(String msg) { }
-
-    @Override
-    public void onUnauthorizedError() { }
-
-    @Override
-    public void onUnknownError() { }
-
-    @Override
-    public void onSuccessGetWeather(Item item) {
-        nowWeatherInfo.setText(
-                (int)Math.floor(item.getObsrValue()) + "\u00B0");
+    public interface onKeyBackPressedListener{
+        void onBack();
     }
 
-    @Override
-    public void onSuccessGetLocation(Document document) {
-        locationView.setText(document.getAddressName());
+    private onKeyBackPressedListener onKeyBackPressedListener;
+    public void setOnBackPressedListener(onKeyBackPressedListener listener){
+        onKeyBackPressedListener = listener;
     }
-
-    @Override
-    public void onConnectFail() { }
-
-    @Override
-    public void onNotFound() { }
 }

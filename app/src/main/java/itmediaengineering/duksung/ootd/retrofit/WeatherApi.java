@@ -47,8 +47,8 @@ public interface WeatherApi {
             @Body JsonObject userData
     );
 
-    @POST("/api/users/login/")
-    Call<UserResponse> login(
+    @POST("/api/users/join/")
+    Call<UserResponse> join(
             @Body JsonObject loginData
     );*/
 
