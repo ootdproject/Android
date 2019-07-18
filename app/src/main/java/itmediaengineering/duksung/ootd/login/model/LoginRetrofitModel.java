@@ -1,6 +1,5 @@
 package itmediaengineering.duksung.ootd.login.model;
 
-import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitService;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitServiceManager;

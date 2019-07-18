@@ -5,13 +5,14 @@ import java.util.List;
 
 import itmediaengineering.duksung.ootd.data.feed.Post;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapterContract;
+import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnItemClickListener;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnPositionListener;
 import itmediaengineering.duksung.ootd.main.tab.feed.model.FeedRetrofitCallback;
 import itmediaengineering.duksung.ootd.main.tab.feed.model.FeedRetrofitModel;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 
-public class FeedPresenter
-        implements FeedContract.Presenter, FeedRetrofitCallback.RetrofitCallback, OnPositionListener {
+public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallback.RetrofitCallback,
+        OnPositionListener, OnItemClickListener {
     private static final String TAG = FeedPresenter.class.getSimpleName();
     private FeedContract.View view;
     private FeedRetrofitModel retrofitModel;
@@ -84,10 +85,16 @@ public class FeedPresenter
     public void setAdapterView(FeedAdapterContract.View adapterView) {
         this.adapterView = adapterView;
         this.adapterView.setOnPositionListener(this);
+        this.adapterView.setOnClickListener(this);
     }
 
     @Override
     public void setAdapterModel(FeedAdapterContract.Model adapterModel) {
         this.adapterModel = adapterModel;
+    }
+
+    @Override
+    public void onItemClick() {
+        view.startPostDetailActivity(null);
     }
 }

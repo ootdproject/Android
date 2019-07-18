@@ -11,7 +11,7 @@ public interface CategoryContract {
         void onSuccessGetLocation(Document document);
         void onSuccessGetWeather(Item item);
         void onConnectFail();
-        //void startDetailActivity(Data item);
+        //void startPostDetailActivity(Data item);
         void onNotFound();
     }
 

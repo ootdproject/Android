@@ -1,5 +1,6 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 
+import itmediaengineering.duksung.ootd.data.feed.Post;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapterContract;
 
 public interface FeedContract {
@@ -9,7 +10,7 @@ public interface FeedContract {
         //void onUnknownError();
         void onSuccessGetList();
         //void onConnectFail();
-        //void startDetailActivity(Post post);
+        void startPostDetailActivity(Post post);
         //void onNotFound();
     }
 

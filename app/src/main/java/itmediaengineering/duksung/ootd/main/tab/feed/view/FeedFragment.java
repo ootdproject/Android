@@ -1,5 +1,6 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.view;
 
+import android.content.Intent;
 import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -16,9 +17,12 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
+import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.main.tab.detail.PostDetailActivity;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapter;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedContract;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedPresenter;
+import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 
 /*
 FeedFragment는 모든 사용자들에 대한 포스트를 요청하고 보여주는 탭
@@ -134,5 +138,12 @@ public class FeedFragment extends Fragment implements FeedContract.View {
     @Override
     public void onSuccessGetList() {
         Log.d(TAG, "Success getting My Page Gallery!");
+    }
+
+    @Override
+    public void startPostDetailActivity(Post post) {
+        Intent intent = new Intent(getActivity(), PostDetailActivity.class);
+        //intent.putExtra(post);
+        startActivity(intent);
     }
 }

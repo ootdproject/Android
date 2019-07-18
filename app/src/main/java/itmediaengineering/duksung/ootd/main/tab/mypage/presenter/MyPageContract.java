@@ -10,7 +10,7 @@ public interface MyPageContract {
         //void onUnknownError();
         void onSuccessGetGallery();
         //void onConnectFail();
-        //void startDetailActivity(Post post);
+        //void startPostDetailActivity(Post post);
         //void onNotFound();
     }
 

@@ -25,6 +25,14 @@ public interface RetrofitService {
             @Query("providerUserId") String token
     );
 
+    @POST("/posts")
+    Call<Void> upload(
+            @Header("Authhorization") String auth,
+            @Body JsonObject post,
+            @Query("providerUserId") String token
+
+    );
+
     /*@GET(FLICKR_SUB_URL)
     Call<GalleryResponse> getGallery(
             @Query("api_key") String key,

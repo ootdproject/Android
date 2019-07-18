@@ -10,7 +10,7 @@ public interface MainContract {
         void onUnknownError();
         void onSuccessGetLocation(Document document);
         void onConnectFail();
-        //void startDetailActivity(Data item);
+        //void startPostDetailActivity(Data item);
         void onNotFound();
     }
 

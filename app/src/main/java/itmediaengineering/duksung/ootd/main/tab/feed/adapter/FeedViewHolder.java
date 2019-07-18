@@ -1,8 +1,8 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.adapter;
 
 import android.content.Context;
+import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,34 +10,34 @@ import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
-import com.google.gson.Gson;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.feed.Post;
-import itmediaengineering.duksung.ootd.main.tab.mypage.adapter.MyPageGalleryViewHolder;
+import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnItemClickListener;
+import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnPositionListener;
 
-public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
+public class FeedViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = FeedViewHolder.class.getSimpleName();
+    private OnItemClickListener onItemClickListener;
+    private OnPositionListener onPositionListener;
 
-    //private AdapterView.OnItemClickListener onItemClickListener;
 
     private Context context;
 
+    @BindView(R.id.feed_item)
+    ConstraintLayout feedItem;
     @BindView(R.id.feed_content_img)
     ImageView feedContentImg;
     @BindView(R.id.feed_item_like_button)
     Button feedItemLikeButton;
-
-
-    @Override
-    public void onClick(View v) {
-        Toast.makeText(context, "좋아요 눌림!", Toast.LENGTH_SHORT).show();
-    }
+    @BindView(R.id.feed_item_title)
+    TextView feedItemTitle;
+    @BindView(R.id.feed_item_cost)
+    TextView feedItemCost;
 
     private class LikeView {
         private static final String LIKEYN = "likeyn";
@@ -84,22 +84,28 @@ public class FeedViewHolder extends RecyclerView.ViewHolder implements View.OnCl
         }
     }
 
-    public FeedViewHolder(final Context context, ViewGroup parent, AdapterView.OnItemClickListener onItemClickListener) {
+    public FeedViewHolder(final Context context, ViewGroup parent,
+                          OnItemClickListener onItemClickListener, OnPositionListener onPositionListener) {
         super(LayoutInflater.from(context).inflate(R.layout.feed_item, parent, false));
         ButterKnife.bind(this, itemView);
-        parent.setOnClickListener(this);
-        //this.onItemClickListener = onItemClickListener;
+        this.onItemClickListener = onItemClickListener;
+        this.onPositionListener = onPositionListener;
         this.context = context;
     }
 
     public void onBind(Post post, int position, int listSize){
         //userIdView.setText(post.getMemberId());
 
+        feedItem.setOnClickListener(v ->
+                onItemClickListener.onItemClick());
+                //onItemClickListener.onItemClick(post, position));
+        //feedItemTitle.setText(post.getMemberId());
+        //feedItemCost.setText(post.getPostCount());
         Glide.with(context)
                 .load(post.getPostUrl())
                 .into(feedContentImg);
 
-        feedItemLikeButton.setOnClickListener(v -> {
+        feedItemLikeButton.setOnClickListener(view -> {
             if(feedItemLikeButton.isSelected())
                 feedItemLikeButton.setSelected(false);
             else

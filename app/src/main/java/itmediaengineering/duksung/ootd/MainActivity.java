@@ -2,6 +2,7 @@ package itmediaengineering.duksung.ootd;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -18,6 +19,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,6 +31,7 @@ import itmediaengineering.duksung.ootd.main.presenter.MainPresenter;
 import itmediaengineering.duksung.ootd.main.tab.category.view.CategoryFragment;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 import itmediaengineering.duksung.ootd.main.tab.mypage.MyPageFragment;
+import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 
 /*
@@ -58,12 +62,15 @@ public class MainActivity extends AppCompatActivity
     ImageView notiBtn;
 
     protected MainPresenter mainPresenter;
+    private  MainPagerAdapter adapter;
     private LocationManager locationManager;
     private String locationProvider;
     private String myLocation;
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private static final int MIN_DISTANCE = 50;
+
+    private int uploadCnt = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -89,8 +96,13 @@ public class MainActivity extends AppCompatActivity
                         locationChangeBtn.setVisibility(View.GONE);
                         break;
                     case 2:
+                        if(uploadCnt == 0) {
+                            Intent intent = new Intent(MainActivity.this, UploadActivity.class);
+                            startActivity(intent);
+                            uploadCnt++;
+                        }
                         locationTitle.setClickable(false);
-                        locationView.setText("나의 물품 올리기");
+                        locationView.setText("나의 물품 판매하기");
                         locationChangeBtn.setVisibility(View.GONE);
                         break;
                     case 3:
@@ -118,7 +130,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     private void setupViewPager(ViewPager viewPager) {
-        MainPagerAdapter adapter = new MainPagerAdapter(getSupportFragmentManager());
+        adapter = new MainPagerAdapter(getSupportFragmentManager());
         adapter.addFragment(FeedFragment.newInstance(), "First");
         adapter.addFragment(CategoryFragment.newInstance(), "Second");
         adapter.addFragment(UploadFragment.newInstance(), "Third");
@@ -174,7 +186,9 @@ public class MainActivity extends AppCompatActivity
             double latitude = lastKnownLocation.getLatitude();  // 위도
 
             // 위치정보 호출
-            mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
+            if(tabContent.getSelectedTabPosition() == 0) {
+                mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
+            }
 
             locationManager.requestLocationUpdates(
                     locationProvider,
@@ -217,7 +231,8 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void toast(String msg) {
-
+        Runnable r = () -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
+        this.runOnUiThread(r);
     }
 
     @Override
