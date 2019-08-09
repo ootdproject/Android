@@ -17,11 +17,11 @@ public class MyPageHeaderViewHolder extends RecyclerView.ViewHolder{
 
     private Context context;
 
-    @BindView(R.id.mypage_user_image)
+    @BindView(R.id.my_page_user_image)
     ImageView userImg;
-    @BindView(R.id.mypage_user_nickname)
+    @BindView(R.id.my_page_user_nickname)
     TextView userNick;
-    @BindView(R.id.mypage_user_description)
+    @BindView(R.id.my_page_user_description)
     TextView userDscrp;
 
     public MyPageHeaderViewHolder(final Context context, @NonNull View itemView) {

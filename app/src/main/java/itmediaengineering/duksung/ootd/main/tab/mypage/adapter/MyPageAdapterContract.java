@@ -13,7 +13,7 @@ public interface MyPageAdapterContract {
     interface Model {
         //void getPosts();
         //void setFeeds(ArrayList items);
-        void addPhotos(ArrayList items);
+        void addPosts(ArrayList items);
         void clearGallery();
     }
 }

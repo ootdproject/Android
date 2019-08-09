@@ -3,7 +3,7 @@ package itmediaengineering.duksung.ootd.main.tab.mypage.presenter;
 import java.util.ArrayList;
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.data.mygallery.Photo;
+import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.mypage.adapter.MyPageAdapterContract;
 import itmediaengineering.duksung.ootd.main.tab.mypage.model.MyPageRetrofitCallback;
 import itmediaengineering.duksung.ootd.main.tab.mypage.model.MyPageRetrofitModel;
@@ -26,24 +26,25 @@ public class MyPagePresenter implements MyPageContract.Presenter, MyPageRetrofit
 
     @Override
     public void getMyGallery() {
+        adapterModel.clearGallery();
         retrofitModel.getGallery();
     }
 
     @Override
-    public void onSuccess(int code, List<Photo> photos) {
-        if (code == ResponseCode.NOT_FOUND && photos == null) {
+    public void onSuccess(int code, List<Post> posts) {
+        if (code == ResponseCode.NOT_FOUND && posts == null) {
             //view.onNotFound();
             return;
         }
 
-        if (code == ResponseCode.UNAUTHORIZED && photos == null) {
+        if (code == ResponseCode.UNAUTHORIZED && posts == null) {
             //view.onUnauthorizedError();
             return;
         }
 
-        if (code == ResponseCode.SUCCESS && photos != null) {
+        if (code == ResponseCode.SUCCESS && posts != null) {
             //Log.d(TAG, photos.get(0).toString());
-            adapterModel.addPhotos(new ArrayList(photos));
+            adapterModel.addPosts(new ArrayList(posts));
             view.onSuccessGetGallery();
             return;
         }
@@ -62,7 +63,7 @@ public class MyPagePresenter implements MyPageContract.Presenter, MyPageRetrofit
 
     @Override
     public void detachView() {
-
+        this.view = null;
     }
 
     @Override
