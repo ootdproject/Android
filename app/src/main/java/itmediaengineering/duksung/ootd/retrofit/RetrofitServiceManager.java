@@ -4,6 +4,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.logging.HttpLoggingInterceptor;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class RetrofitServiceManager {
     private static String url = "http://helena1114.cafe24.com";
@@ -22,6 +23,7 @@ public class RetrofitServiceManager {
 
             retrofit = new Retrofit.Builder()
                     .baseUrl(url)
+                    .addConverterFactory(ScalarsConverterFactory.create())
                     .addConverterFactory(GsonConverterFactory.create())
                     .client(okHttpClient)
                     .build();

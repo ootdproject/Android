@@ -4,9 +4,7 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,9 +14,7 @@ import com.bumptech.glide.Glide;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
-import itmediaengineering.duksung.ootd.data.feed.Post;
-import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnItemClickListener;
-import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnPositionListener;
+import itmediaengineering.duksung.ootd.data.post.Post;
 
 public class FeedViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = FeedViewHolder.class.getSimpleName();
@@ -97,13 +93,20 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
         //userIdView.setText(post.getMemberId());
 
         feedItem.setOnClickListener(v ->
-                onItemClickListener.onItemClick());
+                onItemClickListener.onItemClick(post));
                 //onItemClickListener.onItemClick(post, position));
         //feedItemTitle.setText(post.getMemberId());
         //feedItemCost.setText(post.getPostCount());
         Glide.with(context)
-                .load(post.getPostUrl())
+                .load(post.getImageUrl())
                 .into(feedContentImg);
+
+        if(post.getTitle().length()>16){
+            feedItemTitle.setText(post.getTitle().substring(0,15) + "...");
+        }else{
+            feedItemTitle.setText(post.getTitle());
+        }
+        feedItemCost.setText(post.getCost());
 
         feedItemLikeButton.setOnClickListener(view -> {
             if(feedItemLikeButton.isSelected())

@@ -2,13 +2,23 @@ package itmediaengineering.duksung.ootd.retrofit;
 
 import com.google.gson.JsonObject;
 
+import java.util.List;
+import java.util.Map;
+
 import itmediaengineering.duksung.ootd.data.mygallery.GalleryResponse;
+import itmediaengineering.duksung.ootd.data.post.Post;
+import itmediaengineering.duksung.ootd.data.post.PostRequest;
 import itmediaengineering.duksung.ootd.data.weather.WeatherResponse;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
+import retrofit2.http.Multipart;
 import retrofit2.http.POST;
+import retrofit2.http.Part;
+import retrofit2.http.PartMap;
 import retrofit2.http.Query;
 
 public interface RetrofitService {
@@ -25,14 +35,26 @@ public interface RetrofitService {
             @Query("providerUserId") String token
     );
 
-    @POST("/posts")
-    Call<Void> upload(
-            @Header("Authhorization") String auth,
-            @Body JsonObject post,
-            @Query("providerUserId") String token
-
+    @GET("/posts")
+    Call<List<Post>> getPosts(
+            @Header("Authorization") String authorization
     );
 
+    @Multipart
+    @POST("/posts")
+    Call<Post> createPost(
+            @Header("Authorization") String auth,
+            @Part MultipartBody.Part file,
+            @Part MultipartBody.Part postRequest,
+            //@PartMap Map<String, RequestBody> postRequest,
+            @Header("x-providerUserId") String pUid
+    );
+
+    @GET("/myposts")
+    Call<List<Post>> getMyPosts(
+            @Header("Authorization") String authorization,
+            @Header("x-providerUserId") String pUid
+    );
     /*@GET(FLICKR_SUB_URL)
     Call<GalleryResponse> getGallery(
             @Query("api_key") String key,
@@ -40,13 +62,6 @@ public interface RetrofitService {
             @Query("format") String format,
             @Query("nojsoncallback") String jsoncallback,
             @Query("extras") String extras
-    );*/
-
-    /*@GET("api/posts")
-    Call<Void> getPosts(
-            @Header("Authorization") String authorization,
-            @Query("search") String search,
-            @Query("page") int page
     );*/
 
     /*@GET("service/SecndSrtpFrcstInfoService2/ForecastGridb")

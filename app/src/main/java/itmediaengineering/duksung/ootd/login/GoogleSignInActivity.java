@@ -1,8 +1,12 @@
 package itmediaengineering.duksung.ootd.login;
 
 import android.content.Intent;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
@@ -18,6 +22,9 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -52,6 +59,8 @@ public class GoogleSignInActivity extends BaseActivity implements
     // 구글 로그인 관리 클래스
     private GoogleSignInClient googleSignInClient;
 
+    //SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
+
     @BindView(R.id.status)
     TextView mStatusTextView;
     @BindView(R.id.detail)
@@ -64,6 +73,19 @@ public class GoogleSignInActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google);
         ButterKnife.bind(this);
+
+        try {
+            PackageInfo info = getPackageManager().getPackageInfo("itmediaengineering.duksung.ootd", PackageManager.GET_SIGNATURES);
+            for (Signature signature : info.signatures) {
+                MessageDigest md = MessageDigest.getInstance("SHA");
+                md.update(signature.toByteArray());
+                Log.e("KeyHash:", Base64.encodeToString(md.digest(), Base64.DEFAULT));
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchAlgorithmException e) {
+            e.printStackTrace();
+        }
 
         // ?
         // FirebaseApp.initializeApp(GoogleSignInActivity.this);
@@ -212,6 +234,12 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
+            //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
+            /*SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putString("uid", user.getUid());
+            editor.putString("email", user.getEmail());
+            editor.commit();    //최종 커밋*/
+
             presenter.login(user.getUid());
             /*mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));

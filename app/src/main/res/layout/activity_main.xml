@@ -78,6 +78,8 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:padding="12dp"
+            android:clickable="true"
+            android:background="?attr/selectableItemBackground"
             tools:layout_editor_absoluteX="149dp"
             tools:layout_editor_absoluteY="13dp">
 
@@ -111,6 +113,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="end"
             android:padding="8dp"
+            android:background="?attr/selectableItemBackground"
             app:srcCompat="@drawable/round_notifications_none_black_36"
             tools:layout_editor_absoluteX="16dp"/>
 

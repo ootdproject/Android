@@ -6,7 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
 import java.util.ArrayList;
 
-import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.data.post.Post;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         implements FeedAdapterContract.View, FeedAdapterContract.Model{
@@ -67,12 +67,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
     @Override
     public void addPosts(ArrayList items) {
         this.items.addAll(items);
-        notifyDataSetChanged();
+        notifyAdapter();
     }
 
     @Override
     public void clearFeed() {
         items.clear();
-        notifyDataSetChanged();
+        notifyAdapter();
     }
 }

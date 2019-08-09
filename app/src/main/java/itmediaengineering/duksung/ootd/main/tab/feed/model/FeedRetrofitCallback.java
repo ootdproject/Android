@@ -2,7 +2,7 @@ package itmediaengineering.duksung.ootd.main.tab.feed.model;
 
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.data.post.Post;
 
 public interface FeedRetrofitCallback {
     interface RetrofitCallback {

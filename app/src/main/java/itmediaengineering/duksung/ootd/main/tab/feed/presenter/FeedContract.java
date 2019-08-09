@@ -1,6 +1,6 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 
-import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapterContract;
 
 public interface FeedContract {

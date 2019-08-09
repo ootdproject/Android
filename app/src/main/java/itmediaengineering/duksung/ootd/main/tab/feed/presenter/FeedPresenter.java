@@ -3,7 +3,7 @@ package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 import java.util.ArrayList;
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapterContract;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnItemClickListener;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnPositionListener;
@@ -25,6 +25,7 @@ public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallba
     public FeedPresenter(){
         retrofitModel = new FeedRetrofitModel();
         retrofitModel.setCallback(this);
+
     }
 
     @Override
@@ -94,7 +95,7 @@ public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallba
     }
 
     @Override
-    public void onItemClick() {
-        view.startPostDetailActivity(null);
+    public void onItemClick(Post post) {
+        view.startPostDetailActivity(post);
     }
 }

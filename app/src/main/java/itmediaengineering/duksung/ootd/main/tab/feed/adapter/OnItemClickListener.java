@@ -1,8 +1,8 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.adapter;
 
-import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.data.post.Post;
 
 public interface OnItemClickListener {
     //void onItemClick(Post post, int position);
-    void onItemClick();
+    void onItemClick(Post post);
 }

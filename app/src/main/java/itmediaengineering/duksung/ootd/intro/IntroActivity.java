@@ -1,6 +1,7 @@
 package itmediaengineering.duksung.ootd.intro;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -9,6 +10,9 @@ import android.widget.ImageView;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Toast;
+
+import com.sendbird.android.SendBird;
+import com.sendbird.android.SendBirdException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -19,6 +23,9 @@ import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.intro.presenter.IntroConnectContract;
 import itmediaengineering.duksung.ootd.intro.presenter.IntroConnectPresenter;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
+import itmediaengineering.duksung.ootd.utils.ConnectionManager;
+import itmediaengineering.duksung.ootd.utils.PreferenceUtils;
+import itmediaengineering.duksung.ootd.utils.PushUtils;
 
 /*
 구글 로그인 이후 받아오는 아이디 값과 사용자가 입력한 정보를 서버에 넘겨야 하는 액티비티
@@ -28,6 +35,8 @@ import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 public class IntroActivity extends AppCompatActivity implements IntroConnectContract.View{//, ObserverCallback {
 
     private static final String TAG = IntroActivity.class.getSimpleName();
+
+    //SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
 
     @BindView(R.id.intro_user_image)
     ImageView userImage;
@@ -59,7 +68,7 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
 
     @OnClick(R.id.intro_save_btn)
     public void onSaveBtnClick(){
-        String nickName = nickname.getText().toString();
+        String nickNameStr = nickname.getText().toString();
         String gender;
 
         if(womenBtn.isChecked()) {
@@ -71,21 +80,30 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
             return;
         }
 
-        if(nickName.equals("")){
+        if(nickNameStr.equals("")){
             toast("닉네임을 입력해주세요!");
             return;
         }
 
-        Log.d("test",nickName + " " + gender);
+        Log.d("test",nickNameStr + " " + gender);
+
+        /*SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("nickname", nickNameStr);
+        editor.commit();*/
 
         // 서버로 사용자 정보 전송
-        User user = new User(gender, nickName, "GOOGLE", userId, "null");
+        User user = new User(gender, nickNameStr, "GOOGLE", userId, "null");
         presenter.join(user);
 
-        Intent intent = new Intent(IntroActivity.this, MainActivity.class);
-        startActivity(intent);
+        PreferenceUtils.setUserId(userId);
+        PreferenceUtils.setNickname(nickNameStr);
+
+        connectToSendBird(userId, nickNameStr);
+
+        //Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+        //startActivity(intent);
         Toast.makeText(this, "가입을 축하합니다!", Toast.LENGTH_SHORT).show();
-        finish();
+        //finish();
     }
 
     @Override
@@ -112,5 +130,64 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
     public void toast(String msg) {
         Runnable r = () -> Toast.makeText(this, msg, Toast.LENGTH_SHORT).show();
         runOnUiThread(r);
+    }
+
+    private void connectToSendBird(final String userId, final String userNickname) {
+        // Show the loading indicator
+        //showProgressBar(true);
+        //mConnectButton.setEnabled(false);
+
+        ConnectionManager.login(userId, (user, e) -> {
+            // Callback received; hide the progress bar.
+            //showProgressBar(false);
+
+            if (e != null) {
+                // Error!
+                Toast.makeText(
+                        IntroActivity.this, "" + e.getCode() + ": " + e.getMessage(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+                // Show login failure snackbar
+                //showSnackbar("Login to SendBird failed");
+                //mConnectButton.setEnabled(true);
+                PreferenceUtils.setConnected(false);
+                return;
+            }
+
+            PreferenceUtils.setConnected(true);
+
+            // Update the user's nickname
+            updateCurrentUserInfo(userNickname);
+            updateCurrentUserPushToken();
+
+            // Proceed to MainActivity
+            Intent intent = new Intent(IntroActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        });
+    }
+
+    private void updateCurrentUserPushToken() {
+        PushUtils.registerPushTokenForCurrentUser(IntroActivity.this, null);
+    }
+
+    private void updateCurrentUserInfo(final String userNickname) {
+        SendBird.updateCurrentUserInfo(userNickname, null, e -> {
+            if (e != null) {
+                // Error!
+                Toast.makeText(
+                        IntroActivity.this, "" + e.getCode() + ":" + e.getMessage(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+                // Show update failed snackbar
+                //showSnackbar("Update user nickname failed");
+
+                return;
+            }
+
+            PreferenceUtils.setNickname(userNickname);
+        });
     }
 }

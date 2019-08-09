@@ -66,4 +66,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="download">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="upload">Upload</string>
+    <string name="resend_message">Resend</string>
+    <string name="delete_message">Delete</string>
+
+    <string name="all_group_channels">판매 채팅</string>
+
+    <string name="group_channel_list_file_message_text">%1$s has uploaded a file.</string>
+
+    <!-- Message Status -->
+    <string name="message_sending">Sending</string>
+    <string name="message_failed">Failed</string>
+
 </resources>

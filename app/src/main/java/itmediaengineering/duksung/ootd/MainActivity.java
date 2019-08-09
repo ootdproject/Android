@@ -1,6 +1,7 @@
 package itmediaengineering.duksung.ootd;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -8,6 +9,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.ActivityCompat;
@@ -16,6 +18,7 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -24,15 +27,18 @@ import android.widget.Toast;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import itmediaengineering.duksung.ootd.chat_list.view.ChatListActivity;
 import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.main.adapter.MainPagerAdapter;
 import itmediaengineering.duksung.ootd.main.presenter.MainContract;
 import itmediaengineering.duksung.ootd.main.presenter.MainPresenter;
 import itmediaengineering.duksung.ootd.main.tab.category.view.CategoryFragment;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
-import itmediaengineering.duksung.ootd.main.tab.mypage.MyPageFragment;
+import itmediaengineering.duksung.ootd.main.tab.mypage.view.MyPageFragment;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
+import itmediaengineering.duksung.ootd.map.LocationDemoActivity;
+import itmediaengineering.duksung.ootd.map.runtimePermissions.AppPermissionHandlerActivity;
 
 /*
 탭을 구현하는 MainActivity
@@ -40,9 +46,12 @@ import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 */
 
 public class MainActivity extends AppCompatActivity
-    implements MainContract.View{
+        implements MainContract.View {
 
-    public static final String TAG = "TAG MESSAGE";
+    public static final String TAG = MainActivity.class.getSimpleName();
+
+    private static final int INTENT_REQUEST_LOCATION = 302;
+    public static final String PERMISSION_STRINGS = "permissions";
 
     @BindView(R.id.viewpager_content)
     ViewPager viewpagerContent;
@@ -62,14 +71,17 @@ public class MainActivity extends AppCompatActivity
     ImageView notiBtn;
 
     protected MainPresenter mainPresenter;
-    private  MainPagerAdapter adapter;
+    private MainPagerAdapter adapter;
     private LocationManager locationManager;
     private String locationProvider;
     private String myLocation;
+    private boolean isSelectedLocation = true;
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private static final int MIN_DISTANCE = 50;
 
+    private double longitude;
+    private double latitude;
     private int uploadCnt = 0;
 
     @Override
@@ -96,7 +108,7 @@ public class MainActivity extends AppCompatActivity
                         locationChangeBtn.setVisibility(View.GONE);
                         break;
                     case 2:
-                        if(uploadCnt == 0) {
+                        if (uploadCnt == 0) {
                             Intent intent = new Intent(MainActivity.this, UploadActivity.class);
                             startActivity(intent);
                             uploadCnt++;
@@ -114,10 +126,12 @@ public class MainActivity extends AppCompatActivity
             }
 
             @Override
-            public void onTabUnselected(TabLayout.Tab tab) { }
+            public void onTabUnselected(TabLayout.Tab tab) {
+            }
 
             @Override
-            public void onTabReselected(TabLayout.Tab tab) { }
+            public void onTabReselected(TabLayout.Tab tab) {
+            }
         });
 
         setupTabIcons();
@@ -174,28 +188,31 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        if ( Build.VERSION.SDK_INT >= 26 &&
-                ContextCompat.checkSelfPermission( this, Manifest.permission.ACCESS_COARSE_LOCATION ) != PackageManager.PERMISSION_GRANTED ) {
-            ActivityCompat.requestPermissions(this, new String[] {  Manifest.permission.ACCESS_COARSE_LOCATION  },
-                    0 );
-        }
-        else{
-            Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-            String provider = lastKnownLocation.getProvider();
-            double longitude = lastKnownLocation.getLongitude(); // 경도
-            double latitude = lastKnownLocation.getLatitude();  // 위도
 
-            // 위치정보 호출
-            if(tabContent.getSelectedTabPosition() == 0) {
-                mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
+        if (Build.VERSION.SDK_INT >= 26 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                    0);
+        } else {
+            if(isSelectedLocation) {
+                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+                String provider = lastKnownLocation.getProvider();
+                longitude = lastKnownLocation.getLongitude(); // 경도
+                latitude = lastKnownLocation.getLatitude();  // 위도
+
+                locationManager.requestLocationUpdates(
+                        locationProvider,
+                        TWO_MINUTES,
+                        MIN_DISTANCE,
+                        locationListener);
             }
+                // 위치정보 호출
+                if (tabContent.getSelectedTabPosition() == 0) {
+                    mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
+                }
 
-            locationManager.requestLocationUpdates(
-                    locationProvider,
-                    TWO_MINUTES,
-                    MIN_DISTANCE,
-                    locationListener);
         }
+
     }
 
     // 이 부분은 사용자가 새로고침 눌렀을 때 실행되도록 하자!
@@ -216,18 +233,58 @@ public class MainActivity extends AppCompatActivity
                     "위치정보 호출횟수  : " + cnt);*/
         }
 
-        public void onStatusChanged(String provider, int status, Bundle extras) { }
+        public void onStatusChanged(String provider, int status, Bundle extras) {
+        }
 
-        public void onProviderEnabled(String provider) { }
+        public void onProviderEnabled(String provider) {
+        }
 
-        public void onProviderDisabled(String provider) { }
+        public void onProviderDisabled(String provider) {
+        }
     };
 
     @OnClick(R.id.main_toolbar_title)
-    public void onChangeLocationBtnClick(){
+    public void onChangeLocationBtnClick() {
+        /*Intent intent = new Intent(this, AppPermissionHandlerActivity.class);
+        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+        intent.putExtra(PERMISSION_STRINGS, permissions);
+        startActivity(intent);*/
 
+        if (Build.VERSION.SDK_INT >= 26 &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
+                    0);
+        } else {
+            Intent intent = new Intent(this, LocationDemoActivity.class);
+            startActivityForResult(intent, INTENT_REQUEST_LOCATION);
+        }
     }
 
+    @OnClick(R.id.main_activity_noti_btn)
+    public void onChattingAlarmBtnClick() {
+        Intent intent = new Intent(this, ChatListActivity.class);
+        startActivity(intent);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        // Set this as true to restart auto-background detection.
+        // This means that you will be automatically disconnected from SendBird when your
+        // app enters the background.
+
+        if (requestCode == INTENT_REQUEST_LOCATION && resultCode == Activity.RESULT_OK) {
+            if (data == null) {
+                Log.d(TAG, "data is null!");
+                return;
+            }
+            isSelectedLocation = false;
+            latitude = data.getDoubleExtra("latitude", 0.0d);
+            longitude = data.getDoubleExtra("longitude", 0.0d);
+            //locationView.setText(data.getStringExtra("location"));
+        }
+    }
 
     @Override
     public void toast(String msg) {
@@ -261,12 +318,13 @@ public class MainActivity extends AppCompatActivity
 
     }
 
-    public interface onKeyBackPressedListener{
+    public interface onKeyBackPressedListener {
         void onBack();
     }
 
     private onKeyBackPressedListener onKeyBackPressedListener;
-    public void setOnBackPressedListener(onKeyBackPressedListener listener){
+
+    public void setOnBackPressedListener(onKeyBackPressedListener listener) {
         onKeyBackPressedListener = listener;
     }
 }

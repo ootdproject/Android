@@ -37,6 +37,10 @@
         <item name="android:textSize">14sp</item>
     </style>
 
+    <style name="Toolbar" parent="ThemeOverlay.AppCompat.Dark">
+        <item name="android:textColorPrimary">#000000</item>
+    </style>
+
     <style name="ThemeOverlay.FirebaseIcon" parent="AppTheme">
     </style>
 
