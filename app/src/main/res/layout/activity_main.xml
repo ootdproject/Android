@@ -116,8 +116,7 @@
             android:background="?attr/selectableItemBackground"
             app:srcCompat="@drawable/round_notifications_none_black_36"
             tools:layout_editor_absoluteX="16dp"/>
-
-    </android.support.v7.widget.Toolbar>
+        </android.support.v7.widget.Toolbar>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_content"
@@ -138,7 +137,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tabGravity="fill"
-        app:tabIndicatorColor="#03A9F4"
+        app:tabIndicatorColor="#ce6776"
         app:tabIndicatorHeight="3dp"
         app:tabMode="fixed"/>
 

@@ -20,10 +20,10 @@
     <color name="openChatNicknameMe">#00BCD4</color>
 
     <!-- Group Chat -->
-    <color name="groupChatBubbleMe">#774df2</color>
+    <color name="groupChatBubbleMe">#F5ACC5</color>
     <color name="groupChatTextMe">#ffffff</color>
     <color name="groupChatBubbleOther">#eef1f6</color>
-    <color name="groupChatTextOther">#000000</color>
+    <color name="groupChatTextOther">#8190CC</color>
 
     <color name="groupChatReadReceiptMe">#1fcc94</color>
     <color name="groupChatReadReceiptOther">#00BCD4</color>

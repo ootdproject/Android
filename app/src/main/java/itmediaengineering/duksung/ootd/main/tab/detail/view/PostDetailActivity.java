@@ -1,8 +1,13 @@
 package itmediaengineering.duksung.ootd.main.tab.detail.view;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -33,14 +38,16 @@ public class PostDetailActivity extends AppCompatActivity {
     static final int STATE_SELECT_USERS = 0;
     static final int STATE_SELECT_DISTINCT = 1;
 
-    @BindView(R.id.detail_activity_back_btn)
-    ImageView backBtn;
-    @BindView(R.id.detail_activity_post_img)
+    /*@BindView(R.id.detail_activity_back_btn)
+    ImageView backBtn;*/
+    @BindView(R.id.ivActivityMaterialDetail)
     ImageView postImgView;
-    @BindView(R.id.detail_activity_user_profile_img)
-    ImageView userImg;
-    @BindView(R.id.detail_activity_nickname_view)
-    TextView userNick;
+    /*@BindView(R.id.detail_activity_user_profile_img)
+    ImageView userImg;*/
+    /*@BindView(R.id.detail_activity_nickname_view)
+    TextView userNick;*/
+    @BindView(R.id.tbActivityMaterialDetail)
+    Toolbar toolbar;
     @BindView(R.id.detail_activity_post_title)
     TextView postTitle;
     @BindView(R.id.detail_activity_cost_view)
@@ -49,8 +56,8 @@ public class PostDetailActivity extends AppCompatActivity {
     TextView dongAndTime;
     @BindView(R.id.detail_activity_description_view)
     TextView postDesc;
-    @BindView(R.id.detail_activity_chatting_btn)
-    TextView chattingBtn;
+    @BindView(R.id.fabActivityMaterialDetail)
+    FloatingActionButton chattingBtn;
 
     //SharedPreferences sharedPreferences = getSharedPreferences("sFile", MODE_PRIVATE);
 
@@ -65,17 +72,26 @@ public class PostDetailActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_post_detail);
+        setContentView(R.layout.activity_material_detail);
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
         Post post = intent.getParcelableExtra("post");
 
+        setSupportActionBar(toolbar);
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayShowTitleEnabled(false);
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            //actionBar.setTitle(post.getTitle());
+            //actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
+        }
+
         Glide.with(this)
                 .load(post.getImageUrl())
                 .into(postImgView);
 
-        userNick.setText(post.getMember().getNickname());
+        //userNick.setText(post.getMember().getNickname());
         postTitle.setText(post.getTitle());
         postCost.setText(post.getCost());
         dongAndTime.setText(post.getDong() + "  |  " + post.getCreatedAt());
@@ -84,7 +100,7 @@ public class PostDetailActivity extends AppCompatActivity {
         mSelectedIds = new ArrayList<>();
     }
 
-    @OnClick(R.id.detail_activity_chatting_btn)
+    @OnClick(R.id.fabActivityMaterialDetail)
     public void onChattingBtnClick() {
         /*writeNewUser(
                 sharedPreferences.getString("uid",""),
@@ -109,9 +125,33 @@ public class PostDetailActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick(R.id.detail_activity_back_btn)
-    public void onBackBtnClick() {
-        finish();
+    public interface onBackPressedListener {
+        boolean onBack();
+    }
+    private PostDetailActivity.onBackPressedListener mOnBackPressedListener;
+
+    public void setOnBackPressedListener(PostDetailActivity.onBackPressedListener listener) {
+        mOnBackPressedListener = listener;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (mOnBackPressedListener != null && mOnBackPressedListener.onBack()) {
+            return;
+        }
+        super.onBackPressed();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == android.R.id.home) {
+            onBackPressed();
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     private void createGroupChannel(List<String> userIds, boolean distinct) {

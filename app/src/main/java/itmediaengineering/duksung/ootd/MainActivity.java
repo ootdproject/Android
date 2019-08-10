@@ -38,7 +38,6 @@ import itmediaengineering.duksung.ootd.main.tab.mypage.view.MyPageFragment;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 import itmediaengineering.duksung.ootd.map.LocationDemoActivity;
-import itmediaengineering.duksung.ootd.map.runtimePermissions.AppPermissionHandlerActivity;
 
 /*
 탭을 구현하는 MainActivity
@@ -75,7 +74,8 @@ public class MainActivity extends AppCompatActivity
     private LocationManager locationManager;
     private String locationProvider;
     private String myLocation;
-    private boolean isSelectedLocation = true;
+    private boolean isAutoLocation = true;
+    private boolean isAutoLocationInit = true;
 
     private static final int TWO_MINUTES = 1000 * 60 * 2;
     private static final int MIN_DISTANCE = 50;
@@ -136,6 +136,9 @@ public class MainActivity extends AppCompatActivity
 
         setupTabIcons();
 
+        isAutoLocation = true;
+        isAutoLocationInit = true;
+
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationProvider = LocationManager.NETWORK_PROVIDER;
 
@@ -194,7 +197,7 @@ public class MainActivity extends AppCompatActivity
             ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
                     0);
         } else {
-            if(isSelectedLocation) {
+            if (isAutoLocation && isAutoLocationInit) {
                 Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
                 String provider = lastKnownLocation.getProvider();
                 longitude = lastKnownLocation.getLongitude(); // 경도
@@ -205,11 +208,14 @@ public class MainActivity extends AppCompatActivity
                         TWO_MINUTES,
                         MIN_DISTANCE,
                         locationListener);
+
+                isAutoLocationInit = false;
             }
-                // 위치정보 호출
-                if (tabContent.getSelectedTabPosition() == 0) {
-                    mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
-                }
+
+            // 위치정보 호출
+            if (tabContent.getSelectedTabPosition() == 0) {
+                mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
+            }
 
         }
 
@@ -279,7 +285,7 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "data is null!");
                 return;
             }
-            isSelectedLocation = false;
+            isAutoLocation = false;
             latitude = data.getDoubleExtra("latitude", 0.0d);
             longitude = data.getDoubleExtra("longitude", 0.0d);
             //locationView.setText(data.getStringExtra("location"));
@@ -304,8 +310,9 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSuccessGetLocation(Document document) {
-        locationView.setText(document.getRegion3depthName());
-        myLocation = document.getRegion3depthName();
+        String location = document.getRegion2depthName() + " " + document.getRegion3depthName();
+        locationView.setText(location);
+        myLocation = location;
     }
 
     @Override

@@ -1,5 +1,7 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 
+import android.widget.ImageView;
+
 import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapterContract;
 
@@ -10,7 +12,7 @@ public interface FeedContract {
         //void onUnknownError();
         void onSuccessGetList();
         //void onConnectFail();
-        void startPostDetailActivity(Post post);
+        void startPostDetailActivity(Post post, ImageView sharedView);
         //void onNotFound();
     }
 

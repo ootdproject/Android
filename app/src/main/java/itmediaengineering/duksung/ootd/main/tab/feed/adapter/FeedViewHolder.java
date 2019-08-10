@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -13,8 +14,10 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
+import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 
 public class FeedViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = FeedViewHolder.class.getSimpleName();
@@ -87,13 +90,16 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
         this.onItemClickListener = onItemClickListener;
         this.onPositionListener = onPositionListener;
         this.context = context;
+
+        //View view = findViewById(R..fab_b);
+        feedContentImg.setTransitionName("movieWork");
     }
 
     public void onBind(Post post, int position, int listSize){
         //userIdView.setText(post.getMemberId());
 
         feedItem.setOnClickListener(v ->
-                onItemClickListener.onItemClick(post));
+                onItemClickListener.onItemClick(post, feedContentImg));
                 //onItemClickListener.onItemClick(post, position));
         //feedItemTitle.setText(post.getMemberId());
         //feedItemCost.setText(post.getPostCount());

@@ -1,5 +1,9 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -95,7 +99,7 @@ public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallba
     }
 
     @Override
-    public void onItemClick(Post post) {
-        view.startPostDetailActivity(post);
+    public void onItemClick(Post post, ImageView sharedView) {
+        view.startPostDetailActivity(post, sharedView);
     }
 }

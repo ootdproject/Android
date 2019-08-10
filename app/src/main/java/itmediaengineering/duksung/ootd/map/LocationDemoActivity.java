@@ -1,13 +1,9 @@
 package itmediaengineering.duksung.ootd.map;
 
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -24,8 +20,7 @@ import itmediaengineering.duksung.ootd.R;
 public class LocationDemoActivity extends AppCompatActivity
         implements MapView.CurrentLocationEventListener,
         MapReverseGeoCoder.ReverseGeoCodingResultListener,
-        MapView.MapViewEventListener
-{
+        MapView.MapViewEventListener {
 
     private static final String LOG_TAG = "LocationDemoActivity";
 
@@ -51,6 +46,8 @@ public class LocationDemoActivity extends AppCompatActivity
         mMapView.setDaumMapApiKey(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY);
         mMapView.setCurrentLocationEventListener(this);
         mMapView.setMapViewEventListener(this);
+
+        okBtn.setClickable(false);
     }
 
     /*@Override
@@ -83,14 +80,18 @@ public class LocationDemoActivity extends AppCompatActivity
     }
 
     @OnClick(R.id.map_view_location_ok)
-    public void onOkBtnClick(){
-        //String location = locationView.getText().toString();
-        Intent intent = new Intent();
-        intent.putExtra("latitude", latitude);
-        intent.putExtra("longitude", longitude);
-        //intent.putExtra("location", location);
-        setResult(RESULT_OK, intent);
-        finish();
+    public void onOkBtnClick() {
+        if (okBtn.isClickable()) {
+            //String location = locationView.getText().toString();
+            Intent intent = new Intent();
+            intent.putExtra("latitude", latitude);
+            intent.putExtra("longitude", longitude);
+            //intent.putExtra("location", location);
+            setResult(RESULT_OK, intent);
+            finish();
+        } else {
+            Toast.makeText(LocationDemoActivity.this, "위치를 변경한 후 선택해 주세요", Toast.LENGTH_SHORT).show();
+        }
     }
 
     @Override
@@ -166,6 +167,11 @@ public class LocationDemoActivity extends AppCompatActivity
 
     @Override
     public void onMapViewDragEnded(MapView mapView, MapPoint mapPoint) {
+
+    }
+
+    @Override
+    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
         MapPoint.GeoCoordinate mapPointGeo = mapPoint.getMapPointGeoCoord();
         MapPoint.PlainCoordinate mapPointScreenLocation = mapPoint.getMapPointScreenLocation();
         latitude = mapPointGeo.latitude;
@@ -176,10 +182,6 @@ public class LocationDemoActivity extends AppCompatActivity
         mReverseGeoCoder = new MapReverseGeoCoder(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY, mMapView.getMapCenterPoint(), LocationDemoActivity.this, LocationDemoActivity.this);
         mReverseGeoCoder.startFindingAddress();
         okBtn.setBackgroundColor(0xffef5350);
-    }
-
-    @Override
-    public void onMapViewMoveFinished(MapView mapView, MapPoint mapPoint) {
-
+        okBtn.setClickable(true);
     }
 }
