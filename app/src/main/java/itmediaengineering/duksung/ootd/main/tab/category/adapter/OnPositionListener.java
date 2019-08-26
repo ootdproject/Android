@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.feed.adapter;
+package itmediaengineering.duksung.ootd.main.tab.category.adapter;
 
 public interface OnPositionListener {
     void onLoad(int page);

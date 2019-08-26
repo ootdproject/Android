@@ -15,7 +15,7 @@ public interface MainContract {
     }
 
     interface Presenter {
-        void getData(String x, String y);
+        void getLocation(double x, double y);
         //void getWeather(String baseDate, String baseTime, String nx, String ny);
         void attachView(View view);
         void detachView();

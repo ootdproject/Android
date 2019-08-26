@@ -5,6 +5,7 @@ import android.util.Log;
 import java.util.List;
 
 import itmediaengineering.duksung.ootd.data.location.Document;
+import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.model.MainCallback;
 import itmediaengineering.duksung.ootd.main.model.MainRetrofitModel;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
@@ -47,8 +48,8 @@ public class MainPresenter implements MainContract.Presenter, MainCallback.Retro
     }
 
     @Override
-    public void getData(String x, String y) {
-        mainRetrofitModel.getLocation(x, y);
+    public void getLocation(double x, double y) {
+        mainRetrofitModel.getLocation(String.valueOf(x), String.valueOf(y));
     }
 
     @Override

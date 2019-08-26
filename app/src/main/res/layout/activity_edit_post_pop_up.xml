@@ -3,8 +3,71 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_width="260dp"
+    android:layout_height="wrap_content"
     tools:context=".main.tab.mypage.view.EditPostPopUpActivity">
 
+    <TextView
+        android:id="@+id/textView2"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="24dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="24dp"
+        android:text="게시물 관리"
+        android:textColor="@color/app_point_black"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"/>
+
+    <TextView
+        android:id="@+id/edit_post_popup_sale_to_sold_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="14dp"
+        android:layout_marginEnd="4dp"
+        android:background="?attr/selectableItemBackground"
+        android:paddingStart="24dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="판매 완료"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textView2"/>
+
+    <TextView
+        android:id="@+id/edit_post_popup_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="?attr/selectableItemBackground"
+        android:paddingStart="24dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="게시물 수정"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_post_popup_sale_to_sold_btn"/>
+
+    <TextView
+        android:id="@+id/edit_post_popup_delete_btn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="14dp"
+        android:paddingStart="24dp"
+        android:paddingTop="14dp"
+        android:paddingBottom="14dp"
+        android:text="게시물 삭제"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edit_post_popup_btn"/>
 </android.support.constraint.ConstraintLayout>

@@ -3,22 +3,20 @@ package itmediaengineering.duksung.ootd.retrofit;
 import com.google.gson.JsonObject;
 
 import java.util.List;
-import java.util.Map;
 
-import itmediaengineering.duksung.ootd.data.mygallery.GalleryResponse;
+import itmediaengineering.duksung.ootd.data.ResponseAuth;
 import itmediaengineering.duksung.ootd.data.post.Post;
-import itmediaengineering.duksung.ootd.data.post.PostRequest;
-import itmediaengineering.duksung.ootd.data.weather.WeatherResponse;
 import okhttp3.MultipartBody;
-import okhttp3.RequestBody;
+import okhttp3.ResponseBody;
 import retrofit2.Call;
 import retrofit2.http.Body;
+import retrofit2.http.DELETE;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
 import retrofit2.http.Multipart;
 import retrofit2.http.POST;
 import retrofit2.http.Part;
-import retrofit2.http.PartMap;
+import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RetrofitService {
@@ -26,37 +24,83 @@ public interface RetrofitService {
     //String API_KEY = "b727dc9341180f8b23d6b4a3043f687e";
 
     @POST("/members")
-    Call<Void> createUser(
+    Call<ResponseAuth> createUser(
             @Body JsonObject userData
     );
 
     @POST("/members/login")
-    Call<Void> login(
+    Call<ResponseAuth> login(
             @Query("providerUserId") String token
     );
 
     @GET("/posts")
     Call<List<Post>> getPosts(
-            @Header("Authorization") String authorization
+            @Header("Authorization") String authorization,
+            @Query("page") int pageNum,
+            @Query("sort") String sort,
+            @Query("sale") boolean sale
+
+    );
+
+    @GET("/posts")
+    Call<List<Post>> getMyPickPosts(
+            @Header("Authorization") String authorization,
+            @Query("page") int pageNum,
+            @Query("sort") String sort,
+            @Query("onlyLike") Boolean isPick
+    );
+
+    @GET("/posts")
+    Call<List<Post>> getGuPosts(
+            @Header("Authorization") String authorization,
+            @Query("q") String gu,
+            @Query("page") int pageNum,
+            @Query("sort") String sort
+    );
+
+    @GET("/posts")
+    Call<List<Post>> getCategoryPosts(
+            @Header("Authorization") String authorization,
+            @Query("category") String category,
+            @Query("page") int pageNum,
+            @Query("sort") String sort
+    );
+
+    @POST("/posts/{postId}")
+    Call<Void> editPost(
+            @Header("Authorization") String authorization,
+            @Path("postId") int postId,
+            @Body JsonObject postRequest,
+            @Header("x-providerUserId") String pUid
     );
 
     @Multipart
     @POST("/posts")
-    Call<Post> createPost(
+    Call<ResponseBody> createPost(
             @Header("Authorization") String auth,
+            @Header("x-providerUserId") String pUid,
             @Part MultipartBody.Part file,
-            @Part MultipartBody.Part postRequest,
+            //@Part("postRequest") RequestBody postRequest
+            @Part MultipartBody.Part postRequest
             //@PartMap Map<String, RequestBody> postRequest,
-            @Header("x-providerUserId") String pUid
     );
 
     @GET("/myposts")
     Call<List<Post>> getMyPosts(
             @Header("Authorization") String authorization,
+            @Header("x-providerUserId") String pUid,
+            @Query ("sale") Boolean isSale
+    );
+
+    @DELETE("/posts/{postId}/delete")
+    Call<Void> deleteMyPost(
+            @Header("Authorization") String authorization,
+            @Path("postId") int postId,
             @Header("x-providerUserId") String pUid
     );
+
     /*@GET(FLICKR_SUB_URL)
-    Call<GalleryResponse> getGallery(
+    Call<GalleryResponse> getMyPosts(
             @Query("api_key") String key,
             @Query ("method") String method,
             @Query("format") String format,

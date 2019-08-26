@@ -128,7 +128,7 @@ public class LocationDemoActivity extends AppCompatActivity
 
     private void onFinishReverseGeoCoding(String result) {
         //locationView.setText(result);
-        Toast.makeText(LocationDemoActivity.this, "Reverse Geo-coding : " + result, Toast.LENGTH_SHORT).show();
+        Toast.makeText(LocationDemoActivity.this, "선택된 위치 : " + result, Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -181,7 +181,7 @@ public class LocationDemoActivity extends AppCompatActivity
 
         mReverseGeoCoder = new MapReverseGeoCoder(MapApiConst.DAUM_MAPS_ANDROID_APP_API_KEY, mMapView.getMapCenterPoint(), LocationDemoActivity.this, LocationDemoActivity.this);
         mReverseGeoCoder.startFindingAddress();
-        okBtn.setBackgroundColor(0xffef5350);
+        okBtn.setBackgroundColor(0xffB128C0);
         okBtn.setClickable(true);
     }
 }

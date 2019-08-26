@@ -1,22 +1,21 @@
 package itmediaengineering.duksung.ootd;
 
 import android.Manifest;
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
-import android.location.LocationListener;
 import android.location.LocationManager;
-import android.os.Build;
+import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -34,23 +33,21 @@ import itmediaengineering.duksung.ootd.main.presenter.MainContract;
 import itmediaengineering.duksung.ootd.main.presenter.MainPresenter;
 import itmediaengineering.duksung.ootd.main.tab.category.view.CategoryFragment;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
+import itmediaengineering.duksung.ootd.main.tab.feed.view.LocationUpdatable;
 import itmediaengineering.duksung.ootd.main.tab.mypage.view.MyPageFragment;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
 import itmediaengineering.duksung.ootd.map.LocationDemoActivity;
 
-/*
-탭을 구현하는 MainActivity
-탭과 함께 뷰페이져 구성하여 각 탭들의 상태유지를 생각해야 함
-*/
-
-public class MainActivity extends AppCompatActivity
-        implements MainContract.View {
-
+public class MainActivity extends AppCompatActivity implements MainContract.View {
     public static final String TAG = MainActivity.class.getSimpleName();
 
     private static final int INTENT_REQUEST_LOCATION = 302;
-    public static final String PERMISSION_STRINGS = "permissions";
+    private static final int REQUEST_LOCATION_PERMISSION = 303;
+    private static final int FEED_TAB = 0;
+    private static final int CATEGORY_TAB = 1;
+    private static final int UPLOAD_TAB = 2;
+    private static final int MY_PAGE_TAB = 3;
 
     @BindView(R.id.viewpager_content)
     ViewPager viewpagerContent;
@@ -72,16 +69,11 @@ public class MainActivity extends AppCompatActivity
     protected MainPresenter mainPresenter;
     private MainPagerAdapter adapter;
     private LocationManager locationManager;
-    private String locationProvider;
+    private LocationUpdatable locationUpdatable;
     private String myLocation;
-    private boolean isAutoLocation = true;
-    private boolean isAutoLocationInit = true;
+    private String locationProvider;
+    private String myDongLocation;
 
-    private static final int TWO_MINUTES = 1000 * 60 * 2;
-    private static final int MIN_DISTANCE = 50;
-
-    private double longitude;
-    private double latitude;
     private int uploadCnt = 0;
 
     @Override
@@ -96,30 +88,30 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 switch (tab.getPosition()) {
-                    case 0:
+                    case FEED_TAB:
                         locationTitle.setClickable(true);
-                        locationView.setText(myLocation);
-                        //onResume();
+                        locationView.setText(myLocation == null ? "" : myLocation);
                         locationChangeBtn.setVisibility(View.VISIBLE);
+                        locationUpdatable.onLocationUpdated(myDongLocation);
                         break;
-                    case 1:
+                    case CATEGORY_TAB:
                         locationTitle.setClickable(false);
-                        locationView.setText("카테고리");
+                        locationView.setText(R.string.tab_category_title);
                         locationChangeBtn.setVisibility(View.GONE);
                         break;
-                    case 2:
+                    case UPLOAD_TAB:
                         if (uploadCnt == 0) {
                             Intent intent = new Intent(MainActivity.this, UploadActivity.class);
                             startActivity(intent);
                             uploadCnt++;
                         }
                         locationTitle.setClickable(false);
-                        locationView.setText("나의 물품 판매하기");
+                        locationView.setText(R.string.tab_upload_title);
                         locationChangeBtn.setVisibility(View.GONE);
                         break;
-                    case 3:
+                    case MY_PAGE_TAB:
                         locationTitle.setClickable(false);
-                        locationView.setText("마이 페이지");
+                        locationView.setText(R.string.tab_my_page_title);
                         locationChangeBtn.setVisibility(View.GONE);
                         break;
                 }
@@ -135,20 +127,31 @@ public class MainActivity extends AppCompatActivity
         });
 
         setupTabIcons();
-
-        isAutoLocation = true;
-        isAutoLocationInit = true;
-
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationProvider = LocationManager.NETWORK_PROVIDER;
 
         mainPresenter = new MainPresenter();
         mainPresenter.attachView(this);
+        requestPermissionIfNeeded();
+        refreshLocation();
+    }
+
+    private void requestPermissionIfNeeded() {
+        if (HasLocationPermission()) { return; }
+        requestPermissions(new String[]{Manifest.permission.ACCESS_COARSE_LOCATION, Manifest.permission.ACCESS_FINE_LOCATION},
+                REQUEST_LOCATION_PERMISSION);
+    }
+
+    private boolean HasLocationPermission() {
+        return ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED;
     }
 
     private void setupViewPager(ViewPager viewPager) {
         adapter = new MainPagerAdapter(getSupportFragmentManager());
-        adapter.addFragment(FeedFragment.newInstance(), "First");
+        FeedFragment feedFragment = FeedFragment.newInstance();
+        locationUpdatable = feedFragment;
+        adapter.addFragment(feedFragment, "First");
         adapter.addFragment(CategoryFragment.newInstance(), "Second");
         adapter.addFragment(UploadFragment.newInstance(), "Third");
         adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
@@ -172,82 +175,40 @@ public class MainActivity extends AppCompatActivity
         TextView txtThird = viewThird.findViewById(R.id.txt_tab);
         TextView txtFourth = viewFourth.findViewById(R.id.txt_tab);
 
-        imgFirst.setImageResource(R.drawable.icn_home_inactive);
-        imgSecond.setImageResource(R.drawable.icn_menu_outlined);
-        imgThird.setImageResource(R.drawable.icn_add_outlined);
-        imgFourth.setImageResource(R.drawable.icn_profile_inactive);
+        imgFirst.setImageResource(R.drawable.tab_icon_feed_line);
+        imgSecond.setImageResource(R.drawable.tab_icon_category_line);
+        imgThird.setImageResource(R.drawable.tab_icon_upload_line);
+        imgFourth.setImageResource(R.drawable.tab_icon_mypage_line);
 
         txtFirst.setText("Feed");
         txtSecond.setText("Category");
         txtThird.setText("Upload");
         txtFourth.setText("My Page");
 
-        tabContent.getTabAt(0).setCustomView(viewFirst);
-        tabContent.getTabAt(1).setCustomView(viewSecond);
-        tabContent.getTabAt(2).setCustomView(viewThird);
-        tabContent.getTabAt(3).setCustomView(viewFourth);
+        tabContent.getTabAt(FEED_TAB).setCustomView(viewFirst);
+        tabContent.getTabAt(CATEGORY_TAB).setCustomView(viewSecond);
+        tabContent.getTabAt(UPLOAD_TAB).setCustomView(viewThird);
+        tabContent.getTabAt(MY_PAGE_TAB).setCustomView(viewFourth);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-
-        if (Build.VERSION.SDK_INT >= 26 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
-                    0);
-        } else {
-            if (isAutoLocation && isAutoLocationInit) {
-                Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-                String provider = lastKnownLocation.getProvider();
-                longitude = lastKnownLocation.getLongitude(); // 경도
-                latitude = lastKnownLocation.getLatitude();  // 위도
-
-                locationManager.requestLocationUpdates(
-                        locationProvider,
-                        TWO_MINUTES,
-                        MIN_DISTANCE,
-                        locationListener);
-
-                isAutoLocationInit = false;
-            }
-
-            // 위치정보 호출
-            if (tabContent.getSelectedTabPosition() == 0) {
-                mainPresenter.getData(String.valueOf(latitude), String.valueOf(longitude));
-            }
-
-        }
-
     }
 
-    // 이 부분은 사용자가 새로고침 눌렀을 때 실행되도록 하자!
-    final LocationListener locationListener = new LocationListener() {
-        public void onLocationChanged(Location location) {
-            //네트워크 위치 제공자에 의해 새 위치가 인식되었을 경우
-            //makeUseOfNewLocation(location);
-            //cnt++;
-            String provider = location.getProvider();
-            double longitude = location.getLongitude();
-            double latitude = location.getLatitude();
-            double altitude = location.getAltitude();
+    private void refreshLocation() {
+        if (!HasLocationPermission()) { return; }
+        @SuppressLint("MissingPermission")
+        Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
+        double longitude = lastKnownLocation.getLongitude();// 경도
+        double latitude = lastKnownLocation.getLatitude();// 위도
 
-            /*txtResult.setText("바뀐위치정보 : " + provider + "\n" +
-                    "위도 : " + longitude + "\n" +
-                    "경도 : " + latitude + "\n" +
-                    "고도  : " + altitude + "\n" +
-                    "위치정보 호출횟수  : " + cnt);*/
-        }
+        refreshLocation(longitude, latitude);
+    }
 
-        public void onStatusChanged(String provider, int status, Bundle extras) {
-        }
-
-        public void onProviderEnabled(String provider) {
-        }
-
-        public void onProviderDisabled(String provider) {
-        }
-    };
+    private void refreshLocation(double longitude, double latitude) {
+        mainPresenter.getLocation(latitude, longitude);
+    }
 
     @OnClick(R.id.main_toolbar_title)
     public void onChangeLocationBtnClick() {
@@ -256,20 +217,30 @@ public class MainActivity extends AppCompatActivity
         intent.putExtra(PERMISSION_STRINGS, permissions);
         startActivity(intent);*/
 
-        if (Build.VERSION.SDK_INT >= 26 &&
-                ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},
-                    0);
-        } else {
+        if (!HasLocationPermission()) { return; }
             Intent intent = new Intent(this, LocationDemoActivity.class);
             startActivityForResult(intent, INTENT_REQUEST_LOCATION);
-        }
     }
 
     @OnClick(R.id.main_activity_noti_btn)
     public void onChattingAlarmBtnClick() {
         Intent intent = new Intent(this, ChatListActivity.class);
         startActivity(intent);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // 권한 요청에 대한 결과 처리
+        // If request is cancelled, the result arrays are empty.
+        if (requestCode == REQUEST_LOCATION_PERMISSION &&
+                grantResults.length > 0 &&
+                grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+            refreshLocation();
+        }
+        else {
+            finish();
+        }
     }
 
     @Override
@@ -285,10 +256,11 @@ public class MainActivity extends AppCompatActivity
                 Log.d(TAG, "data is null!");
                 return;
             }
-            isAutoLocation = false;
-            latitude = data.getDoubleExtra("latitude", 0.0d);
-            longitude = data.getDoubleExtra("longitude", 0.0d);
+
+            double latitude = data.getDoubleExtra("latitude", 0.0d);
+            double longitude = data.getDoubleExtra("longitude", 0.0d);
             //locationView.setText(data.getStringExtra("location"));
+            refreshLocation(longitude, latitude);
         }
     }
 
@@ -310,9 +282,11 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSuccessGetLocation(Document document) {
-        String location = document.getRegion2depthName() + " " + document.getRegion3depthName();
-        locationView.setText(location);
+        String location = document.getRegion2depthName() + " [" + document.getRegion3depthName() + "]";
         myLocation = location;
+        locationView.setText(location);
+        myDongLocation = document.getRegion2depthName();
+        locationUpdatable.onLocationUpdated(myDongLocation);
     }
 
     @Override

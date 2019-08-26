@@ -1,56 +1,69 @@
 package itmediaengineering.duksung.ootd.main.tab.category.presenter;
 
 import android.util.Log;
+import android.widget.ImageView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import itmediaengineering.duksung.ootd.data.location.Document;
+import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.data.weather.Item;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryAdapterContract;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.OnItemClickListener;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.OnPositionListener;
 import itmediaengineering.duksung.ootd.main.tab.category.model.CategoryCallback;
 import itmediaengineering.duksung.ootd.main.tab.category.model.CategoryRetrofitModel;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 
 public class CategoryPresenter
-        implements CategoryContract.Presenter, CategoryCallback.RetrofitCallback {
+        implements CategoryContract.Presenter, CategoryCallback.RetrofitCallback,
+        OnPositionListener, OnItemClickListener {
     private static final String TAG = CategoryPresenter.class.getSimpleName();
     private CategoryContract.View view;
-    private CategoryRetrofitModel categoryRetrofitModel;
+    private CategoryRetrofitModel retrofitModel;
+    private CategoryAdapterContract.View adapterView;
+    private CategoryAdapterContract.Model adapterModel;
+
+    private int page;
+    private String category;
 
     public CategoryPresenter(){
-        categoryRetrofitModel = new CategoryRetrofitModel();
-        categoryRetrofitModel.setCallback(this);
+        retrofitModel = new CategoryRetrofitModel();
+        retrofitModel.setCallback(this);
     }
 
     @Override
-    public void onSuccess(int code, List<Item> weather, List<Document> location) {
-        if (code == 0000 && location == null) {
-            view.onNotFound();
+    public void getCategoryPost(String categoryStr) {
+        page = 0;
+        category = categoryStr;
+        adapterModel.clearFeed();
+        retrofitModel.getCategoryPosts(categoryStr, page);
+    }
+
+    @Override
+    public void onSuccess(int code, List<Post> posts) {
+        if (code == ResponseCode.NOT_FOUND && posts == null) {
+            //view.onNotFound();
             return;
         }
 
-        if (code == ResponseCode.UNAUTHORIZED && location == null) {
-            view.onUnauthorizedError();
+        if (code == ResponseCode.UNAUTHORIZED && posts == null) {
+            //view.onUnauthorizedError();
             return;
         }
 
-        if (code == 200 && location != null) {
-            view.onSuccessGetLocation(location.get(0));
-            view.onSuccessGetWeather(weather.get(3));
-            Log.d(TAG, location.get(0).getAddressName());
-            Log.d(TAG, weather.get(3).getCategory() + " : " + weather.get(3).getObsrValue());
+        if (code == ResponseCode.SUCCESS && posts != null) {
+            //Log.d(TAG, posts.get(0).toString());
+            adapterModel.addPosts(new ArrayList(posts));
+            //view.onSuccessGetList();
             return;
         }
-        view.onUnknownError();
     }
 
     @Override
     public void onFailure() {
-        view.onConnectFail();
-    }
-
-    @Override
-    public void getData(String x, String y) {
-        categoryRetrofitModel.getLocation(x, y);
+        //view.onConnectFail();
     }
 
     @Override
@@ -61,5 +74,31 @@ public class CategoryPresenter
     @Override
     public void detachView() {
         this.view = null;
+    }
+
+    @Override
+    public void setAdapterView(CategoryAdapterContract.View adapterView) {
+        this.adapterView = adapterView;
+        this.adapterView.setOnPositionListener(this);
+        this.adapterView.setOnClickListener(this);
+    }
+
+    @Override
+    public void setAdapterModel(CategoryAdapterContract.Model adapterModel) {
+        this.adapterModel = adapterModel;
+    }
+
+    @Override
+    public void onItemClick(Post post, ImageView sharedView) {
+        view.startPostDetailActivity(post, sharedView);
+    }
+
+    @Override
+    public void onLoad(int page) {
+        if (this.page == page)
+            return;
+        this.page = page;
+        Log.d(TAG, "page : " + page);
+        retrofitModel.getCategoryPosts(category, page);
     }
 }

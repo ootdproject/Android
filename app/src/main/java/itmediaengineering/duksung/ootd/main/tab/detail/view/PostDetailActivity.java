@@ -34,6 +34,7 @@ import itmediaengineering.duksung.ootd.utils.PushUtils;
 public class PostDetailActivity extends AppCompatActivity {
 
     public static final String EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
+    public static final String START_ACTIVITY_FROM_POST_DETAIL = "START_ACTIVITY_FROM_POST_DETAIL";
 
     static final int STATE_SELECT_USERS = 0;
     static final int STATE_SELECT_DISTINCT = 1;
@@ -50,6 +51,8 @@ public class PostDetailActivity extends AppCompatActivity {
     Toolbar toolbar;
     @BindView(R.id.detail_activity_post_title)
     TextView postTitle;
+    @BindView(R.id.detail_activity_user)
+    TextView postUserId;
     @BindView(R.id.detail_activity_cost_view)
     TextView postCost;
     @BindView(R.id.detail_activity_dong_and_update_time)
@@ -83,7 +86,7 @@ public class PostDetailActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayShowTitleEnabled(false);
             actionBar.setDisplayHomeAsUpEnabled(true);
-            //actionBar.setTitle(post.getTitle());
+            //actionBar.setTitle("판매 정보");
             //actionBar.setHomeAsUpIndicator(R.drawable.icon_back);
         }
 
@@ -93,8 +96,9 @@ public class PostDetailActivity extends AppCompatActivity {
 
         //userNick.setText(post.getMember().getNickname());
         postTitle.setText(post.getTitle());
+        postUserId.setText("판매자 : " + post.getMember().getNickname());
         postCost.setText(post.getCost());
-        dongAndTime.setText(post.getDong() + "  |  " + post.getCreatedAt());
+        dongAndTime.setText(post.getDong() + "  |  " + post.getCreatedAt().split("T")[0]);
         postDesc.setText(post.getDescription());
 
         mSelectedIds = new ArrayList<>();
@@ -164,9 +168,10 @@ public class PostDetailActivity extends AppCompatActivity {
             Intent intent = new Intent(
                     PostDetailActivity.this, ChatListActivity.class);
             intent.putExtra(EXTRA_NEW_CHANNEL_URL, groupChannel.getUrl());
+            intent.putExtra(START_ACTIVITY_FROM_POST_DETAIL, true);
             setResult(RESULT_OK, intent);
             startActivity(intent);
-            finish();
+            //finish();
         });
     }
 
