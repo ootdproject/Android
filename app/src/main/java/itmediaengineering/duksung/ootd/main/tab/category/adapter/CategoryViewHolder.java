@@ -1,4 +1,4 @@
-package itmediaengineering.duksung.ootd.main.tab.feed.adapter;
+package itmediaengineering.duksung.ootd.main.tab.category.adapter;
 
 import android.content.Context;
 import android.support.constraint.ConstraintLayout;
@@ -14,13 +14,11 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
-import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 
-public class FeedViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = FeedViewHolder.class.getSimpleName();
+public class CategoryViewHolder extends RecyclerView.ViewHolder {
+    private static final String TAG = CategoryViewHolder.class.getSimpleName();
     private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
 
@@ -84,8 +82,8 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public FeedViewHolder(final Context context, ViewGroup parent,
-                          OnItemClickListener onItemClickListener, OnPositionListener onPositionListener) {
+    public CategoryViewHolder(final Context context, ViewGroup parent,
+                              OnItemClickListener onItemClickListener, OnPositionListener onPositionListener) {
         super(LayoutInflater.from(context).inflate(R.layout.feed_item, parent, false));
         ButterKnife.bind(this, itemView);
         this.onItemClickListener = onItemClickListener;
@@ -104,7 +102,6 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
                 //onItemClickListener.onItemClick(post, position));
         //feedItemTitle.setText(post.getMemberId());
         //feedItemCost.setText(post.getPostCount());
-
         if(!post.getSale()) {
             feedContentImgSoldFilter.setVisibility(View.VISIBLE);
         } else {

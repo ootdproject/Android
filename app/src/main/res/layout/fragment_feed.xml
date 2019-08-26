@@ -5,7 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".main.tab.feed.view.FeedActivity">
+    tools:context=".main.tab.feed.view.FeedFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/post_recycler_view"

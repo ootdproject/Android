@@ -1,5 +1,6 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 
+import android.support.annotation.Nullable;
 import android.widget.ImageView;
 
 import itmediaengineering.duksung.ootd.data.post.Post;
@@ -17,7 +18,7 @@ public interface FeedContract {
     }
 
     interface Presenter {
-        void getFeed();
+        void getFeedByLocationString(@Nullable String dongStr);
         //void getCreatedPosts();
         //void getLikedFeeds();
         void attachView(View view);

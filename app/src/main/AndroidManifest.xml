@@ -12,7 +12,9 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-    <meta-data android:name="com.kakao.sdk.AppKey" android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
+    <meta-data
+        android:name="com.kakao.sdk.AppKey"
+        android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
 
     <application
         android:name=".BaseApplication"
@@ -23,6 +25,11 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
+        <activity
+            android:name=".main.tab.mypage.view.EditPostPopUpActivity"
+            android:theme="@style/CustomPopup"/>
+        <activity android:name=".main.tab.category.view.CategoryActivity">
+        </activity>
         <activity android:name=".map.LocationDemoActivity">
         </activity>
         <activity android:name=".map.MapViewDemoActivity">
@@ -47,8 +54,9 @@
         <activity android:name=".MainActivity">
         </activity>
 
-        <meta-data android:name="com.kakao.sdk.AppKey" android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
-
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
     </application>
 
 </manifest>

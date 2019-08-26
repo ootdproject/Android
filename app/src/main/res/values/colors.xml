@@ -1,5 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <color name="app_point_black">#000000</color>
+    <color name="app_point_white">#ffffff</color>
+    <color name="app_point_purple">#B128C0</color>
+
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#CACACA</color>
     <color name="colorAccent">#D81B60</color>

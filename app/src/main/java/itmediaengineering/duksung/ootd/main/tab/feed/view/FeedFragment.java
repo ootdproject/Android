@@ -6,12 +6,10 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.ActivityOptionsCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.Pair;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,21 +25,28 @@ import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapter;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedContract;
 import itmediaengineering.duksung.ootd.main.tab.feed.presenter.FeedPresenter;
 
-public class FeedFragment extends Fragment implements FeedContract.View {
+public class FeedFragment extends Fragment
+        implements FeedContract.View, LocationUpdatable{
     private static final String TAG = FeedFragment.class.getSimpleName();
 
     @BindView(R.id.post_recycler_view)
     RecyclerView postRecyclerView;
-
-    public final static String SHARE_VIEW_NAME = "SHARE_VIEW_NAME";
+    //public final static String SHARE_VIEW_NAME = "SHARE_VIEW_NAME";
 
     protected FeedAdapter adapter;
-    protected FeedPresenter presenter;
-    //private int sort = 0;
-    //private String searchStr = "";
+    protected FeedPresenter presenter = new FeedPresenter();
 
     public static FeedFragment newInstance(){
         return new FeedFragment();
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        adapter = new FeedAdapter(getContext());
+        presenter.setAdapterModel(adapter);
+        presenter.setAdapterView(adapter);
+
     }
 
     @Override
@@ -49,8 +54,7 @@ public class FeedFragment extends Fragment implements FeedContract.View {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_feed, container, false);
         ButterKnife.bind(this, rootView);
 
-        adapter = new FeedAdapter(getContext());
-
+        presenter.attachView(this);
         GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
 
         postRecyclerView.setLayoutManager(layoutManager);
@@ -85,48 +89,10 @@ public class FeedFragment extends Fragment implements FeedContract.View {
     }
 
     @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-        presenter = new FeedPresenter();
-        presenter.attachView(this);
-        presenter.setAdapterModel(adapter);
-        presenter.setAdapterView(adapter);
-        presenter.getFeed();
-    }
-
-    @Override
     public void onResume() {
         super.onResume();
         Log.d(TAG, "onResume");
-        //refreshList(null);
     }
-
-    protected void refreshList(String search) {
-        presenter.getFeed();
-    }
-
-    //galleryRecyclerView.setLayoutManager(new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false));
-    //galleryAdapter = new GalleryAdapter(getContext());
-
-        /*galleryAdapter.setOnItemClickListener((holder, view, position) -> {
-            GalleryItem item = galleryAdapter.getItem(position);
-
-            if (item.isPhoto()) {
-                Intent intent = new Intent(getContext(), GalleryViewActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                intent.putExtra("url", item.getMediaUrl());
-                startActivity(intent);
-            } else {
-                Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse(item.getMediaUrl()));
-                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-
-                startActivity(intent);
-            }
-        });*/
-
-    //galleryRecyclerView.setAdapter(galleryAdapter);
 
     @Override
     public void toast(String msg) {
@@ -144,10 +110,20 @@ public class FeedFragment extends Fragment implements FeedContract.View {
         Intent intent = new Intent(getActivity(), PostDetailActivity.class);
         intent.putExtra("post", post);
 
-        Pair<View, String> pair = new Pair(sharedView, SHARE_VIEW_NAME);
+        //Pair<View, String> pair = new Pair(sharedView, SHARE_VIEW_NAME);
         ActivityOptions options = ActivityOptions.makeSceneTransitionAnimation(getActivity(),
                 sharedView, "movieWork");
 
         startActivity(intent, options.toBundle());
+    }
+
+    @Override
+    public void onLocationUpdated(String location) {
+        presenter.getFeedByLocationString(location);
+    }
+
+    @Override
+    public void onFeedResumed() {
+        //presenter.getFeedByLocationString();
     }
 }

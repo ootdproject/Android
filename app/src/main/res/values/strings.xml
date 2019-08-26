@@ -1,6 +1,10 @@
 <resources>
     <string name="app_name">OOTD</string>
 
+    <string name="tab_category_title">카테고리</string>
+    <string name="tab_upload_title">나의 물품 판매하기</string>
+    <string name="tab_my_page_title">마이 페이지</string>
+
     <string name="default_web_client_id">861114963652-bv1aptkblv0r5p73hqkqhonhj8stj9bt.apps.googleusercontent.com</string>
 
     <string name="OPEN_WEATHER_MAP_API_KEY">c80c463cb124732acd07fb082ed0eb9e</string>

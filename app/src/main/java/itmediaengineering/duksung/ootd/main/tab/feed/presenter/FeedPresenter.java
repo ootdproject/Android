@@ -1,7 +1,7 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.presenter;
 
-import android.view.View;
-import android.view.ViewGroup;
+import android.support.annotation.Nullable;
+import android.util.Log;
 import android.widget.ImageView;
 
 import java.util.ArrayList;
@@ -24,31 +24,27 @@ public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallba
     private FeedAdapterContract.Model adapterModel;
     //private String search;
     //private int sort;
-    //private int page;
+    private int page;
+    private String dong;
 
     public FeedPresenter(){
         retrofitModel = new FeedRetrofitModel();
         retrofitModel.setCallback(this);
-
     }
 
     @Override
-    public void getFeed() {
+    public void getFeedByLocationString(@Nullable String dongStr) {
         //this.search = search;
         //this.sort = sort;
-        //page = 1;
+        page = 0;
         adapterModel.clearFeed();
-        retrofitModel.getPosts();
+        if(dongStr != null){
+            dong = dongStr;
+            retrofitModel.getQueryLocationPosts(dongStr, page);
+        } else {
+            retrofitModel.getPosts(page);
+        }
     }
-
-    /*@Override
-    public void onLoad(int page) {
-        if (this.page == page)
-            return;
-        this.page = page;
-        Log.d(TAG, "page : " + page);
-        retrofitModel.getPosts(search, sort, page);
-    }*/
 
     @Override
     public void onSuccess(int code, List<Post> posts) {
@@ -101,5 +97,14 @@ public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallba
     @Override
     public void onItemClick(Post post, ImageView sharedView) {
         view.startPostDetailActivity(post, sharedView);
+    }
+
+    @Override
+    public void onLoad(int page) {
+        if (this.page == page)
+            return;
+        this.page = page;
+        Log.d(TAG, "page : " + page);
+        retrofitModel.getQueryLocationPosts(dong, page);
     }
 }
