@@ -240,6 +240,7 @@ public class GoogleSignInActivity extends BaseActivity implements
             editor.putString("email", user.getEmail());
             editor.commit();    //최종 커밋*/
 
+
             presenter.login(user.getUid());
             /*mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));

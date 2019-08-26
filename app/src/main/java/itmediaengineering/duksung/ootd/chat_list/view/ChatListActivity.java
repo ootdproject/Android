@@ -1,10 +1,10 @@
 package itmediaengineering.duksung.ootd.chat_list.view;
 
+import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 
@@ -17,6 +17,7 @@ public class ChatListActivity extends AppCompatActivity
         implements ChatContract.View{
 
     public static final String EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
+    public static final String START_ACTIVITY_FROM_POST_DETAIL = "START_ACTIVITY_FROM_POST_DETAIL";
 
     @Override
     protected void onCreate(final @Nullable Bundle savedInstanceState) {
@@ -30,16 +31,17 @@ public class ChatListActivity extends AppCompatActivity
             getSupportActionBar().setHomeAsUpIndicator(R.drawable.outline_arrow_back_black_24);
         }
 
-        if (savedInstanceState == null) {
-            // Load list of Group Channels
-            Fragment fragment = GroupChannelListFragment.newInstance();
+        if(!getIntent().getBooleanExtra(START_ACTIVITY_FROM_POST_DETAIL, false)) {
+            if (savedInstanceState == null) {
+                // Load list of Group Channels
+                Fragment fragment = GroupChannelListFragment.newInstance();
+                FragmentManager manager = getSupportFragmentManager();
+                manager.popBackStack();
 
-            FragmentManager manager = getSupportFragmentManager();
-            manager.popBackStack();
-
-            manager.beginTransaction()
-                    .replace(R.id.container_group_channel, fragment)
-                    .commit();
+                manager.beginTransaction()
+                        .replace(R.id.container_group_channel, fragment)
+                        .commit();
+            }
         }
 
         final String channelUrl = getIntent().getStringExtra(EXTRA_NEW_CHANNEL_URL);
@@ -49,7 +51,7 @@ public class ChatListActivity extends AppCompatActivity
             FragmentManager manager = getSupportFragmentManager();
             manager.beginTransaction()
                     .replace(R.id.container_group_channel, fragment)
-                    .addToBackStack(null)
+                    //.addToBackStack(null)
                     .commit();
         }
     }

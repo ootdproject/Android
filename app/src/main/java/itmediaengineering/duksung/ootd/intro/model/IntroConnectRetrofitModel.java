@@ -1,13 +1,9 @@
 package itmediaengineering.duksung.ootd.intro.model;
 
-import android.util.Log;
-
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
+import itmediaengineering.duksung.ootd.data.ResponseAuth;
 import itmediaengineering.duksung.ootd.data.User;
-import itmediaengineering.duksung.ootd.data.mygallery.GalleryResponse;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitService;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitServiceManager;
@@ -36,19 +32,19 @@ public class IntroConnectRetrofitModel {
         jsonObject.addProperty ("providerType", "GOOGLE");
         jsonObject.addProperty ("providerUserId", user.getProviderUserId());
         jsonObject.addProperty ("token", "");
-        Call<Void> call = retrofitService.createUser(jsonObject);
-        call.enqueue(new Callback<Void>() {
+        Call<ResponseAuth> call = retrofitService.createUser(jsonObject);
+        call.enqueue(new Callback<ResponseAuth>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<ResponseAuth> call, Response<ResponseAuth> response) {
                 if (response.code() == ResponseCode.BAD_REQUEST) {
-                    callback.onSuccess(ResponseCode.BAD_REQUEST);
+                    callback.onSuccess(ResponseCode.BAD_REQUEST, null);
                     return;
                 }
-                callback.onSuccess(ResponseCode.SUCCESS);
+                callback.onSuccess(ResponseCode.CREATED, response.body());
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<ResponseAuth> call, Throwable t) {
                 t.printStackTrace();
                 callback.onFailure();
             }

@@ -63,12 +63,13 @@
         android:id="@+id/main_toolbar"
         android:layout_width="0dp"
         android:layout_height="50dp"
+        android:layout_marginTop="0dp"
         android:background="#ffffff"
         android:elevation="3dp"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -77,9 +78,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:padding="12dp"
+            android:background="?attr/selectableItemBackgroundBorderless"
             android:clickable="true"
-            android:background="?attr/selectableItemBackground"
+            android:padding="12dp"
             tools:layout_editor_absoluteX="149dp"
             tools:layout_editor_absoluteY="13dp">
 
@@ -88,11 +89,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                tools:text="나의 위치"
                 android:textSize="18sp"
+                android:textColor="#000000"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent"
+                tools:text="나의 위치"/>
 
             <ImageView
                 android:id="@+id/main_activity_location_icon"
@@ -103,20 +105,20 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/main_activity_location_view"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/round_place_black_24"/>
+                app:srcCompat="@drawable/icon_map_pin_line"/>
 
         </android.support.constraint.ConstraintLayout>
 
         <ImageView
             android:id="@+id/main_activity_noti_btn"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_gravity="end"
-            android:padding="8dp"
-            android:background="?attr/selectableItemBackground"
-            app:srcCompat="@drawable/round_notifications_none_black_36"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            app:srcCompat="@drawable/icon_chatting_noti_line"
             tools:layout_editor_absoluteX="16dp"/>
-        </android.support.v7.widget.Toolbar>
+    </android.support.v7.widget.Toolbar>
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_content"
@@ -132,13 +134,15 @@
         android:layout_width="0dp"
         android:layout_height="50dp"
         android:elevation="3dp"
-        android:background="#ffffff"
+        android:background="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tabGravity="fill"
-        app:tabIndicatorColor="#ce6776"
-        app:tabIndicatorHeight="3dp"
+        app:tabIndicatorColor="#B128C0"
+        app:tabIndicator="@null"
+        app:tabIndicatorHeight="0dp"
         app:tabMode="fixed"/>
+
 
 </android.support.constraint.ConstraintLayout>

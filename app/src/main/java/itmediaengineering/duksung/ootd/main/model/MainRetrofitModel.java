@@ -1,21 +1,14 @@
 package itmediaengineering.duksung.ootd.main.model;
 
-import android.util.Log;
-
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.api.WeatherGridChange;
 import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.data.location.LocationResponse;
-import itmediaengineering.duksung.ootd.data.weather.Item;
-import itmediaengineering.duksung.ootd.data.weather.WeatherResponse;
 import itmediaengineering.duksung.ootd.retrofit.LocationApi;
 import itmediaengineering.duksung.ootd.retrofit.LocationApiManager;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
-import itmediaengineering.duksung.ootd.retrofit.WeatherApi;
-import itmediaengineering.duksung.ootd.retrofit.WeatherApiManager;
+import itmediaengineering.duksung.ootd.retrofit.RetrofitService;
+import itmediaengineering.duksung.ootd.retrofit.RetrofitServiceManager;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -23,14 +16,14 @@ import retrofit2.Response;
 public class MainRetrofitModel {
     private MainCallback.RetrofitCallback callback;
     private LocationApi locationApi;
-    private WeatherApi weatherApi;
+    //private WeatherApi weatherApi;
     private String APP_KEY = "KakaoAK 8aa198813b232314bb0c0689b81ba6eb";
-    private String SERVICE_KEY = "ze8%2F5it%2Bz8c4W0AzgWV%2FkpD%2FNgJfqxfteF0desEMVJgnSTSKmeJbE3J5B2ExHUz8YSMYkEff%2FeKUt0FD7XO%2FWg%3D%3D";
+
     private String TYPE = "json";
 
     public MainRetrofitModel(){
         locationApi = LocationApiManager.getLocationRetrofitInstance();
-        weatherApi = WeatherApiManager.getWeatherRetrofitInstance();
+        //weatherApi = WeatherApiManager.getWeatherRetrofitInstance();
     }
 
     public void setCallback(MainCallback.RetrofitCallback callback){
