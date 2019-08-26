@@ -7,6 +7,7 @@ import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnPositionListener;
 public interface MyPageAdapterContract {
     interface View {
         void setOnPositionListener(OnPositionListener onPositionListener);
+        void setOnClickListener(OnItemClickListener onClickListener);
         void notifyAdapter();
     }
 

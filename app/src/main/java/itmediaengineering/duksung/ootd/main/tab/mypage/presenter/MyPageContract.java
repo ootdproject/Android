@@ -1,6 +1,6 @@
 package itmediaengineering.duksung.ootd.main.tab.mypage.presenter;
 
-import itmediaengineering.duksung.ootd.main.tab.feed.adapter.FeedAdapterContract;
+import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.mypage.adapter.MyPageAdapterContract;
 
 public interface MyPageContract {
@@ -8,14 +8,18 @@ public interface MyPageContract {
         void toast(String msg);
         //void onUnauthorizedError();
         //void onUnknownError();
+        void onSuccessEditPostSaleState();
         void onSuccessGetGallery();
+        void onSuccessDeletePost();
         //void onConnectFail();
-        //void startPostDetailActivity(Post post);
+        void onStartPopUp(Post post);
         //void onNotFound();
     }
 
     interface Presenter {
-        void getMyGallery();
+        void getMyPosts(SaleType saleType);
+        void editPostSaleState(Post post);
+        void deletePost(Post post);
         //void getCreatedPosts();
         //void getLikedFeeds();
         void attachView(View view);

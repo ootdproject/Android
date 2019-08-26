@@ -8,6 +8,8 @@ import itmediaengineering.duksung.ootd.data.post.Post;
 public interface MyPageRetrofitCallback {
     interface RetrofitCallback {
         void onSuccess(int code, List<Post> posts);
+        void onSuccessEditSaleState(int code);
+        void onSuccessDeleteMyPost(int code);
         void onFailure();
     }
 }

@@ -5,16 +5,13 @@ import android.content.SharedPreferences;
 
 public class PreferenceUtils {
 
-    private static final String PREFERENCE_KEY_USER_ID = "userId";
-    private static final String PREFERENCE_KEY_NICKNAME = "nickname";
-    private static final String PREFERENCE_KEY_CONNECTED = "connected";
-
-    private static final String PREFERENCE_KEY_NOTIFICATIONS = "notifications";
-    private static final String PREFERENCE_KEY_NOTIFICATIONS_SHOW_PREVIEWS = "notificationsShowPreviews";
-    private static final String PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB = "notificationsDoNotDisturb";
-    private static final String PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB_FROM = "notificationsDoNotDisturbFrom";
-    private static final String PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB_TO = "notificationsDoNotDisturbTo";
-    private static final String PREFERENCE_KEY_GROUP_CHANNEL_DISTINCT = "channelDistinct";
+    private static final String KEY_USER_ID = "userId";
+    private static final String KEY_NICKNAME = "nickname";
+    private static final String KEY_CONNECTED = "connected";
+    
+    private static final String KEY_GROUP_CHANNEL_DISTINCT = "channelDistinct";
+    private static final String KEY_AUTH = "auth";
+    private static final String KEY_PID = "pid";
 
     private static Context mAppContext;
 
@@ -32,86 +29,47 @@ public class PreferenceUtils {
 
     public static void setUserId(String userId) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(PREFERENCE_KEY_USER_ID, userId).apply();
+        editor.putString(KEY_USER_ID, userId).apply();
     }
 
     public static String getUserId() {
-        return getSharedPreferences().getString(PREFERENCE_KEY_USER_ID, "");
+        return getSharedPreferences().getString(KEY_USER_ID, "");
     }
 
     public static void setNickname(String nickname) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(PREFERENCE_KEY_NICKNAME, nickname).apply();
+        editor.putString(KEY_NICKNAME, nickname).apply();
     }
 
     public static String getNickname() {
-        return getSharedPreferences().getString(PREFERENCE_KEY_NICKNAME, "");
+        return getSharedPreferences().getString(KEY_NICKNAME, "");
     }
+
+    public static void setProviderUserId(String pid){
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putString(KEY_PID, pid).apply();
+    }
+
+    public static String getProviderUserId(){
+        return getSharedPreferences().getString(KEY_PID, "");
+    }
+
+    public static void setAuth(String auth){
+        SharedPreferences.Editor editor = getSharedPreferences().edit();
+        editor.putString(KEY_AUTH, auth).apply();
+    }
+
+    public static String getAuth(){
+        return getSharedPreferences().getString(KEY_AUTH, "");
+    }
+
 
     public static void setConnected(boolean tf) {
         SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREFERENCE_KEY_CONNECTED, tf).apply();
-    }
-
-    public static boolean getConnected() {
-        return getSharedPreferences().getBoolean(PREFERENCE_KEY_CONNECTED, false);
-    }
-
-    public static void clearAll() {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.clear().apply();
-    }
-
-    public static void setNotifications(boolean notifications) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREFERENCE_KEY_NOTIFICATIONS, notifications).apply();
-    }
-
-    public static boolean getNotifications() {
-        return getSharedPreferences().getBoolean(PREFERENCE_KEY_NOTIFICATIONS, true);
-    }
-
-    public static void setNotificationsShowPreviews(boolean notificationsShowPreviews) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREFERENCE_KEY_NOTIFICATIONS_SHOW_PREVIEWS, notificationsShowPreviews).apply();
-    }
-
-    public static boolean getNotificationsShowPreviews() {
-        return getSharedPreferences().getBoolean(PREFERENCE_KEY_NOTIFICATIONS_SHOW_PREVIEWS, true);
-    }
-
-    public static void setNotificationsDoNotDisturb(boolean notificationsDoNotDisturb) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB, notificationsDoNotDisturb).apply();
-    }
-
-    public static boolean getNotificationsDoNotDisturb() {
-        return getSharedPreferences().getBoolean(PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB, false);
-    }
-
-    public static void setNotificationsDoNotDisturbFrom(String notificationsDoNotDisturbFrom) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB_FROM, notificationsDoNotDisturbFrom).apply();
-    }
-
-    public static String getNotificationsDoNotDisturbFrom() {
-        return getSharedPreferences().getString(PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB_FROM, "");
-    }
-
-    public static void setNotificationsDoNotDisturbTo(String notificationsDoNotDisturbTo) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putString(PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB_TO, notificationsDoNotDisturbTo).apply();
-    }
-
-    public static String getNotificationsDoNotDisturbTo() {
-        return getSharedPreferences().getString(PREFERENCE_KEY_NOTIFICATIONS_DO_NOT_DISTURB_TO, "");
-    }
-    public static void setGroupChannelDistinct(boolean channelDistinct) {
-        SharedPreferences.Editor editor = getSharedPreferences().edit();
-        editor.putBoolean(PREFERENCE_KEY_GROUP_CHANNEL_DISTINCT, channelDistinct).apply();
+        editor.putBoolean(KEY_CONNECTED, tf).apply();
     }
 
     public static boolean getGroupChannelDistinct() {
-        return getSharedPreferences().getBoolean(PREFERENCE_KEY_GROUP_CHANNEL_DISTINCT, true);
+        return getSharedPreferences().getBoolean(KEY_GROUP_CHANNEL_DISTINCT, true);
     }
 }

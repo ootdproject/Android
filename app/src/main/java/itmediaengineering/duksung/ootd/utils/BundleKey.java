@@ -1,4 +1,5 @@
 package itmediaengineering.duksung.ootd.utils;
 
-public class BundleKeySet {
+public class BundleKey {
+    public static final String SALE_TYPE = "saleType";
 }

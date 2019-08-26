@@ -15,15 +15,12 @@ import itmediaengineering.duksung.ootd.data.mygallery.Photo;
 import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.feed.adapter.OnPositionListener;
 
-public class MyPageGalleryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
+public class MyPageGalleryAdapter extends RecyclerView.Adapter<MyPageGalleryViewHolder>
         implements MyPageAdapterContract.View, MyPageAdapterContract.Model {
     private static final String TAG = MyPageGalleryAdapter.class.getSimpleName();
+    private OnItemClickListener onItemClickListener;
     private List<Post> galleryItems;
     private Context context;
-    /*public MyPageGalleryAdapter(Context context){
-        this.context = context;
-        this.galleryItems = new ArrayList<>();
-    }*/
 
     public MyPageGalleryAdapter(Context context) {
         this.context = context;
@@ -32,47 +29,16 @@ public class MyPageGalleryAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     @NonNull
     @Override
-    public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup viewGroup, int i) {
-        context = viewGroup.getContext();
-        LayoutInflater inflater = LayoutInflater.from(context);
-        // ?
-        RecyclerView.ViewHolder holder;
-        View view = inflater.inflate(R.layout.mypage_gallery_item, viewGroup, false);
-        holder = new MyPageGalleryViewHolder(context, view);
-            /*
-        } else {
-            view = inflater.inflate(R.layout.mypage_gallery_item, viewGroup, false);
-            holder = new MyPageGalleryViewHolder(context, view);
-        }*/
-        return holder;
+    public MyPageGalleryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        return new MyPageGalleryViewHolder(context, parent, onItemClickListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RecyclerView.ViewHolder viewHolder, int position) {
-        /*if (viewHolder instanceof MyPageHeaderViewHolder) {
-            MyPageHeaderViewHolder headerViewHolder = (MyPageHeaderViewHolder) viewHolder;
-        } else { // Item을 하나, 하나 보여주는(bind 되는) 함수입니다.*/
-        Post galleryItem = this.galleryItems.get(position);
-        MyPageGalleryViewHolder galleryViewHolder = (MyPageGalleryViewHolder) viewHolder;
-        //galleryViewHolder.onBind(listData.get(position - 1), position);
-        galleryViewHolder.bindDrawable(galleryItem.getImageUrl());
-
+    public void onBindViewHolder(@NonNull MyPageGalleryViewHolder holder, int position) {
+        if(holder == null)
+            return;
+        holder.onBind(galleryItems.get(position));
     }
-
-    /*@Override
-    public void onBindViewHolder(@NonNull MyPageGalleryViewHolder photoHolder, int position) {
-        Photo galleryItem = this.galleryItems.get(position);
-
-        photoHolder.bindDrawable(galleryItem.getUrlS());
-    }*/
-
-    /*@Override
-    public int getItemViewType(int position) {
-        if (position == 0)
-            return TYPE_HEADER;
-        else
-            return TYPE_ITEM;
-    }*/
 
     @Override
     public void addPosts(ArrayList items) {
@@ -88,6 +54,11 @@ public class MyPageGalleryAdapter extends RecyclerView.Adapter<RecyclerView.View
     @Override
     public void setOnPositionListener(OnPositionListener onPositionListener) {
 
+    }
+
+    @Override
+    public void setOnClickListener(OnItemClickListener onClickListener) {
+        this.onItemClickListener = onClickListener;
     }
 
     @Override

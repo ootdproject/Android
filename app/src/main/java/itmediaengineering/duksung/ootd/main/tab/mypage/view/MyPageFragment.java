@@ -16,6 +16,8 @@ import android.widget.TextView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
+import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.SaleType;
+import itmediaengineering.duksung.ootd.utils.BundleKey;
 
 /*
 MyPageFragment에서는 사용자 정보 페이지(myPage) 탭을 보여줌
@@ -55,12 +57,17 @@ public class MyPageFragment extends Fragment{
         ButterKnife.bind(this, rootView);
 
         tabHost.setup(getContext(), getChildFragmentManager(), android.R.id.tabcontent);
-        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("Sale"),
-                MyPagePagerFragment.class, null);
-        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("Sold"),
-                MyPagePagerFragment.class, null);
-        tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("Pick"),
-                MyPagePagerFragment.class, null);
+        //tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#ce6776"));
+        //tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator(getTabIndicator(tabHost.getContext(), R.string.app_name, android.R.drawable.star_on)).,
+        //        MyPagePagerFragment.class, null);
+        tabHost.addTab(tabHost.newTabSpec("tab1").setIndicator("판매중"),
+                MyPagePagerFragment.class, makeBundle(SaleType.onSale));
+        tabHost.addTab(tabHost.newTabSpec("tab2").setIndicator("판매완료"),
+                MyPagePagerFragment.class, makeBundle(SaleType.soldOut));
+        tabHost.addTab(tabHost.newTabSpec("tab3").setIndicator("찜"),
+                MyPagePagerFragment.class, makeBundle(SaleType.pick));
+
+        //tabHost.getTabWidget().getChildAt(tabHost.getCurrentTab()).setBackgroundResource(R.drawable.tab_selected);
 
         /*setupViewPager(myPageViewPager);
         tabWidget.(myPageViewPager);
@@ -117,6 +124,21 @@ public class MyPageFragment extends Fragment{
 
         return rootView;
     }
+
+    private Bundle makeBundle(SaleType saleType){
+        Bundle bundle = new Bundle();
+        bundle.putSerializable(BundleKey.SALE_TYPE, saleType);
+        return bundle;
+    }
+
+    /*private View getTabIndicator(Context context, int title, int icon) {
+        View view = LayoutInflater.from(context).inflate(R.layout.tab_layout, null);
+        ImageView iv = view.findViewById(R.id.imageView);
+        iv.setImageResource(icon);
+        TextView tv = view.findViewById(R.id.textView);
+        tv.setText(title);
+        return view;
+    }*/
 
     @Override
     public void onResume() {
