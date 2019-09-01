@@ -58,6 +58,29 @@ public interface RetrofitService {
             @Query("sort") String sort
     );
 
+    @POST("/posts/{postId}/like")
+    Call<Void> likePost(
+            @Header("Authorization") String authorization,
+            @Path("postId") int postId,
+            @Header("x-providerUserId") String pUid
+    );
+
+    @POST("/posts/{postId}/unlike")
+    Call<Void> unlikePost(
+            @Header("Authorization") String authorization,
+            @Path("postId") int postId,
+            @Header("x-providerUserId") String pUid
+    );
+
+    @GET("/posts")
+    Call<List<Post>> getRecommendGuPosts(
+            @Header("Authorization") String authorization,
+            @Query("q") String gu,
+            @Query("page") int pageNum,
+            @Query("sort") String sort,
+            @Query("size") int size
+    );
+
     @GET("/posts")
     Call<List<Post>> getCategoryPosts(
             @Header("Authorization") String authorization,

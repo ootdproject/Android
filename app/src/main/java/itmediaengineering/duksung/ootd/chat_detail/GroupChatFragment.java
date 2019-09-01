@@ -800,7 +800,7 @@ public class GroupChatFragment extends Fragment {
                                 mMessageCollection.deleteMessage(userMessage);
                             }
 
-                            // add failed message to adapter
+                            // add failed message to feedAdapter
                             mChatAdapter.addFirst(userMessage);
                             mChatAdapter.markMessageFailed(userMessage.getRequestId());
                             return;
@@ -856,7 +856,7 @@ public class GroupChatFragment extends Fragment {
                         mMessageCollection.deleteMessage(userMessage);
                     }
 
-                    // add failed message to adapter
+                    // add failed message to feedAdapter
                     mChatAdapter.addFirst(userMessage);
                     mChatAdapter.markMessageFailed(userMessage.getRequestId());
                     return;
@@ -945,7 +945,7 @@ public class GroupChatFragment extends Fragment {
                             mMessageCollection.deleteMessage(fileMessage);
                         }
 
-                        // add failed message to adapter
+                        // add failed message to feedAdapter
                         mChatAdapter.addFirst(fileMessage);
                         mChatAdapter.markMessageFailed(fileMessage.getRequestId());
                         return;

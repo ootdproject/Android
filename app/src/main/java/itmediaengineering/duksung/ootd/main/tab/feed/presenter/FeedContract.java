@@ -12,6 +12,7 @@ public interface FeedContract {
         //void onUnauthorizedError();
         //void onUnknownError();
         void onSuccessGetList();
+        void onSuccessPostLike();
         //void onConnectFail();
         void startPostDetailActivity(Post post, ImageView sharedView);
         //void onNotFound();
@@ -23,7 +24,9 @@ public interface FeedContract {
         //void getLikedFeeds();
         void attachView(View view);
         void detachView();
-        void setAdapterView(FeedAdapterContract.View adapterView);
-        void setAdapterModel(FeedAdapterContract.Model adapterModel);
+        void setFeedAdapterView(FeedAdapterContract.View adapterView);
+        void setRecommendFeedAdapterView(FeedAdapterContract.View adapterView);
+        void setFeedAdapterModel(FeedAdapterContract.Model adapterModel);
+        void setRecommendFeedAdapterModel(FeedAdapterContract.Model adapterModel);
     }
 }

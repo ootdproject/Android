@@ -519,7 +519,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 readReceiptText.setVisibility(View.VISIBLE);
             } else {
 
-                // Since setChannel is set slightly after adapter is created
+                // Since setChannel is set slightly after feedAdapter is created
                 if (channel != null) {
                     int readReceipt = channel.getReadReceipt(message);
                     if (readReceipt > 0) {
@@ -612,7 +612,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
 
         void bind(Context context, final UserMessage message, GroupChannel channel, boolean isNewDay, boolean isContinuous, final OnItemClickListener clickListener, final OnItemLongClickListener longClickListener, final int position) {
 
-            // Since setChannel is set slightly after adapter is created
+            // Since setChannel is set slightly after feedAdapter is created
             if (channel != null) {
                 int readReceipt = channel.getReadReceipt(message);
                 if (readReceipt > 0) {
@@ -774,7 +774,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
             timeText.setText(DateUtils.formatTime(message.getCreatedAt()));
 //            fileSizeText.setText(String.valueOf(message.getSize()));
 
-            // Since setChannel is set slightly after adapter is created, check if null.
+            // Since setChannel is set slightly after feedAdapter is created, check if null.
             if (channel != null) {
                 int readReceipt = channel.getReadReceipt(message);
                 if (readReceipt > 0) {
@@ -854,7 +854,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 circleProgressBar.setVisibility(View.GONE);
                 mFileMessageMap.remove(message);
 
-                // Since setChannel is set slightly after adapter is created, check if null.
+                // Since setChannel is set slightly after feedAdapter is created, check if null.
                 if (channel != null) {
                     int readReceipt = channel.getReadReceipt(message);
                     if (readReceipt > 0) {
@@ -926,7 +926,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void bind(Context context, final FileMessage message, GroupChannel channel, boolean isNewDay, boolean isContinuous, final OnItemClickListener listener) {
             timeText.setText(DateUtils.formatTime(message.getCreatedAt()));
 
-            // Since setChannel is set slightly after adapter is created, check if null.
+            // Since setChannel is set slightly after feedAdapter is created, check if null.
             if (channel != null) {
                 int readReceipt = channel.getReadReceipt(message);
                 if (readReceipt > 0) {
@@ -1024,7 +1024,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
                 circleProgressBar.setVisibility(View.GONE);
                 mFileMessageMap.remove(message);
 
-                // Since setChannel is set slightly after adapter is created, check if null.
+                // Since setChannel is set slightly after feedAdapter is created, check if null.
                 if (channel != null) {
                     int readReceipt = channel.getReadReceipt(message);
                     if (readReceipt > 0) {
@@ -1086,7 +1086,7 @@ public class GroupChatAdapter extends RecyclerView.Adapter<RecyclerView.ViewHold
         void bind(Context context, final FileMessage message, GroupChannel channel, boolean isNewDay, boolean isContinuous, final OnItemClickListener listener) {
             timeText.setText(DateUtils.formatTime(message.getCreatedAt()));
 
-            // Since setChannel is set slightly after adapter is created, check if null.
+            // Since setChannel is set slightly after feedAdapter is created, check if null.
             if (channel != null) {
                 int readReceipt = channel.getReadReceipt(message);
                 if (readReceipt > 0) {

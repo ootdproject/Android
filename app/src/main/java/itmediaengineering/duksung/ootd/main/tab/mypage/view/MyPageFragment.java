@@ -96,7 +96,7 @@ public class MyPageFragment extends Fragment{
         layoutManager.setSpanSizeLookup(new GridLayoutManager.SpanSizeLookup() {
             @Override
             public int getSpanSize(int i) {
-                switch(adapter.getItemViewType(i)){
+                switch(feedAdapter.getItemViewType(i)){
                     case TYPE_HEADER:
                         return 3;       // 3개로 나눈 영역 중에 3개를 합쳐 사용하겠다
                     case TYPE_ITEM:
@@ -151,13 +151,13 @@ public class MyPageFragment extends Fragment{
     }
 
     private void setupViewPager(ViewPager viewPager) {
-       /* adapter = new MyPagePagerAdapter(getFragmentManager());
-        adapter.addFragment(FeedFragment.newInstance(), "First");
-        adapter.addFragment(CategoryFragment.newInstance(), "Second");
-        adapter.addFragment(UploadFragment.newInstance(), "Third");
-        adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
+       /* feedAdapter = new MyPagePagerAdapter(getFragmentManager());
+        feedAdapter.addFragment(FeedFragment.newInstance(), "First");
+        feedAdapter.addFragment(CategoryFragment.newInstance(), "Second");
+        feedAdapter.addFragment(UploadFragment.newInstance(), "Third");
+        feedAdapter.addFragment(MyPageFragment.newInstance(), "Fourth");
         viewPager.setOffscreenPageLimit(4);
-        viewPager.setAdapter(adapter);*/
+        viewPager.setAdapter(feedAdapter);*/
     }
 }
 

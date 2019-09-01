@@ -184,7 +184,7 @@ public class GroupChannelListFragment extends Fragment {
         });
     }
 
-    // Sets up channel list adapter
+    // Sets up channel list feedAdapter
     private void setUpChannelListAdapter() {
         mChannelListAdapter.setOnItemClickListener(new GroupChannelListAdapter.OnItemClickListener() {
             @Override

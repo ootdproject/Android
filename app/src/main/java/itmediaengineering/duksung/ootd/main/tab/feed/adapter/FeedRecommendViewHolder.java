@@ -14,13 +14,10 @@ import com.bumptech.glide.Glide;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
-import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
-import itmediaengineering.duksung.ootd.utils.LikeType;
 
-public class FeedViewHolder extends RecyclerView.ViewHolder {
+public class FeedRecommendViewHolder extends RecyclerView.ViewHolder {
     private static final String TAG = FeedViewHolder.class.getSimpleName();
     private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
@@ -85,9 +82,9 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
         }
     }
 
-    public FeedViewHolder(final Context context, ViewGroup parent,
+    public FeedRecommendViewHolder(final Context context, ViewGroup parent,
                           OnItemClickListener onItemClickListener, OnPositionListener onPositionListener) {
-        super(LayoutInflater.from(context).inflate(R.layout.feed_item, parent, false));
+        super(LayoutInflater.from(context).inflate(R.layout.recommend_feed_item, parent, false));
         ButterKnife.bind(this, itemView);
         this.onItemClickListener = onItemClickListener;
         this.onPositionListener = onPositionListener;
@@ -102,7 +99,7 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
 
         feedItem.setOnClickListener(v ->
                 onItemClickListener.onItemClick(post, feedContentImg));
-                //onItemClickListener.onItemClick(post, position));
+        //onItemClickListener.onItemClick(post, position));
         //feedItemTitle.setText(post.getMemberId());
         //feedItemCost.setText(post.getPostCount());
 
@@ -124,13 +121,10 @@ public class FeedViewHolder extends RecyclerView.ViewHolder {
         feedItemCost.setText(post.getCost());
 
         feedItemLikeButton.setOnClickListener(view -> {
-            if(feedItemLikeButton.isSelected()) {
+            if(feedItemLikeButton.isSelected())
                 feedItemLikeButton.setSelected(false);
-                onItemClickListener.onItemLikeClick(post, LikeType.CANCEL, feedItemLikeButton);
-            } else {
+            else
                 feedItemLikeButton.setSelected(true);
-                onItemClickListener.onItemLikeClick(post, LikeType.LIKE, feedItemLikeButton);
-            }
         });
 
         setLikeButtonView();
