@@ -149,9 +149,9 @@ public class MyPagePagerFragment extends Fragment implements MyPageContract.View
     public void onSuccessEditPostSaleState() {
         presenter.getMyPosts(saleType);
         if(saleType == SaleType.onSale){
-            toast("판매 중으로 바뀜");
-        } else {
             toast("판매가 완료되었습니다");
+        } else {
+            toast("판매 중으로 바뀜");
         }
     }
 

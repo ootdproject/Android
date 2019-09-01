@@ -102,6 +102,7 @@ public class PostDetailActivity extends AppCompatActivity {
         postDesc.setText(post.getDescription());
 
         mSelectedIds = new ArrayList<>();
+        mSelectedIds.add(post.getMember().getProviderUserId());
     }
 
     @OnClick(R.id.fabActivityMaterialDetail)
@@ -112,12 +113,10 @@ public class PostDetailActivity extends AppCompatActivity {
                 sharedPreferences.getString("nickname",""));*/
 
         //mSelectedIds.add(postWriter.getProviderUserId());
-        PreferenceUtils.setUserId("test0802");
-        PreferenceUtils.setNickname("vrUMvaDqKiVJT6y3EAzy4F9JMtu1");
+        String userId = PreferenceUtils.getProviderUserId();
+        String userNickname = PreferenceUtils.getNickname();
 
-        connectToSendBird("test0802", "vrUMvaDqKiVJT6y3EAzy4F9JMtu1");
-
-        mSelectedIds.add("mung");
+        connectToSendBird(userId, userNickname);
 
         if (mCurrentState == STATE_SELECT_USERS) {
             mIsDistinct = PreferenceUtils.getGroupChannelDistinct();

@@ -59,7 +59,7 @@ public class MyPageRetrofitModel {
         };
 
         final Call<List<Post>> call = saleType.isPick != null ?
-                retrofitService.getMyPickPosts(auth, 0, SortType.DESC.key, saleType.isPick) :
+                retrofitService.getMyPickPosts(auth, saleType.isPick, providerUserId) :
                 retrofitService.getMyPosts(auth, providerUserId, saleType.isSale);
 
         call.enqueue(callback);

@@ -5,6 +5,7 @@ import com.google.gson.JsonObject;
 import java.util.List;
 
 import itmediaengineering.duksung.ootd.data.ResponseAuth;
+import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.data.post.Post;
 import okhttp3.MultipartBody;
 import okhttp3.ResponseBody;
@@ -24,7 +25,7 @@ public interface RetrofitService {
     //String API_KEY = "b727dc9341180f8b23d6b4a3043f687e";
 
     @POST("/members")
-    Call<ResponseAuth> createUser(
+    Call<User> createUser(
             @Body JsonObject userData
     );
 
@@ -45,9 +46,8 @@ public interface RetrofitService {
     @GET("/posts")
     Call<List<Post>> getMyPickPosts(
             @Header("Authorization") String authorization,
-            @Query("page") int pageNum,
-            @Query("sort") String sort,
-            @Query("onlyLike") Boolean isPick
+            @Query("onlyLike") Boolean isPick,
+            @Header("x-providerUserId") String pUid
     );
 
     @GET("/posts")

@@ -111,6 +111,7 @@ public class CategoryActivity extends AppCompatActivity
     public interface onBackPressedListener {
         boolean onBack();
     }
+
     private PostDetailActivity.onBackPressedListener mOnBackPressedListener;
 
     public void setOnBackPressedListener(PostDetailActivity.onBackPressedListener listener) {

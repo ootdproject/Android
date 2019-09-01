@@ -2,7 +2,7 @@ package itmediaengineering.duksung.ootd.intro.model;
 
 import com.google.gson.JsonObject;
 
-import itmediaengineering.duksung.ootd.data.ResponseAuth;
+import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitService;
@@ -24,7 +24,7 @@ public class IntroConnectRetrofitModel {
         this.callback = callback;
     }
 
-    public void join(User user) {
+    public void createUser(User user) {
         //JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty ("gender", user.getGender());
@@ -32,19 +32,19 @@ public class IntroConnectRetrofitModel {
         jsonObject.addProperty ("providerType", "GOOGLE");
         jsonObject.addProperty ("providerUserId", user.getProviderUserId());
         jsonObject.addProperty ("token", "");
-        Call<ResponseAuth> call = retrofitService.createUser(jsonObject);
-        call.enqueue(new Callback<ResponseAuth>() {
+        Call<User> call = retrofitService.createUser(jsonObject);
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<ResponseAuth> call, Response<ResponseAuth> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() == ResponseCode.BAD_REQUEST) {
                     callback.onSuccess(ResponseCode.BAD_REQUEST, null);
                     return;
                 }
-                callback.onSuccess(ResponseCode.CREATED, response.body());
+                callback.onSuccess(ResponseCode.CREATED, response.body().getNickname());
             }
 
             @Override
-            public void onFailure(Call<ResponseAuth> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 t.printStackTrace();
                 callback.onFailure();
             }

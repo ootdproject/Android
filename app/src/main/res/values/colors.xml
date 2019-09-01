@@ -4,6 +4,9 @@
     <color name="app_point_white">#ffffff</color>
     <color name="app_point_purple">#B128C0</color>
 
+    <color name="category_btn_selected">#B128C0</color>
+    <color name="category_btn_unselected">#40B128C0</color>
+
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#CACACA</color>
     <color name="colorAccent">#D81B60</color>

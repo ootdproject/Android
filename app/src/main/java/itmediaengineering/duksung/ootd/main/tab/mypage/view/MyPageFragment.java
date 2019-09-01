@@ -1,5 +1,6 @@
 package itmediaengineering.duksung.ootd.main.tab.mypage.view;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTabHost;
@@ -18,6 +19,7 @@ import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.SaleType;
 import itmediaengineering.duksung.ootd.utils.BundleKey;
+import itmediaengineering.duksung.ootd.utils.PreferenceUtils;
 
 /*
 MyPageFragment에서는 사용자 정보 페이지(myPage) 탭을 보여줌
@@ -55,6 +57,8 @@ public class MyPageFragment extends Fragment{
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_my_page, container, false);
         ButterKnife.bind(this, rootView);
+
+        userNickName.setText(PreferenceUtils.getNickname());
 
         tabHost.setup(getContext(), getChildFragmentManager(), android.R.id.tabcontent);
         //tabHost.getTabWidget().getChildAt(0).setBackgroundColor(Color.parseColor("#ce6776"));

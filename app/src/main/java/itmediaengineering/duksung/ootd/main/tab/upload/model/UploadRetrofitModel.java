@@ -84,6 +84,7 @@ public class UploadRetrofitModel {
 
     public void editPostContents(PostRequest post, int postId){
         final String auth = PreferenceUtils.getAuth();
+        final String providerUserId = PreferenceUtils.getProviderUserId();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty ("categoryA", post.getCategoryA());
         jsonObject.addProperty ("categoryB", post.getCategoryB());
@@ -94,7 +95,7 @@ public class UploadRetrofitModel {
         jsonObject.addProperty ("sale", post.getSale());
         jsonObject.addProperty ("title", post.getTitle());
 
-        Call<Void> call = retrofitService.editPost(auth, postId, jsonObject, "vrUMvaDqKiVJT6y3EAzy4F9JMtu1");
+        Call<Void> call = retrofitService.editPost(auth, postId, jsonObject, providerUserId);
         call.enqueue(new Callback<Void>() {
             @Override
             public void onResponse(Call<Void> call, Response<Void> response) {

@@ -33,6 +33,19 @@
         <item name="android:textColor">@android:color/white</item>
     </style>
 
+    <style name="CategoryBtn">
+        <item name="android:text">14sp</item>
+        <item name="android:textColor">@color/app_point_black</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:paddingStart">18dp</item>
+        <item name="android:paddingEnd">18dp</item>
+        <item name="android:paddingTop">12dp</item>
+        <item name="android:paddingBottom">12dp</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/category_btn_background_selector</item>
+    </style>
+
     <!-- Light EditTexts -->
     <style name="ThemeOverlay.MyLightEditText" parent="ThemeOverlay.AppCompat.Dark"/>
 

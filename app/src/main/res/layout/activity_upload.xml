@@ -85,9 +85,11 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="96dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:background="@drawable/upload_camera"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"/>
@@ -143,16 +145,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upload_activity_title_view"/>
 
-        <EditText
+        <TextView
             android:id="@+id/upload_activity_category_view"
             android:layout_width="0dp"
             android:layout_height="60dp"
             android:background="@drawable/botton_line_background"
             android:gravity="center|start"
             android:hint="카테고리"
-            android:inputType="text"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"
+            android:textColor="@color/app_point_black"
+            android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/upload_activity_cost_view"/>
@@ -163,7 +166,7 @@
             android:layout_height="60dp"
             android:background="@drawable/botton_line_background"
             android:gravity="center|start"
-            android:hint="판매 동네"
+            android:hint="판매 동네 (ex. 도봉구)"
             android:inputType="textPersonName"
             android:paddingStart="16dp"
             android:paddingEnd="16dp"

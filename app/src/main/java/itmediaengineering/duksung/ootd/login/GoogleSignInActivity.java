@@ -234,19 +234,12 @@ public class GoogleSignInActivity extends BaseActivity implements
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
         if (user != null) {
-            //저장을 하기위해 editor를 이용하여 값을 저장시켜준다.
-            /*SharedPreferences.Editor editor = sharedPreferences.edit();
-            editor.putString("uid", user.getUid());
-            editor.putString("email", user.getEmail());
-            editor.commit();    //최종 커밋*/
-
-
             presenter.login(user.getUid());
-            /*mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
 
             findViewById(R.id.signInButton).setVisibility(View.GONE);
-            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);*/
+            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
         } else {
             mStatusTextView.setText(R.string.signed_out);
             mDetailTextView.setText(null);
