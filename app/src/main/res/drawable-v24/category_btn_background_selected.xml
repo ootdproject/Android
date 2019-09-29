@@ -3,6 +3,6 @@
        android:shape="rectangle">
 
     <stroke android:width="0dp"/>
-    <solid android:color="@color/category_btn_selected"/>
+    <solid android:color="#dddddd"/>
     <corners android:radius="24dp"/>
 </shape>

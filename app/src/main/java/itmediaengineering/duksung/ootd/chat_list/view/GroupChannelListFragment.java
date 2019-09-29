@@ -1,6 +1,5 @@
 package itmediaengineering.duksung.ootd.chat_list.view;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -19,13 +18,10 @@ import android.widget.Toast;
 import com.sendbird.android.GroupChannel;
 import com.sendbird.android.GroupChannelListQuery;
 import com.sendbird.android.SendBird;
-import com.sendbird.android.SendBirdException;
-
 import com.sendbird.syncmanager.ChannelCollection;
 import com.sendbird.syncmanager.ChannelEventAction;
 import com.sendbird.syncmanager.SendBirdSyncManager;
 import com.sendbird.syncmanager.handler.ChannelCollectionHandler;
-import com.sendbird.syncmanager.handler.CompletionHandler;
 
 import java.util.List;
 
@@ -33,7 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.BaseApplication;
 import itmediaengineering.duksung.ootd.R;
-import itmediaengineering.duksung.ootd.chat_detail.GroupChatFragment;
 import itmediaengineering.duksung.ootd.chat_list.adapter.GroupChannelListAdapter;
 import itmediaengineering.duksung.ootd.main.tab.detail.view.PostDetailActivity;
 import itmediaengineering.duksung.ootd.utils.ConnectionManager;
@@ -49,6 +44,8 @@ public class GroupChannelListFragment extends Fragment {
     private static final int CHANNEL_LIST_LIMIT = 15;
     private static final String CONNECTION_HANDLER_ID = "CONNECTION_HANDLER_GROUP_CHANNEL_LIST";
     private static final String CHANNEL_HANDLER_ID = "CHANNEL_HANDLER_GROUP_CHANNEL_LIST";
+
+    public static final String EXTRA_NEW_CHANNEL_URL = "EXTRA_NEW_CHANNEL_URL";
 
     @BindView(R.id.recycler_group_channel_list)
     RecyclerView mRecyclerView;
@@ -73,7 +70,7 @@ public class GroupChannelListFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         // Change action bar title
-        ((ChatListActivity) getActivity()).setActionBarTitle(getResources().getString(R.string.all_group_channels));
+        //((ChatListActivity) getActivity()).setActionBarTitle(getResources().getString(R.string.all_group_channels));
 
         mSwipeRefresh.setOnRefreshListener(() -> {
             mSwipeRefresh.setRefreshing(true);
@@ -94,30 +91,19 @@ public class GroupChannelListFragment extends Fragment {
 
         String userId = PreferenceUtils.getUserId();
 
-        SendBirdSyncManager.setup(getActivity().getApplicationContext(), userId, new CompletionHandler() {
-            @Override
-            public void onCompleted(SendBirdException e) {
-                if (getActivity() == null) {
-                    return;
+        SendBirdSyncManager.setup(getActivity().getApplicationContext(), userId, e -> {
+            if (getActivity() == null) {
+                return;
+            }
+
+            ((BaseApplication)getActivity().getApplication()).setSyncManagerSetup(true);
+            getActivity().runOnUiThread(() -> {
+                if (SendBird.getConnectionState() != SendBird.ConnectionState.OPEN) {
+                    refresh();
                 }
 
-                ((BaseApplication)getActivity().getApplication()).setSyncManagerSetup(true);
-                getActivity().runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        if (SendBird.getConnectionState() != SendBird.ConnectionState.OPEN) {
-                            refresh();
-                        }
-
-                        ConnectionManager.addConnectionManagementHandler(CONNECTION_HANDLER_ID, new ConnectionManager.ConnectionManagementHandler() {
-                            @Override
-                            public void onConnected(boolean reconnect) {
-                                refresh();
-                            }
-                        });
-                    }
-                });
-            }
+                ConnectionManager.addConnectionManagementHandler(CONNECTION_HANDLER_ID, reconnect -> refresh());
+            });
         });
 
         super.onResume();
@@ -169,12 +155,9 @@ public class GroupChannelListFragment extends Fragment {
                 if (newState == RecyclerView.SCROLL_STATE_IDLE) {
                     if (mLayoutManager.findLastVisibleItemPosition() == mChannelListAdapter.getItemCount() - 1) {
                         if (mChannelCollection != null) {
-                            mChannelCollection.fetch(new CompletionHandler() {
-                                @Override
-                                public void onCompleted(SendBirdException e) {
-                                    if (mSwipeRefresh.isRefreshing()) {
-                                        mSwipeRefresh.setRefreshing(false);
-                                    }
+                            mChannelCollection.fetch(e -> {
+                                if (mSwipeRefresh.isRefreshing()) {
+                                    mSwipeRefresh.setRefreshing(false);
                                 }
                             });
                         }
@@ -186,19 +169,9 @@ public class GroupChannelListFragment extends Fragment {
 
     // Sets up channel list feedAdapter
     private void setUpChannelListAdapter() {
-        mChannelListAdapter.setOnItemClickListener(new GroupChannelListAdapter.OnItemClickListener() {
-            @Override
-            public void onItemClick(GroupChannel channel) {
-                enterGroupChannel(channel);
-            }
-        });
+        mChannelListAdapter.setOnItemClickListener(channel -> enterGroupChannel(channel));
 
-        mChannelListAdapter.setOnItemLongClickListener(new GroupChannelListAdapter.OnItemLongClickListener() {
-            @Override
-            public void onItemLongClick(final GroupChannel channel) {
-                showChannelOptionsDialog(channel);
-            }
-        });
+        mChannelListAdapter.setOnItemLongClickListener(channel -> showChannelOptionsDialog(channel));
     }
 
     /**
@@ -214,24 +187,16 @@ public class GroupChannelListFragment extends Fragment {
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle("Channel options")
-                .setItems(options, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == 0) {
-                            // Show a dialog to confirm that the user wants to leave the channel.
-                            new AlertDialog.Builder(getActivity())
-                                    .setTitle("Leave channel " + channel.getName() + "?")
-                                    .setPositiveButton("Leave", new DialogInterface.OnClickListener() {
-                                        @Override
-                                        public void onClick(DialogInterface dialog, int which) {
-                                            leaveChannel(channel);
-                                        }
-                                    })
-                                    .setNegativeButton("Cancel", null)
-                                    .create().show();
-                        } else if (which == 1) {
-                            setChannelPushPreferences(channel, !pushCurrentlyEnabled);
-                        }
+                .setItems(options, (dialog, which) -> {
+                    if (which == 0) {
+                        // Show a dialog to confirm that the user wants to leave the channel.
+                        new AlertDialog.Builder(getActivity())
+                                .setTitle("Leave channel " + channel.getName() + "?")
+                                .setPositiveButton("Leave", (dialog1, which1) -> leaveChannel(channel))
+                                .setNegativeButton("Cancel", null)
+                                .create().show();
+                    } else if (which == 1) {
+                        setChannelPushPreferences(channel, !pushCurrentlyEnabled);
                     }
                 });
         builder.create().show();
@@ -244,23 +209,20 @@ public class GroupChannelListFragment extends Fragment {
      */
     private void setChannelPushPreferences(final GroupChannel channel, final boolean on) {
         // Change push preferences.
-        channel.setPushPreference(on, new GroupChannel.GroupChannelSetPushPreferenceHandler() {
-            @Override
-            public void onResult(SendBirdException e) {
-                if (e != null) {
-                    e.printStackTrace();
-                    Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT)
-                            .show();
-                    return;
-                }
-
-                String toast = on
-                        ? "Push notifications have been turned ON"
-                        : "Push notifications have been turned OFF";
-
-                Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT)
+        channel.setPushPreference(on, e -> {
+            if (e != null) {
+                e.printStackTrace();
+                Toast.makeText(getActivity(), "Error: " + e.getMessage(), Toast.LENGTH_SHORT)
                         .show();
+                return;
             }
+
+            String toast = on
+                    ? "Push notifications have been turned ON"
+                    : "Push notifications have been turned OFF";
+
+            Toast.makeText(getActivity(), toast, Toast.LENGTH_SHORT)
+                    .show();
         });
     }
 
@@ -282,11 +244,15 @@ public class GroupChannelListFragment extends Fragment {
      * @param channelUrl The URL of the channel to enter.
      */
     void enterGroupChannel(String channelUrl) {
-        GroupChatFragment fragment = GroupChatFragment.newInstance(channelUrl);
+        /*GroupChatFragment fragment = GroupChatFragment.newInstance(channelUrl);
         getFragmentManager().beginTransaction()
                 .replace(R.id.container_group_channel, fragment)
                 .addToBackStack(null)
-                .commit();
+                .commit();*/
+        Intent intent = new Intent(
+                getContext(), ChatListActivity.class);
+        intent.putExtra(EXTRA_NEW_CHANNEL_URL, channelUrl);
+        startActivity(intent);
     }
 
     private void refresh() {
@@ -310,12 +276,9 @@ public class GroupChannelListFragment extends Fragment {
         query.setLimit(numChannels);
         mChannelCollection = new ChannelCollection(query);
         mChannelCollection.setCollectionHandler(mChannelCollectionHandler);
-        mChannelCollection.fetch(new CompletionHandler() {
-            @Override
-            public void onCompleted(SendBirdException e) {
-                if (mSwipeRefresh.isRefreshing()) {
-                    mSwipeRefresh.setRefreshing(false);
-                }
+        mChannelCollection.fetch(e -> {
+            if (mSwipeRefresh.isRefreshing()) {
+                mSwipeRefresh.setRefreshing(false);
             }
         });
     }
@@ -326,61 +289,57 @@ public class GroupChannelListFragment extends Fragment {
      * @param channel The channel to leave.
      */
     private void leaveChannel(final GroupChannel channel) {
-        channel.leave(new GroupChannel.GroupChannelLeaveHandler() {
-            @Override
-            public void onResult(SendBirdException e) {
-                if (e != null) {
-                    // Error!
-                    return;
-                }
-
-                // Re-query message list
-                refresh();
+        channel.leave(e -> {
+            if (e != null) {
+                // Error!
+                return;
             }
+
+            // Re-query message list
+            refresh();
         });
     }
 
     ChannelCollectionHandler mChannelCollectionHandler = new ChannelCollectionHandler() {
         @Override
-        public void onChannelEvent(final ChannelCollection channelCollection, final List<GroupChannel> list, final ChannelEventAction channelEventAction) {
+        public void onChannelEvent(final ChannelCollection channelCollection,
+                                   final List<GroupChannel> list,
+                                   final ChannelEventAction channelEventAction) {
             Log.d("SyncManager", "onChannelEvent: size = " + list.size() + ", action = " + channelEventAction);
             if (getActivity() == null) {
                 return;
             }
 
-            getActivity().runOnUiThread(new Runnable() {
-                @Override
-                public void run() {
-                    if (mSwipeRefresh.isRefreshing()) {
-                        mSwipeRefresh.setRefreshing(false);
-                    }
+            getActivity().runOnUiThread(() -> {
+                if (mSwipeRefresh.isRefreshing()) {
+                    mSwipeRefresh.setRefreshing(false);
+                }
 
-                    switch (channelEventAction) {
-                        case INSERT:
-                            mChannelListAdapter.clearMap();
-                            mChannelListAdapter.insertChannels(list, channelCollection.getQuery().getOrder());
-                            break;
+                switch (channelEventAction) {
+                    case INSERT:
+                        mChannelListAdapter.clearMap();
+                        mChannelListAdapter.insertChannels(list, channelCollection.getQuery().getOrder());
+                        break;
 
-                        case UPDATE:
-                            mChannelListAdapter.clearMap();
-                            mChannelListAdapter.updateChannels(list);
-                            break;
+                    case UPDATE:
+                        mChannelListAdapter.clearMap();
+                        mChannelListAdapter.updateChannels(list);
+                        break;
 
-                        case MOVE:
-                            mChannelListAdapter.clearMap();
-                            mChannelListAdapter.moveChannels(list, channelCollection.getQuery().getOrder());
-                            break;
+                    case MOVE:
+                        mChannelListAdapter.clearMap();
+                        mChannelListAdapter.moveChannels(list, channelCollection.getQuery().getOrder());
+                        break;
 
-                        case REMOVE:
-                            mChannelListAdapter.clearMap();
-                            mChannelListAdapter.removeChannels(list);
-                            break;
+                    case REMOVE:
+                        mChannelListAdapter.clearMap();
+                        mChannelListAdapter.removeChannels(list);
+                        break;
 
-                        case CLEAR:
-                            mChannelListAdapter.clearMap();
-                            mChannelListAdapter.clearChannelList();
-                            break;
-                    }
+                    case CLEAR:
+                        mChannelListAdapter.clearMap();
+                        mChannelListAdapter.clearChannelList();
+                        break;
                 }
             });
         }

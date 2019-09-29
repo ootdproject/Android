@@ -38,8 +38,12 @@ public class FeedPresenter implements FeedContract.Presenter, FeedRetrofitCallba
     @Override
     public void getFeedByLocationString(@Nullable String dongStr) {
         page = 0;
-        adapterModel.clearFeed();
-        recommendAdapterModel.clearFeed();
+        if(adapterModel != null){
+            adapterModel.clearFeed();
+        }
+        if(recommendAdapterModel != null) {
+            recommendAdapterModel.clearFeed();
+        }
         if(dongStr != null){
             dong = dongStr;
             retrofitModel.getQueryLocationPosts(dongStr, page);

@@ -12,7 +12,7 @@ import itmediaengineering.duksung.ootd.data.post.Post;
 public class FeedRecommendAdapter extends RecyclerView.Adapter<FeedRecommendViewHolder>
         implements FeedAdapterContract.View, FeedAdapterContract.Model{
     private static final String TAG = FeedRecommendAdapter.class.getSimpleName();
-    private ArrayList<Post> items;
+    private ArrayList<Post> items = new ArrayList<>();
     private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
     private Context context;
@@ -59,7 +59,15 @@ public class FeedRecommendAdapter extends RecyclerView.Adapter<FeedRecommendView
 
     @Override
     public void addPosts(ArrayList items) {
-        this.items.addAll(items);
+        if(items.size() < 5) {
+            this.items.addAll(items);
+        } else {
+            this.items.add((Post) items.get(0));
+            this.items.add((Post) items.get(1));
+            this.items.add((Post) items.get(2));
+            this.items.add((Post) items.get(3));
+            this.items.add((Post) items.get(4));
+        }
         notifyAdapter();
     }
 

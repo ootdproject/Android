@@ -49,8 +49,10 @@ public class FeedFragment extends Fragment
         super.onCreate(savedInstanceState);
         feedAdapter = new FeedAdapter(getContext());
         recommendFeedAdapter = new FeedRecommendAdapter(getContext());
+
         presenter.setFeedAdapterModel(feedAdapter);
         presenter.setFeedAdapterView(feedAdapter);
+
         presenter.setRecommendFeedAdapterModel(recommendFeedAdapter);
         presenter.setRecommendFeedAdapterView(recommendFeedAdapter);
     }
@@ -62,9 +64,9 @@ public class FeedFragment extends Fragment
 
         presenter.attachView(this);
 
-        GridLayoutManager layoutManager = new GridLayoutManager(getContext(), 2);
         LinearLayoutManager recommendLayoutManager
                 = new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+        GridLayoutManager feedLayoutManager = new GridLayoutManager(getContext(), 2);
 
         feedRecommendRecyclerView.setLayoutManager(recommendLayoutManager);
         feedRecommendRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
@@ -85,7 +87,7 @@ public class FeedFragment extends Fragment
             }
         });
 
-        feedRecyclerView.setLayoutManager(layoutManager);
+        feedRecyclerView.setLayoutManager(feedLayoutManager);
         feedRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
@@ -103,6 +105,7 @@ public class FeedFragment extends Fragment
                 }
             }
         });
+        feedRecyclerView.setNestedScrollingEnabled(false);
         setUpAdapter();
 
         return rootView;

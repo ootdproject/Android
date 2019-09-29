@@ -1,5 +1,7 @@
 package itmediaengineering.duksung.ootd.main.tab.feed.model;
 
+import android.util.Log;
+
 import java.util.List;
 
 import itmediaengineering.duksung.ootd.data.post.Post;
@@ -12,6 +14,8 @@ import itmediaengineering.duksung.ootd.utils.SortType;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
+
+import static java.lang.String.valueOf;
 
 public class FeedRetrofitModel {
     private FeedRetrofitCallback.RetrofitCallback callback;
@@ -52,7 +56,7 @@ public class FeedRetrofitModel {
 
     public void getQueryLocationPosts(String dong, int page){
         final String auth = PreferenceUtils.getAuth();
-        Call<List<Post>> call = retrofitService.getGuPosts(auth, dong, page, SortType.DESC.key);
+        Call<List<Post>> call = retrofitService.getGuPosts(auth, dong, page, SortType.DESC.key, 100);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -78,7 +82,7 @@ public class FeedRetrofitModel {
 
     public void getRecommendLocationPosts(String dong, int page){
         final String auth = PreferenceUtils.getAuth();
-        Call<List<Post>> call = retrofitService.getRecommendGuPosts(auth, dong, page, SortType.DESC2.key, 5);
+        Call<List<Post>> call = retrofitService.getRecommendGuPosts(auth, dong, page, SortType.DESC2.key, 60);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -106,9 +110,9 @@ public class FeedRetrofitModel {
         final String auth = PreferenceUtils.getAuth();
         final String pUid = PreferenceUtils.getProviderUserId();
 
-        final Callback<Void> callback = new Callback<Void>() {
+        final Callback<Post> callback = new Callback<Post>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<Post> call, Response<Post> response) {
                 if (response.code() == ResponseCode.NOT_FOUND) {
                     FeedRetrofitModel.this.callback.onSuccessLikePost(ResponseCode.NOT_FOUND);
                     return;
@@ -117,17 +121,20 @@ public class FeedRetrofitModel {
                     FeedRetrofitModel.this.callback.onSuccessLikePost(ResponseCode.UNAUTHORIZED);
                     return;
                 }
+
+                int count = response.body().getCount();
+                Log.d("postCount : ", "" + count);
                 FeedRetrofitModel.this.callback.onSuccessLikePost(ResponseCode.SUCCESS);
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<Post> call, Throwable t) {
                 t.printStackTrace();
                 FeedRetrofitModel.this.callback.onFailure();
             }
         };
 
-        final Call<Void> call = likeType.key == true ?
+        final Call<Post> call = likeType.isLike == true ?
                 retrofitService.likePost(auth, postId, pUid) :
                 retrofitService.unlikePost(auth, postId, pUid);
 

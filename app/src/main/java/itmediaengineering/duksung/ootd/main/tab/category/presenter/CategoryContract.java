@@ -6,20 +6,9 @@ import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.data.weather.Item;
 import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryAdapterContract;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryBAdapterContract;
 
 public interface CategoryContract {
-    interface FragmentView {
-        void toast(String msg);
-        //void onUnauthorizedError();
-        //void onUnknownError();
-        //void onSuccessGetLocation(Document document);
-        //void onSuccessGetWeather(Item item);
-        //void onConnectFail();
-        //void startPostDetailActivity(Data item);
-        //void startPostDetailActivity(Post post, ImageView sharedView);
-        //void onNotFound();
-    }
-
     interface View {
         void toast(String msg);
         //void onUnauthorizedError();
@@ -38,6 +27,8 @@ public interface CategoryContract {
         void attachView(View view);
         void detachView();
         void setAdapterView(CategoryAdapterContract.View adapterView);
+        void setCategoryListAdapterView(CategoryBAdapterContract.View adapterView);
         void setAdapterModel(CategoryAdapterContract.Model adapterModel);
+        void setCategoryListAdapterModel(CategoryBAdapterContract.Model adapterModel);
     }
 }

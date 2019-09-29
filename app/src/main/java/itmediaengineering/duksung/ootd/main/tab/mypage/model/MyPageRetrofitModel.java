@@ -12,7 +12,6 @@ import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitService;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitServiceManager;
 import itmediaengineering.duksung.ootd.utils.PreferenceUtils;
-import itmediaengineering.duksung.ootd.utils.SortType;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -59,7 +58,7 @@ public class MyPageRetrofitModel {
         };
 
         final Call<List<Post>> call = saleType.isPick != null ?
-                retrofitService.getMyPickPosts(auth, saleType.isPick, providerUserId) :
+                retrofitService.getMyPickPosts(auth, saleType.isPick, providerUserId, 100) :
                 retrofitService.getMyPosts(auth, providerUserId, saleType.isSale);
 
         call.enqueue(callback);

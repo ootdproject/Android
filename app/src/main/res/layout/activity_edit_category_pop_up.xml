@@ -14,7 +14,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
-        android:text="카테고리 재설정"
+        tools:hint="카테고리 재설정"
         android:textColor="@color/app_point_black"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"

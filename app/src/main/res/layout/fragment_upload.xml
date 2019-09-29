@@ -10,7 +10,7 @@
         android:id="@+id/upload_state_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="옷장 속\n아이템에게도\n기회를!"
+        android:text="옷장 속 아이템을\n판매해보세요"
         android:textAlignment="center"
         android:textSize="40sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +34,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_percent="0.3"/>
+        app:layout_constraintGuide_percent="0.4"/>
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline4"

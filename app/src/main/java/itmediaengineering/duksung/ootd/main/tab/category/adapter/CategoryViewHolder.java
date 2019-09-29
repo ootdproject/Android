@@ -18,7 +18,6 @@ import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
 
 public class CategoryViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = CategoryViewHolder.class.getSimpleName();
     private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
 

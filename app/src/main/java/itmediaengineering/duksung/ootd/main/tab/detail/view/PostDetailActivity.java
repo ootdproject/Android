@@ -107,16 +107,10 @@ public class PostDetailActivity extends AppCompatActivity {
 
     @OnClick(R.id.fabActivityMaterialDetail)
     public void onChattingBtnClick() {
-        /*writeNewUser(
-                sharedPreferences.getString("uid",""),
-                sharedPreferences.getString("email",""),
-                sharedPreferences.getString("nickname",""));*/
-
-        //mSelectedIds.add(postWriter.getProviderUserId());
-        String userId = PreferenceUtils.getProviderUserId();
+        /*String userId = PreferenceUtils.getProviderUserId();
         String userNickname = PreferenceUtils.getNickname();
 
-        connectToSendBird(userId, userNickname);
+        connectToSendBird(userId, userNickname);*/
 
         if (mCurrentState == STATE_SELECT_USERS) {
             mIsDistinct = PreferenceUtils.getGroupChannelDistinct();
@@ -125,6 +119,31 @@ public class PostDetailActivity extends AppCompatActivity {
             /*Intent intent = new Intent(PostDetailActivity.this, ChatActivity.class);
             intent.putExtra("chatName", userNick.getText().toString());
             startActivity(intent);*/
+        }
+    }
+
+    private void createGroupChannel(List<String> userIds, boolean distinct) {
+        GroupChannel.createChannelWithUserIds(userIds, distinct, (groupChannel, e) -> {
+            if (e != null) {
+                // Error!
+                return;
+            }
+
+            Intent intent = new Intent(
+                    PostDetailActivity.this, ChatListActivity.class);
+            intent.putExtra(EXTRA_NEW_CHANNEL_URL, groupChannel.getUrl());
+            intent.putExtra(START_ACTIVITY_FROM_POST_DETAIL, true);
+            setResult(RESULT_OK, intent);
+            startActivity(intent);
+            //finish();
+        });
+    }
+
+    private void setState(int state) {
+        if (state == STATE_SELECT_USERS) {
+            mCurrentState = STATE_SELECT_USERS;
+        } else if (state == STATE_SELECT_DISTINCT) {
+            mCurrentState = STATE_SELECT_DISTINCT;
         }
     }
 
@@ -155,89 +174,5 @@ public class PostDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void createGroupChannel(List<String> userIds, boolean distinct) {
-        GroupChannel.createChannelWithUserIds(userIds, distinct, (groupChannel, e) -> {
-            if (e != null) {
-                // Error!
-                return;
-            }
-
-            Intent intent = new Intent(
-                    PostDetailActivity.this, ChatListActivity.class);
-            intent.putExtra(EXTRA_NEW_CHANNEL_URL, groupChannel.getUrl());
-            intent.putExtra(START_ACTIVITY_FROM_POST_DETAIL, true);
-            setResult(RESULT_OK, intent);
-            startActivity(intent);
-            //finish();
-        });
-    }
-
-    private void setState(int state) {
-        if (state == STATE_SELECT_USERS) {
-            mCurrentState = STATE_SELECT_USERS;
-        } else if (state == STATE_SELECT_DISTINCT) {
-            mCurrentState = STATE_SELECT_DISTINCT;
-        }
-    }
-
-    private void connectToSendBird(final String userId, final String userNickname) {
-        // Show the loading indicator
-        //showProgressBar(true);
-        //mConnectButton.setEnabled(false);
-
-        ConnectionManager.login(userId, (user, e) -> {
-            // Callback received; hide the progress bar.
-            //showProgressBar(false);
-
-            if (e != null) {
-                // Error!
-                Toast.makeText(
-                        PostDetailActivity.this, "" + e.getCode() + ": " + e.getMessage(),
-                        Toast.LENGTH_SHORT)
-                        .show();
-
-                // Show login failure snackbar
-                //showSnackbar("Login to SendBird failed");
-                //mConnectButton.setEnabled(true);
-                PreferenceUtils.setConnected(false);
-                return;
-            }
-
-            PreferenceUtils.setConnected(true);
-
-            // Update the user's nickname
-            updateCurrentUserInfo(userNickname);
-            updateCurrentUserPushToken();
-
-            // Proceed to MainActivity
-            /*Intent intent = new Intent(PostDetailActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();*/
-        });
-    }
-
-    private void updateCurrentUserPushToken() {
-        PushUtils.registerPushTokenForCurrentUser(PostDetailActivity.this, null);
-    }
-
-    private void updateCurrentUserInfo(final String userNickname) {
-        SendBird.updateCurrentUserInfo(userNickname, null, e -> {
-            if (e != null) {
-                // Error!
-                Toast.makeText(
-                        PostDetailActivity.this, "" + e.getCode() + ":" + e.getMessage(),
-                        Toast.LENGTH_SHORT)
-                        .show();
-
-                // Show update failed snackbar
-                //showSnackbar("Update user nickname failed");
-
-                return;
-            }
-
-            PreferenceUtils.setNickname(userNickname);
-        });
     }
 }

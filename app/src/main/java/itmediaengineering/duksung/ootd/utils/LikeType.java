@@ -4,9 +4,9 @@ public enum LikeType {
     LIKE(true),
     CANCEL(false);
 
-    public final boolean key;
+    public final boolean isLike;
 
-    LikeType(boolean key) {
-        this.key = key;
+    LikeType(boolean isLike) {
+        this.isLike = isLike;
     }
 }

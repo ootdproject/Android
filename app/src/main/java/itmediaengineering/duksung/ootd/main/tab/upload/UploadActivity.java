@@ -39,6 +39,8 @@ import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.TensorFlowImageClassifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.presenter.UploadContract;
 import itmediaengineering.duksung.ootd.main.tab.upload.presenter.UploadPresenter;
+import itmediaengineering.duksung.ootd.search.view.RecognitionManager;
+import itmediaengineering.duksung.ootd.utils.BundleKey;
 import itmediaengineering.duksung.ootd.utils.PaymentTextWatcher;
 
 public class UploadActivity extends AppCompatActivity implements UploadContract.View {
@@ -50,12 +52,17 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     private static final String INPUT_NAME = "input";
     private static final String OUTPUT_NAME = "MobilenetV1/Predictions/Softmax";
 
-    private static final String MODEL_FILE = "file:///android_asset/20000_2.pb";
+    //private static final String MODEL_FILE = "file:///android_asset/20000_2.pb";
+    private static final String MODEL_FILE = "file:///android_asset/opt.pb";
     private static final String LABEL_FILE = "file:///android_asset/labels.txt";
+    private static final String COLOR_MODEL_FILE = "file:///android_asset/color_test.pb";
+    private static final String COLOR_LABEL_FILE = "file:///android_asset/color_labels.txt";
 
-    private Classifier classifier;
+    private Classifier categoryClassifier;
+    private Classifier colorClassifier;
 
     ArrayList<Classifier.Recognition> recognitions = new ArrayList<>();
+    ArrayList<Classifier.Recognition> colorRecognitions = new ArrayList<>();
 
     @BindView(R.id.upload_activity_toolbar)
     ConstraintLayout toolbar;
@@ -75,6 +82,8 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     EditText cost;
     @BindView(R.id.upload_activity_category_view)
     TextView category;
+    @BindView(R.id.upload_activity_color_view)
+    TextView color;
     @BindView(R.id.upload_activity_dong)
     EditText dong;
     @BindView(R.id.upload_activity_description_view)
@@ -90,7 +99,8 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     private HandlerThread handlerThread;
 
     private final int GET_GALLERY_IMAGE = 200;
-    private final int GET_CORRECT_RECOGNITION = 201;
+    private final int GET_CORRECT_CATEGORY_RECOGNITION = 201;
+    private final int GET_CORRECT_COLOR_RECOGNITION = 202;
 
     @Override
     protected synchronized void onResume() {
@@ -126,7 +136,8 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
 
             title.setText(post.getTitle());
             cost.setText(post.getCost());
-            category.setText(post.getCategoryA());
+            category.setText(post.getCategoryA() + " > " + post.getCategoryB());
+            color.setText(post.getColor());
             dong.setText(post.getDong());
             description.setText(post.getDescription());
         }
@@ -147,7 +158,16 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     void onCategoryBtnClick(){
         Intent intent = new Intent(this, EditCategoryPopUpActivity.class);
         intent.putParcelableArrayListExtra("recognition", recognitions);
-        startActivityForResult(intent, GET_CORRECT_RECOGNITION);
+        intent.putExtra(BundleKey.CORRECT_RECOGNITION, EditRecognitionType.CATEGORY);
+        startActivityForResult(intent, GET_CORRECT_CATEGORY_RECOGNITION);
+    }
+
+    @OnClick(R.id.upload_activity_color_view)
+    void onColorBtnClick(){
+        Intent intent = new Intent(this, EditCategoryPopUpActivity.class);
+        intent.putParcelableArrayListExtra("recognition", colorRecognitions);
+        intent.putExtra(BundleKey.CORRECT_RECOGNITION, EditRecognitionType.COLOR);
+        startActivityForResult(intent, GET_CORRECT_COLOR_RECOGNITION);
     }
 
     @OnClick(R.id.upload_back_btn)
@@ -158,22 +178,17 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     @OnClick(R.id.upload_ok_btn)
     void onOkBtnClick() {
         String titleStr = title.getText().toString();
-        String categoryStrA = category.getText().toString().split(" > ")[0];
-        String categoryStrB = category.getText().toString().split(" > ")[1];
         String costStr = cost.getText().toString() + "원";
         String dongStr = dong.getText().toString();
         String descStr = description.getText().toString();
 
-        if (uploadCameraIcon.getVisibility() == View.INVISIBLE
-                && uploadCameraText.getVisibility() == View.INVISIBLE) {
+        if (uploadCameraIcon.getVisibility() == View.VISIBLE
+                && uploadCameraText.getVisibility() == View.VISIBLE) {
             toast("이미지를 올려주셔야 해요!");
             return;
         } else if (titleStr.equals("")) {
             toast("제목을 작성해주세요!");
             return;
-        /*}else if(categoryStr.equals("")){
-            toast("카테고리를 선택해주세요!");
-            return;*/
         } else if (costStr.equals("")) {
             toast("가격을 작성해주세요!");
             return;
@@ -181,6 +196,8 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
             toast("판매동네를 선택해주세요");
             return;
         } else {
+            String categoryStrA = category.getText().toString().split(" > ")[0];
+            String categoryStrB = category.getText().toString().split(" > ")[1];
             PostRequest postRequest = new PostRequest(
                     categoryStrA, categoryStrB, costStr, descStr, dongStr, isUploadMode, titleStr);
             if (isUploadMode) {
@@ -191,17 +208,10 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
         }
     }
 
-
     @Override
     public void onBackPressed() {
         super.onBackPressed();
         Log.e("Other", "onBack()");
-
-        /*// CategoryFragment 로 교체
-        getActivity().getFragmentManager().beginTransaction()
-                .replace(R.id.fragment_container, mainFragment).commit();*/
-        // Activity 에서도 뭔가 처리하고 싶은 내용이 있다면 하단 문장처럼 호출해주면 됩니다.
-        // activity.onBackPressed();
     }
 
     @Override
@@ -226,9 +236,6 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
                             storageDir
                     );
 
-                    //long filesize = file.length();
-                    //File compressedImgFile = new Compressor(this).compressToFile(file);
-                    //long compressedFilesize = compressedImgFile.length();
                     FileOutputStream fileOutputStream = new FileOutputStream(file);
                     resized = Bitmap.createScaledBitmap(img, 224, 224, true);
                     resized.compress(Bitmap.CompressFormat.JPEG, 90, fileOutputStream);
@@ -237,7 +244,6 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
                     fileOutputStream.close();
 
                     this.file = file;
-                    //this.file = compressedImgFile;
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -251,17 +257,26 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
                 classifierImg(resized);
             }
         }
-        if (requestCode == GET_CORRECT_RECOGNITION) {
+
+        if (requestCode == GET_CORRECT_CATEGORY_RECOGNITION) {
             // Make sure the request was successful
             if (resultCode == RESULT_OK) {
-                final String categoryStr = data.getStringExtra("correct_category_string");
+                final String categoryStr = data.getStringExtra(BundleKey.CORRECT_RECOGNITION);
                 category.setText(categoryStr);
+            }
+        }
+
+        if (requestCode == GET_CORRECT_COLOR_RECOGNITION) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                final String colorStr = data.getStringExtra(BundleKey.CORRECT_RECOGNITION);
+                color.setText(colorStr);
             }
         }
     }
 
     protected synchronized void classifierImg(Bitmap img) {
-        classifier =
+        categoryClassifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
                         MODEL_FILE,
@@ -272,15 +287,40 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
                         INPUT_NAME,
                         OUTPUT_NAME);
 
+        colorClassifier =
+                TensorFlowImageClassifier.create(
+                        getAssets(),
+                        COLOR_MODEL_FILE,
+                        COLOR_LABEL_FILE,
+                        INPUT_SIZE,
+                        IMAGE_MEAN,
+                        IMAGE_STD,
+                        INPUT_NAME,
+                        OUTPUT_NAME);
+
+        /*if (handler != null) {
+            handler.post(
+                    () -> {
+                        List<Classifier.Recognition> results = categoryClassifier.recognizeImage(img);
+                        List<Classifier.Recognition> colorResults = colorClassifier.recognizeImage(img);
+                        RecognitionManager.getInstance().setCategoryRecognitions((ArrayList<Classifier.Recognition>) results);
+                        RecognitionManager.getInstance().setColorRecognitions((ArrayList<Classifier.Recognition>) colorResults);
+                    });
+        }*/
+
         if (handler != null) {
             handler.post(
                     () -> {
-                        List<Classifier.Recognition> results = classifier.recognizeImage(img);
-                        final String categoryA = results.get(0).getTitle().split(":")[1].split("_")[0];
-                        final String categoryB = results.get(0).getTitle().split(":")[1]
-                                .split(results.get(0).getTitle().split(":")[1].split("_")[0] + "_")[1];
+                        List<Classifier.Recognition> categoryResults = categoryClassifier.recognizeImage(img);
+                        List<Classifier.Recognition> colorResults = colorClassifier.recognizeImage(img);
+                        final String categoryA = categoryResults.get(0).getTitle().split(":")[1].split("_")[0];
+                        final String categoryB = categoryResults.get(0).getTitle().split(":")[1]
+                                .split(categoryResults.get(0).getTitle().split(":")[1].split("_")[0] + "_")[1];
+                        final String colorStr = colorResults.get(0).getTitle().split(":")[1];
                         category.setText(categoryA + " > " + categoryB);
-                        recognitions = (ArrayList<Classifier.Recognition>) results;
+                        color.setText(colorStr);
+                        recognitions = (ArrayList<Classifier.Recognition>) categoryResults;
+                        colorRecognitions = (ArrayList<Classifier.Recognition>) colorResults;
                     });
         }
         Trace.endSection();

@@ -6,6 +6,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.os.Bundle;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.ActivityCompat;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
@@ -34,11 +35,8 @@ import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.intro.IntroActivity;
 import itmediaengineering.duksung.ootd.login.presenter.LoginContract;
 import itmediaengineering.duksung.ootd.login.presenter.LoginPresenter;
-
-/*
-구글 로그인 및 자동로그인 담당하는 액티비티
-마이페이지에 로그아웃 기능을 구현해야 함
-*/
+import itmediaengineering.duksung.ootd.login.presenter.LoginState;
+import itmediaengineering.duksung.ootd.utils.BundleKey;
 
 public class GoogleSignInActivity extends BaseActivity implements
         View.OnClickListener, LoginContract.View{
@@ -58,6 +56,7 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     // 구글 로그인 관리 클래스
     private GoogleSignInClient googleSignInClient;
+    private Boolean toLogin;
 
     //SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
 
@@ -73,6 +72,9 @@ public class GoogleSignInActivity extends BaseActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_google);
         ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        toLogin = intent.getBooleanExtra(BundleKey.LOGIN_STATE, true);
 
         try {
             PackageInfo info = getPackageManager().getPackageInfo("itmediaengineering.duksung.ootd", PackageManager.GET_SIGNATURES);
@@ -217,9 +219,15 @@ public class GoogleSignInActivity extends BaseActivity implements
         // Firebase sign out
         auth.signOut();
 
+        Intent intent = new Intent(this, GoogleSignInActivity.class);
+        intent.putExtra(BundleKey.LOGIN_STATE, LoginState.login.toLogin);
+        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+        startActivity(intent);
+
         // Google sign out
-        googleSignInClient.signOut().addOnCompleteListener(this,
+        /*googleSignInClient.signOut().addOnCompleteListener(this,
                 task -> updateUI(null));
+        ActivityCompat.finishAffinity(this);*/
     }
 
     private void revokeAccess() {
@@ -233,7 +241,13 @@ public class GoogleSignInActivity extends BaseActivity implements
 
     private void updateUI(FirebaseUser user) {
         hideProgressDialog();
-        if (user != null) {
+        if(user != null && toLogin == LoginState.logout.toLogin) {
+            mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
+            mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));
+
+            findViewById(R.id.signInButton).setVisibility(View.GONE);
+            findViewById(R.id.signOutAndDisconnect).setVisibility(View.VISIBLE);
+        } else if (user != null && toLogin == LoginState.login.toLogin) {
             presenter.login(user.getUid());
             mStatusTextView.setText(getString(R.string.google_status_fmt, user.getEmail()));
             mDetailTextView.setText(getString(R.string.firebase_status_fmt, user.getUid()));

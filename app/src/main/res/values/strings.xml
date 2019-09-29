@@ -1,8 +1,9 @@
 <resources>
-    <string name="app_name">OOTD</string>
+    <string name="app_name">옷:장</string>
 
     <string name="tab_category_title">카테고리</string>
     <string name="tab_upload_title">나의 물품 판매하기</string>
+    <string name="tab_chatting_title">채팅</string>
     <string name="tab_my_page_title">마이 페이지</string>
 
     <string name="default_web_client_id">861114963652-bv1aptkblv0r5p73hqkqhonhj8stj9bt.apps.googleusercontent.com</string>

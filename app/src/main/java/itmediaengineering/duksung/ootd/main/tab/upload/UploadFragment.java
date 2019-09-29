@@ -44,7 +44,7 @@ tflite 파일 올려서 실험해봐야함
 */
 
 public class UploadFragment extends Fragment
-                    implements MainActivity.onKeyBackPressedListener {
+                    implements MainActivity.onBackPressedListener {
     public static final String TAG = UploadFragment.class.getSimpleName();
 
 
@@ -81,7 +81,7 @@ public class UploadFragment extends Fragment
     }
 
     @Override
-    public void onBack() {
+    public boolean onBack() {
         Log.e("Other", "onBack()");
         // 리스너를 설정하기 위해 Activity 를 받아옵니다.
         MainActivity activity = (MainActivity)getActivity();
@@ -98,6 +98,7 @@ public class UploadFragment extends Fragment
         //        .replace(R.id.fragment_container, mainFragment).commit();
         // Activity 에서도 뭔가 처리하고 싶은 내용이 있다면 하단 문장처럼 호출해주면 됩니다.
         // activity.onBackPressed();
+        return true;
     }
 
     // Fragment 호출 시 반드시 호출되는 오버라이드 메소드입니다.

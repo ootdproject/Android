@@ -18,14 +18,17 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
+import itmediaengineering.duksung.ootd.utils.BundleKey;
 
 public class EditCategoryPopUpActivity extends AppCompatActivity
 implements OnItemClickListener{
 
+    @BindView(R.id.edit_category_popup_title)
+    TextView popUpTitle;
     @BindView(R.id.edit_category_popup_recyclerview)
     RecyclerView recyclerView;
 
-    protected CategoryAdapter adapter;
+    protected EditRecognitionAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,10 +36,19 @@ implements OnItemClickListener{
         setContentView(R.layout.activity_edit_category_pop_up);
         ButterKnife.bind(this);
 
+        Intent intent = getIntent();
+        EditRecognitionType editType =
+                (EditRecognitionType) intent.getSerializableExtra(BundleKey.CORRECT_RECOGNITION);
+        if(editType == EditRecognitionType.CATEGORY){
+            popUpTitle.setText("카테고리 재설정");
+        } else if (editType == EditRecognitionType.COLOR) {
+            popUpTitle.setText("색상 재설정");
+        }
+
         ArrayList<Classifier.Recognition> recognitions =
                 getIntent().getParcelableArrayListExtra("recognition");
 
-        adapter = new CategoryAdapter(this);
+        adapter = new EditRecognitionAdapter(this, editType);
         adapter.setOnClickListener(this);
         adapter.clearCategories();
         adapter.addCategories(recognitions);
@@ -47,7 +59,7 @@ implements OnItemClickListener{
     @Override
     public void onItemClick(String category) {
         Intent intent = new Intent();
-        intent.putExtra("correct_category_string", category);
+        intent.putExtra(BundleKey.CORRECT_RECOGNITION, category);
         setResult(RESULT_OK, intent);
         finish();
     }
@@ -57,27 +69,33 @@ interface OnItemClickListener {
     void onItemClick(String category);
 }
 
-class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder>{
+class EditRecognitionAdapter extends RecyclerView.Adapter<EditRecognitionViewHolder>{
     private OnItemClickListener onItemClickListener;
     private ArrayList<Classifier.Recognition> recognitions;
     private Context context;
+    private EditRecognitionType editRecognitionType;
 
-    CategoryAdapter(Context context) {
+    EditRecognitionAdapter(Context context, EditRecognitionType editRecognitionType) {
         this.context = context;
         this.recognitions = new ArrayList<>();
+        this.editRecognitionType = editRecognitionType;
     }
 
     @NonNull
     @Override
-    public CategoryViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        return new CategoryViewHolder(context, parent, onItemClickListener);
+    public EditRecognitionViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
+        return new EditRecognitionViewHolder(context, parent, onItemClickListener);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull CategoryViewHolder categoryViewHolder, int position) {
-        if(categoryViewHolder == null)
+    public void onBindViewHolder(@NonNull EditRecognitionViewHolder editRecognitionViewHolder, int position) {
+        if(editRecognitionViewHolder == null)
             return;
-        categoryViewHolder.onBind(recognitions.get(position));
+        if(editRecognitionType == EditRecognitionType.CATEGORY) {
+            editRecognitionViewHolder.onCategoryBind(recognitions.get(position));
+        } else if(editRecognitionType == EditRecognitionType.COLOR) {
+            editRecognitionViewHolder.onColorBind(recognitions.get(position));
+        }
     }
 
     public void addCategories(ArrayList items) {
@@ -104,7 +122,7 @@ class CategoryAdapter extends RecyclerView.Adapter<CategoryViewHolder>{
     }
 }
 
-class CategoryViewHolder extends RecyclerView.ViewHolder{
+class EditRecognitionViewHolder extends RecyclerView.ViewHolder{
     OnItemClickListener onItemClickListener;
 
     @BindView(R.id.category_edit_recommend_view)
@@ -114,14 +132,14 @@ class CategoryViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.category_edit_recommend_confidence)
     TextView categoryConfidence;
 
-    public CategoryViewHolder(final Context context, ViewGroup parent,
-                              OnItemClickListener onItemClickListener) {
+    public EditRecognitionViewHolder(final Context context, ViewGroup parent,
+                                     OnItemClickListener onItemClickListener) {
         super(LayoutInflater.from(context).inflate(R.layout.category_edit_item, parent, false));
         ButterKnife.bind(this, itemView);
         this.onItemClickListener = onItemClickListener;
     }
 
-    void onBind(Classifier.Recognition categoryRecognition){
+    void onCategoryBind(Classifier.Recognition categoryRecognition){
         final String categoryA = categoryRecognition.getTitle().split(":")[1].split("_")[0];
         final String categoryB = categoryRecognition.getTitle().split(":")[1]
                 .split(categoryRecognition.getTitle().split(":")[1].split("_")[0] + "_")[1];
@@ -131,5 +149,14 @@ class CategoryViewHolder extends RecyclerView.ViewHolder{
         categoryConfidence.setText(categoryConfidenceStr);
 
         categoryEditRecommendView.setOnClickListener(v -> onItemClickListener.onItemClick(categoryStr));
+    }
+
+    void onColorBind(Classifier.Recognition colorRecognition){
+        final String colorStr = colorRecognition.getTitle().split(":")[1];
+        final String colorConfidenceStr = Math.round(colorRecognition.getConfidence()*10000)/100.0f + " %";
+        categoryTitle.setText(colorStr);
+        categoryConfidence.setText(colorConfidenceStr);
+
+        categoryEditRecommendView.setOnClickListener(v -> onItemClickListener.onItemClick(colorStr));
     }
 }

@@ -40,33 +40,32 @@ public interface RetrofitService {
             @Query("page") int pageNum,
             @Query("sort") String sort,
             @Query("sale") boolean sale
-
     );
 
     @GET("/posts")
     Call<List<Post>> getMyPickPosts(
             @Header("Authorization") String authorization,
-            @Query("onlyLike") Boolean isPick,
-            @Header("x-providerUserId") String pUid
-    );
+            @Query("onlyLike") boolean isPick,
+            @Header("x-providerUserId") String pUid,
+            @Query("size") int size);
 
     @GET("/posts")
     Call<List<Post>> getGuPosts(
             @Header("Authorization") String authorization,
             @Query("q") String gu,
             @Query("page") int pageNum,
-            @Query("sort") String sort
-    );
+            @Query("sort") String sort,
+            @Query("size") int pageSize);
 
     @POST("/posts/{postId}/like")
-    Call<Void> likePost(
+    Call<Post> likePost(
             @Header("Authorization") String authorization,
             @Path("postId") int postId,
             @Header("x-providerUserId") String pUid
     );
 
     @POST("/posts/{postId}/unlike")
-    Call<Void> unlikePost(
+    Call<Post> unlikePost(
             @Header("Authorization") String authorization,
             @Path("postId") int postId,
             @Header("x-providerUserId") String pUid
@@ -82,11 +81,40 @@ public interface RetrofitService {
     );
 
     @GET("/posts")
-    Call<List<Post>> getCategoryPosts(
+    Call<List<Post>> getColorQueryPosts(
+            @Header("Authorization") String authorization,
+            @Query("color") String color,
+            @Query("page") int pageNum,
+            @Query("sort") String sort,
+            @Query("size") int size
+    );
+
+    @GET("/posts")
+    Call<List<Post>> getCategoryAndColorQueryPosts(
+            @Header("Authorization") String authorization,
+            @Query("categoryB") String category,
+            @Query("color") String color,
+            @Query("page") int pageNum,
+            @Query("sort") String sort,
+            @Query("size") int size
+    );
+
+    @GET("/posts/categorymaxlike")
+    Call<List<Post>> getCategoryAPosts(
             @Header("Authorization") String authorization,
             @Query("category") String category,
             @Query("page") int pageNum,
-            @Query("sort") String sort
+            @Query("sort") String sort,
+            @Query("size") int size
+    );
+
+    @GET("/posts/categorymaxlike2")
+    Call<List<Post>> getCategoryBPosts(
+            @Header("Authorization") String authorization,
+            @Query("category") String category,
+            @Query("page") int pageNum,
+            @Query("sort") String sort,
+            @Query("size") int size
     );
 
     @POST("/posts/{postId}")

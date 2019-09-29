@@ -110,13 +110,24 @@
         </android.support.constraint.ConstraintLayout>
 
         <ImageView
-            android:id="@+id/main_activity_noti_btn"
+            android:id="@+id/main_activity_search_btn"
             android:layout_width="wrap_content"
             android:layout_height="match_parent"
             android:layout_gravity="end"
             android:background="?attr/selectableItemBackgroundBorderless"
             android:padding="12dp"
-            app:srcCompat="@drawable/icon_chatting_noti_line"
+            app:srcCompat="@drawable/menu_icon_search_line"
+            tools:layout_editor_absoluteX="16dp"/>
+
+        <ImageView
+            android:id="@+id/main_activity_setting_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_gravity="end"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:padding="12dp"
+            app:srcCompat="@drawable/menu_icon_setting_line"
+            android:visibility="gone"
             tools:layout_editor_absoluteX="16dp"/>
     </android.support.v7.widget.Toolbar>
 

@@ -6,9 +6,18 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Environment;
+import android.os.Handler;
+import android.os.HandlerThread;
+import android.os.Trace;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -23,21 +32,42 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.sendbird.android.SendBird;
+
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import itmediaengineering.duksung.ootd.chat_list.view.ChatListActivity;
+import itmediaengineering.duksung.ootd.chat_list.view.GroupChannelListFragment;
 import itmediaengineering.duksung.ootd.data.location.Document;
+import itmediaengineering.duksung.ootd.login.GoogleSignInActivity;
+import itmediaengineering.duksung.ootd.login.presenter.LoginState;
 import itmediaengineering.duksung.ootd.main.adapter.MainPagerAdapter;
 import itmediaengineering.duksung.ootd.main.presenter.MainContract;
 import itmediaengineering.duksung.ootd.main.presenter.MainPresenter;
 import itmediaengineering.duksung.ootd.main.tab.category.view.CategoryFragment;
+import itmediaengineering.duksung.ootd.main.tab.detail.view.PostDetailActivity;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.LocationUpdatable;
 import itmediaengineering.duksung.ootd.main.tab.mypage.view.MyPageFragment;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
+import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
+import itmediaengineering.duksung.ootd.main.tab.upload.classifier.TensorFlowImageClassifier;
 import itmediaengineering.duksung.ootd.map.LocationDemoActivity;
+import itmediaengineering.duksung.ootd.search.view.SearchActivity;
+import itmediaengineering.duksung.ootd.utils.BundleKey;
+import itmediaengineering.duksung.ootd.utils.ConnectionManager;
+import itmediaengineering.duksung.ootd.utils.PreferenceUtils;
+import itmediaengineering.duksung.ootd.utils.PushUtils;
 
 public class MainActivity extends AppCompatActivity implements MainContract.View {
     public static final String TAG = MainActivity.class.getSimpleName();
@@ -47,7 +77,26 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private static final int FEED_TAB = 0;
     private static final int CATEGORY_TAB = 1;
     private static final int UPLOAD_TAB = 2;
-    private static final int MY_PAGE_TAB = 3;
+    private static final int CHATTING_TAB = 3;
+    private static final int MY_PAGE_TAB = 4;
+
+    /*private enum TAB_LIST {
+        FEED_TAB(0),
+        CATEGORY_TAB(1),
+        UPLOAD_TAB(2),
+        CHATTING_TAB(3),
+        MY_PAGE_TAB(4);
+
+        public int getTab() {
+            return tab;
+        }
+
+        public final int tab;
+
+        TAB_LIST(int tab) {
+            this.tab = tab;
+        }
+    }*/
 
     @BindView(R.id.viewpager_content)
     ViewPager viewpagerContent;
@@ -63,8 +112,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     TextView locationView;
     @BindView(R.id.main_activity_location_icon)
     ImageView locationChangeBtn;
-    @BindView(R.id.main_activity_noti_btn)
-    ImageView notiBtn;
+    @BindView(R.id.main_activity_search_btn)
+    ImageView SearchBtn;
+    @BindView(R.id.main_activity_setting_btn)
+    ImageView SettingBtn;
 
     protected MainPresenter mainPresenter;
     private MainPagerAdapter adapter;
@@ -91,13 +142,17 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                     case FEED_TAB:
                         locationTitle.setClickable(true);
                         locationView.setText(myLocation == null ? "" : myLocation);
-                        locationChangeBtn.setVisibility(View.VISIBLE);
                         locationUpdatable.onLocationUpdated(myDongLocation);
+                        SettingBtn.setVisibility(View.GONE);
+                        locationChangeBtn.setVisibility(View.VISIBLE);
+                        SearchBtn.setVisibility(View.VISIBLE);
                         break;
                     case CATEGORY_TAB:
                         locationTitle.setClickable(false);
                         locationView.setText(R.string.tab_category_title);
+                        SettingBtn.setVisibility(View.GONE);
                         locationChangeBtn.setVisibility(View.GONE);
+                        SearchBtn.setVisibility(View.VISIBLE);
                         break;
                     case UPLOAD_TAB:
                         if (uploadCnt == 0) {
@@ -107,12 +162,23 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                         }
                         locationTitle.setClickable(false);
                         locationView.setText(R.string.tab_upload_title);
+                        SettingBtn.setVisibility(View.GONE);
                         locationChangeBtn.setVisibility(View.GONE);
+                        SearchBtn.setVisibility(View.GONE);
+                        break;
+                    case CHATTING_TAB:
+                        locationTitle.setClickable(false);
+                        locationView.setText(R.string.tab_chatting_title);
+                        SettingBtn.setVisibility(View.GONE);
+                        locationChangeBtn.setVisibility(View.GONE);
+                        SearchBtn.setVisibility(View.GONE);
                         break;
                     case MY_PAGE_TAB:
                         locationTitle.setClickable(false);
                         locationView.setText(R.string.tab_my_page_title);
+                        SettingBtn.setVisibility(View.VISIBLE);
                         locationChangeBtn.setVisibility(View.GONE);
+                        SearchBtn.setVisibility(View.GONE);
                         break;
                 }
             }
@@ -134,6 +200,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         mainPresenter.attachView(this);
         requestPermissionIfNeeded();
         refreshLocation();
+
+        String userId = PreferenceUtils.getProviderUserId();
+        String userNickname = PreferenceUtils.getNickname();
+        connectToSendBird(userId, userNickname);
     }
 
     private void requestPermissionIfNeeded() {
@@ -154,56 +224,47 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
         adapter.addFragment(feedFragment, "First");
         adapter.addFragment(CategoryFragment.newInstance(), "Second");
         adapter.addFragment(UploadFragment.newInstance(), "Third");
-        adapter.addFragment(MyPageFragment.newInstance(), "Fourth");
-        viewPager.setOffscreenPageLimit(4);
+        adapter.addFragment(GroupChannelListFragment.newInstance(), "Fourth");
+        adapter.addFragment(MyPageFragment.newInstance(), "Fifth");
+        viewPager.setOffscreenPageLimit(5);
         viewPager.setAdapter(adapter);
     }
 
     private void setupTabIcons() {
-        View viewFirst = getLayoutInflater().inflate(R.layout.custom_tab, null);
-        View viewSecond = getLayoutInflater().inflate(R.layout.custom_tab, null);
-        View viewThird = getLayoutInflater().inflate(R.layout.custom_tab, null);
-        View viewFourth = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        Bitmap feedBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tab_icon_feed_line);
+        Bitmap categoryBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tab_icon_category_line);
+        Bitmap uploadBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tab_icon_upload_line);
+        Bitmap chatBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tab_icon_chat_line2);
+        Bitmap myPageBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.tab_icon_mypage_line);
 
-        ImageView imgFirst = viewFirst.findViewById(R.id.img_tab);
-        ImageView imgSecond = viewSecond.findViewById(R.id.img_tab);
-        ImageView imgThird = viewThird.findViewById(R.id.img_tab);
-        ImageView imgFourth = viewFourth.findViewById(R.id.img_tab);
-
-        TextView txtFirst = viewFirst.findViewById(R.id.txt_tab);
-        TextView txtSecond = viewSecond.findViewById(R.id.txt_tab);
-        TextView txtThird = viewThird.findViewById(R.id.txt_tab);
-        TextView txtFourth = viewFourth.findViewById(R.id.txt_tab);
-
-        imgFirst.setImageResource(R.drawable.tab_icon_feed_line);
-        imgSecond.setImageResource(R.drawable.tab_icon_category_line);
-        imgThird.setImageResource(R.drawable.tab_icon_upload_line);
-        imgFourth.setImageResource(R.drawable.tab_icon_mypage_line);
-
-        txtFirst.setText("Feed");
-        txtSecond.setText("Category");
-        txtThird.setText("Upload");
-        txtFourth.setText("My Page");
-
-        tabContent.getTabAt(FEED_TAB).setCustomView(viewFirst);
-        tabContent.getTabAt(CATEGORY_TAB).setCustomView(viewSecond);
-        tabContent.getTabAt(UPLOAD_TAB).setCustomView(viewThird);
-        tabContent.getTabAt(MY_PAGE_TAB).setCustomView(viewFourth);
+        settingCustomTab(feedBitmap, "Feed", FEED_TAB);
+        settingCustomTab(categoryBitmap, "Category", CATEGORY_TAB);
+        settingCustomTab(uploadBitmap, "Upload", UPLOAD_TAB);
+        settingCustomTab(chatBitmap, "Chat", CHATTING_TAB);
+        settingCustomTab(myPageBitmap, "My Page", MY_PAGE_TAB);
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
+    private void settingCustomTab(Bitmap bitmap, String tabText, int tabCount) {
+        View tabView = getLayoutInflater().inflate(R.layout.custom_tab, null);
+        ImageView tabImg = tabView.findViewById(R.id.img_tab);
+        tabImg.setImageBitmap(bitmap);
+        TextView tabTxt = tabView.findViewById(R.id.txt_tab);
+        tabTxt.setText(tabText);
+        tabContent.getTabAt(tabCount).setCustomView(tabView);
     }
 
     private void refreshLocation() {
         if (!HasLocationPermission()) { return; }
         @SuppressLint("MissingPermission")
         Location lastKnownLocation = locationManager.getLastKnownLocation(locationProvider);
-        double longitude = lastKnownLocation.getLongitude();// 경도
-        double latitude = lastKnownLocation.getLatitude();// 위도
-
-        refreshLocation(longitude, latitude);
+        if(lastKnownLocation == null) {
+            toast("위치정보를 켜주세요");
+            new Handler().postDelayed(() -> finish(), 300);
+        } else {
+            double longitude = lastKnownLocation.getLongitude();// 경도
+            double latitude = lastKnownLocation.getLatitude();// 위도
+            refreshLocation(longitude, latitude);
+        }
     }
 
     private void refreshLocation(double longitude, double latitude) {
@@ -222,9 +283,16 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             startActivityForResult(intent, INTENT_REQUEST_LOCATION);
     }
 
-    @OnClick(R.id.main_activity_noti_btn)
-    public void onChattingAlarmBtnClick() {
-        Intent intent = new Intent(this, ChatListActivity.class);
+    @OnClick(R.id.main_activity_search_btn)
+    public void onSearchImageClick() {
+        Intent intent = new Intent(this, SearchActivity.class);
+        startActivity(intent);
+    }
+
+    @OnClick(R.id.main_activity_setting_btn)
+    public void onSettingBtnClick() {
+        Intent intent = new Intent(this, GoogleSignInActivity.class);
+        intent.putExtra(BundleKey.LOGIN_STATE, LoginState.logout.toLogin);
         startActivity(intent);
     }
 
@@ -247,10 +315,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        // Set this as true to restart auto-background detection.
-        // This means that you will be automatically disconnected from SendBird when your
-        // app enters the background.
-
         if (requestCode == INTENT_REQUEST_LOCATION && resultCode == Activity.RESULT_OK) {
             if (data == null) {
                 Log.d(TAG, "data is null!");
@@ -262,6 +326,63 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             //locationView.setText(data.getStringExtra("location"));
             refreshLocation(longitude, latitude);
         }
+    }
+
+    private void connectToSendBird(final String userId, final String userNickname) {
+        // Show the loading indicator
+        //showProgressBar(true);
+        //mConnectButton.setEnabled(false);
+
+        ConnectionManager.login(userId, (user, e) -> {
+            // Callback received; hide the progress bar.
+            //showProgressBar(false);
+
+            if (e != null) {
+                // Error!
+                Toast.makeText(
+                        this, "" + e.getCode() + ": " + e.getMessage(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+                // Show login failure snackbar
+                //showSnackbar("Login to SendBird failed");
+                //mConnectButton.setEnabled(true);
+                PreferenceUtils.setConnected(false);
+                return;
+            }
+
+            PreferenceUtils.setConnected(true);
+
+            // Update the user's nickname
+            updateCurrentUserInfo(userNickname);
+            updateCurrentUserPushToken();
+
+            // Proceed to MainActivity
+            /*Intent intent = new Intent(PostDetailActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();*/
+        });
+    }
+
+    private void updateCurrentUserPushToken() {
+        PushUtils.registerPushTokenForCurrentUser(this, null);
+    }
+
+    private void updateCurrentUserInfo(final String userNickname) {
+        SendBird.updateCurrentUserInfo(userNickname, null, e -> {
+            if (e != null) {
+                // Error!
+                Toast.makeText(
+                        this, "" + e.getCode() + ":" + e.getMessage(),
+                        Toast.LENGTH_SHORT)
+                        .show();
+
+                // Show update failed snackbar
+                //showSnackbar("Update user nickname failed");
+                return;
+            }
+            PreferenceUtils.setNickname(userNickname);
+        });
     }
 
     @Override
@@ -299,13 +420,21 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     }
 
-    public interface onKeyBackPressedListener {
-        void onBack();
+    public interface onBackPressedListener {
+        boolean onBack();
     }
 
-    private onKeyBackPressedListener onKeyBackPressedListener;
+    private MainActivity.onBackPressedListener onBackPressedListener;
 
-    public void setOnBackPressedListener(onKeyBackPressedListener listener) {
-        onKeyBackPressedListener = listener;
+    public void setOnBackPressedListener(onBackPressedListener listener) {
+        onBackPressedListener = listener;
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (onBackPressedListener != null && onBackPressedListener.onBack()) {
+            return;
+        }
+        super.onBackPressed();
     }
 }

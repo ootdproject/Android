@@ -59,6 +59,7 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.BaseApplication;
+import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.chat_detail.adapter.GroupChatAdapter;
 import itmediaengineering.duksung.ootd.chat_list.view.ChatListActivity;
@@ -600,37 +601,31 @@ public class GroupChatFragment extends Fragment {
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
-        ((ChatListActivity)context).setOnBackPressedListener(new ChatListActivity.onBackPressedListener() {
-            @Override
-            public boolean onBack() {
-                if (mCurrentState == STATE_EDIT) {
-                    setState(STATE_NORMAL, null, -1);
-                    return true;
-                }
-
-                mIMM.hideSoftInputFromWindow(mMessageEditText.getWindowToken(), 0);
-                return false;
+        ((ChatListActivity)context).setOnBackPressedListener(() -> {
+            if (mCurrentState == STATE_EDIT) {
+                GroupChatFragment.this.setState(STATE_NORMAL, null, -1);
+                return true;
             }
+
+            mIMM.hideSoftInputFromWindow(mMessageEditText.getWindowToken(), 0);
+            return false;
         });
     }
 
     private void retryFailedMessage(final BaseMessage message) {
         new AlertDialog.Builder(getActivity())
                 .setMessage("Retry?")
-                .setPositiveButton(R.string.resend_message, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        if (which == DialogInterface.BUTTON_POSITIVE) {
-                            if (message instanceof UserMessage) {
-                                String userInput = ((UserMessage) message).getMessage();
-                                sendUserMessage(userInput);
-                            } else if (message instanceof FileMessage) {
-                                Uri uri = mChatAdapter.getTempFileMessageUri(message);
-                                sendFileWithThumbnail(uri);
-                            }
-
-                            mChatAdapter.removeFailedMessage(message);
+                .setPositiveButton(R.string.resend_message, (dialog, which) -> {
+                    if (which == DialogInterface.BUTTON_POSITIVE) {
+                        if (message instanceof UserMessage) {
+                            String userInput = ((UserMessage) message).getMessage();
+                            sendUserMessage(userInput);
+                        } else if (message instanceof FileMessage) {
+                            Uri uri = mChatAdapter.getTempFileMessageUri(message);
+                            sendFileWithThumbnail(uri);
                         }
+
+                        mChatAdapter.removeFailedMessage(message);
                     }
                 })
                 .setNegativeButton(R.string.delete_message, new DialogInterface.OnClickListener() {

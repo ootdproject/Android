@@ -47,6 +47,9 @@ public class Post implements Parcelable {
     @SerializedName("categoryB")
     @Expose
     private String categoryB;
+    @SerializedName("color")
+    @Expose
+    private String color;
 
     public Post(String title, String imageUrl) {
         this.title = title;
@@ -157,6 +160,10 @@ public class Post implements Parcelable {
         this.categoryB = categoryB;
     }
 
+    public String getColor() { return color; }
+
+    public void setColor(String color) { this.color = color; }
+
     @Override
     public int describeContents() {
         return 0;
@@ -177,6 +184,7 @@ public class Post implements Parcelable {
         dest.writeString(this.imageUrl);
         dest.writeString(this.categoryA);
         dest.writeString(this.categoryB);
+        dest.writeString(this.color);
     }
 
     protected Post(Parcel in) {
@@ -193,6 +201,7 @@ public class Post implements Parcelable {
         this.imageUrl = in.readString();
         this.categoryA = in.readString();
         this.categoryB = in.readString();
+        this.color = in.readString();
     }
 
     public static final Parcelable.Creator<Post> CREATOR = new Parcelable.Creator<Post>() {

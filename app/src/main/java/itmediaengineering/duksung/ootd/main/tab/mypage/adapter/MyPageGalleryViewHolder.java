@@ -13,6 +13,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
+import itmediaengineering.duksung.ootd.main.tab.mypage.presenter.SaleType;
 
 public class MyPageGalleryViewHolder extends RecyclerView.ViewHolder{
     private static final String TAG = MyPageGalleryViewHolder.class.getSimpleName();
@@ -23,10 +24,13 @@ public class MyPageGalleryViewHolder extends RecyclerView.ViewHolder{
     @BindView(R.id.my_page_gallery_image_view)
     ImageView itemImageView;
 
-    public MyPageGalleryViewHolder(final Context context, ViewGroup parent,
+    private SaleType saleType;
+
+    public MyPageGalleryViewHolder(final Context context, ViewGroup parent, SaleType saleType,
                                    OnItemClickListener onItemClickListener) {
         super(LayoutInflater.from(context).inflate(R.layout.mypage_gallery_item, parent, false));
         ButterKnife.bind(this, itemView);
+        this.saleType = saleType;
         this.onItemClickListener = onItemClickListener;
         this.context = context;
     }
@@ -39,7 +43,7 @@ public class MyPageGalleryViewHolder extends RecyclerView.ViewHolder{
 
         itemImageView.setOnClickListener(v -> {
             if(onItemClickListener != null) {
-                onItemClickListener.onItemClick(post);
+                onItemClickListener.onItemClick(post, saleType, itemImageView);
             }
         });
     }

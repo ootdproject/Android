@@ -7,18 +7,14 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.view.ViewPager;
-import android.support.v7.widget.CardView;
 import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -29,15 +25,14 @@ import butterknife.OnClick;
 import itmediaengineering.duksung.ootd.MainActivity;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
-import itmediaengineering.duksung.ootd.main.tab.category.adapter.CardPagerAdapter;
-import itmediaengineering.duksung.ootd.main.tab.category.adapter.CardPagerViewHolder;
 import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryAdapter;
+import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryBAdatper;
 import itmediaengineering.duksung.ootd.main.tab.category.presenter.CategoryContract;
 import itmediaengineering.duksung.ootd.main.tab.category.presenter.CategoryPresenter;
 import itmediaengineering.duksung.ootd.main.tab.detail.view.PostDetailActivity;
-import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
+import itmediaengineering.duksung.ootd.utils.CategoryBList;
 
-public class CategoryFragment extends Fragment implements MainActivity.onKeyBackPressedListener,
+public class CategoryFragment extends Fragment implements MainActivity.onBackPressedListener,
                                                         CategoryContract.View{
     public static final String TAG = CategoryFragment.class.getSimpleName();
 
@@ -50,17 +45,23 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
     @BindView(R.id.category_outer)
     TextView categoryOuter;
     @BindView(R.id.category_fragment_recyclerview)
-    RecyclerView categoryRecyclerView;
-    /*@BindView(R.id.pager)
-    ViewPager viewPager;*/
-
-    protected FragmentManager fm;
+    RecyclerView resultRecyclerView;
+    @BindView(R.id.category_btn_recyclerview)
+    RecyclerView categoryBRecyclerView;
 
     protected CategoryPresenter presenter;
     protected CategoryAdapter adapter;
+    protected CategoryBAdatper categoryBAdatper;
+
+    private CategoryBList categoryBList;
+
+    private static CategoryFragment categoryFragment;
 
     public static CategoryFragment newInstance(){
-        return new CategoryFragment();
+        if(categoryFragment == null){
+            categoryFragment = new CategoryFragment();
+        }
+        return categoryFragment;
     }
 
     @Nullable
@@ -69,34 +70,29 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
         ViewGroup rootView = (ViewGroup) inflater.inflate(R.layout.fragment_category_2, container, false);
         ButterKnife.bind(this, rootView);
 
-        fm = getChildFragmentManager();
-
-        /*CardPagerAdapter pagerAdapter = new CardPagerAdapter(getActivity().getSupportFragmentManager());
-        pagerAdapter.notifyDataSetChanged();
-        viewPager.setAdapter(pagerAdapter);
-        viewPager.setOffscreenPageLimit(3);
-        viewPager.setCurrentItem(3);
-        viewPager.setPadding(100, 0, 100, 0);
-
-        for (int i = 0; i < 5; i++) {
-            pagerAdapter.addItem(CardPagerViewHolder.newInstance());
-        }
-
-        fm.beginTransaction()
-                .add(R.id.pager, CategoryRecommendFragment.newInstance(), "mainFragment")
-                .commit();*/
+        categoryBList = new CategoryBList();
 
         adapter = new CategoryAdapter(getActivity());
+        categoryBAdatper = new CategoryBAdatper(getActivity());
 
         presenter = new CategoryPresenter();
-        presenter.setAdapterModel(adapter);
         presenter.setAdapterView(adapter);
+        presenter.setAdapterModel(adapter);
+        presenter.setCategoryListAdapterView(categoryBAdatper);
+        presenter.setCategoryListAdapterModel(categoryBAdatper);
         presenter.attachView(this);
+
+        LinearLayoutManager linearLayoutManager =
+                new LinearLayoutManager(getContext(), LinearLayoutManager.HORIZONTAL, false);
+
+        categoryBRecyclerView.setLayoutManager(linearLayoutManager);
+        categoryBRecyclerView.setNestedScrollingEnabled(false);
+        categoryBRecyclerView.setAdapter(categoryBAdatper);
 
         GridLayoutManager layoutManager = new GridLayoutManager(getActivity(), 2);
 
-        categoryRecyclerView.setLayoutManager(layoutManager);
-        categoryRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
+        resultRecyclerView.setLayoutManager(layoutManager);
+        resultRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
@@ -113,9 +109,11 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
                 }
             }
         });
+        resultRecyclerView.setNestedScrollingEnabled(false);
+        resultRecyclerView.setAdapter(adapter);
 
-        categoryRecyclerView.setAdapter(adapter);
         categoryTop.setSelected(true);
+        categoryBAdatper.addCategoryB(categoryBList.getTopList());
         presenter.getCategoryPost("top");
 
         return rootView;
@@ -127,7 +125,11 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
         categoryBottom.setSelected(false);
         categoryOuter.setSelected(false);
         categoryPair.setSelected(false);
+
+        categoryBAdatper.clearCategoryBView();
+        categoryBAdatper.addCategoryB(categoryBList.getTopList());
         presenter.getCategoryPost("top");
+
     }
 
     @OnClick(R.id.category_bottom)
@@ -136,6 +138,9 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
         categoryBottom.setSelected(true);
         categoryOuter.setSelected(false);
         categoryPair.setSelected(false);
+
+        categoryBAdatper.clearCategoryBView();
+        categoryBAdatper.addCategoryB(categoryBList.getBottomList());
         presenter.getCategoryPost("bottom");
     }
 
@@ -145,6 +150,9 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
         categoryBottom.setSelected(false);
         categoryOuter.setSelected(true);
         categoryPair.setSelected(false);
+
+        categoryBAdatper.clearCategoryBView();
+        categoryBAdatper.addCategoryB(categoryBList.getOuterList());
         presenter.getCategoryPost("outer");
     }
 
@@ -154,6 +162,9 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
         categoryBottom.setSelected(false);
         categoryOuter.setSelected(false);
         categoryPair.setSelected(true);
+
+        categoryBAdatper.clearCategoryBView();
+        categoryBAdatper.addCategoryB(categoryBList.getPairList());
         presenter.getCategoryPost("pair");
     }
 
@@ -162,9 +173,10 @@ public class CategoryFragment extends Fragment implements MainActivity.onKeyBack
         super.onResume();
     }
     @Override
-    public void onBack() {
+    public boolean onBack() {
         MainActivity activity = (MainActivity)getActivity();
         activity.setOnBackPressedListener(null);
+        return true;
     }
 
     @Override

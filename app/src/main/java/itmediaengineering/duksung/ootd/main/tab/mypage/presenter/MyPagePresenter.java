@@ -1,5 +1,7 @@
 package itmediaengineering.duksung.ootd.main.tab.mypage.presenter;
 
+import android.widget.ImageView;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -13,6 +15,7 @@ import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 public class MyPagePresenter implements MyPageContract.Presenter,
         MyPageRetrofitCallback.RetrofitCallback, OnItemClickListener {
     private MyPageContract.View view;
+    private MyPageContract.PickView pickView;
     private MyPageRetrofitModel retrofitModel;
     private MyPageAdapterContract.View adapterView;
     private MyPageAdapterContract.Model adapterModel;
@@ -43,7 +46,7 @@ public class MyPagePresenter implements MyPageContract.Presenter,
         if (code == ResponseCode.SUCCESS && posts != null) {
             //Log.d(TAG, photos.get(0).toString());
             adapterModel.addPosts(new ArrayList(posts));
-            view.onSuccessGetGallery();
+            //view.onSuccessGetGallery();
             return;
         }
         //view.onUnknownError();
@@ -117,6 +120,11 @@ public class MyPagePresenter implements MyPageContract.Presenter,
     }
 
     @Override
+    public void attachPickView(MyPageContract.PickView view) {
+        this.pickView = view;
+    }
+
+    @Override
     public void detachView() {
         this.view = null;
     }
@@ -133,7 +141,11 @@ public class MyPagePresenter implements MyPageContract.Presenter,
     }
 
     @Override
-    public void onItemClick(Post post) {
-        view.onStartPopUp(post);
+    public void onItemClick(Post post, SaleType saleType, ImageView shareView) {
+        if(saleType == SaleType.onSale) {
+            view.onStartPopUp(post);
+        } else if(saleType == SaleType.pick) {
+            pickView.onStartDetailActivity(post, shareView);
+        }
     }
 }
