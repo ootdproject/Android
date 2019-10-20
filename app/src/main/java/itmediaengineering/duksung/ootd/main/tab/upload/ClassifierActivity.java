@@ -15,18 +15,12 @@ import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.TensorFlowImageClassifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.env.ClassifierImageUtils;
+import itmediaengineering.duksung.ootd.utils.DeepModelPath;
 import itmediaengineering.duksung.ootd.utils.ImageUtils;
 
 public class ClassifierActivity extends AppCompatActivity {
 
     private static final int INPUT_SIZE = 224;
-    private static final int IMAGE_MEAN = 128;
-    private static final float IMAGE_STD = 128.0f;
-    private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "MobilenetV1/Predictions/Softmax";
-
-    private static final String MODEL_FILE = "file:///android_asset/20000_2.pb";
-    private static final String LABEL_FILE = "file:///android_asset/labels.txt";
 
     private Classifier classifier;
 
@@ -54,13 +48,13 @@ public class ClassifierActivity extends AppCompatActivity {
         classifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
-                        MODEL_FILE,
-                        LABEL_FILE,
-                        INPUT_SIZE,
-                        IMAGE_MEAN,
-                        IMAGE_STD,
-                        INPUT_NAME,
-                        OUTPUT_NAME);
+                        DeepModelPath.MODEL_FILE,
+                        DeepModelPath.LABEL_FILE,
+                        DeepModelPath.INPUT_SIZE,
+                        DeepModelPath.IMAGE_MEAN,
+                        DeepModelPath.IMAGE_STD,
+                        DeepModelPath.INPUT_NAME,
+                        DeepModelPath.OUTPUT_NAME);
 
         /*final Canvas canvas = new Canvas(croppedBitmap);
         canvas.drawBitmap(rgbFrameBitmap, frameToCropTransform, null);

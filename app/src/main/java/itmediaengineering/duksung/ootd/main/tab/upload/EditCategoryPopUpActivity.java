@@ -37,11 +37,11 @@ implements OnItemClickListener{
         ButterKnife.bind(this);
 
         Intent intent = getIntent();
-        EditRecognitionType editType =
-                (EditRecognitionType) intent.getSerializableExtra(BundleKey.CORRECT_RECOGNITION);
-        if(editType == EditRecognitionType.CATEGORY){
+        RecognitionType editType =
+                (RecognitionType) intent.getSerializableExtra(BundleKey.CORRECT_RECOGNITION);
+        if(editType == RecognitionType.CATEGORY){
             popUpTitle.setText("카테고리 재설정");
-        } else if (editType == EditRecognitionType.COLOR) {
+        } else if (editType == RecognitionType.COLOR) {
             popUpTitle.setText("색상 재설정");
         }
 
@@ -73,12 +73,12 @@ class EditRecognitionAdapter extends RecyclerView.Adapter<EditRecognitionViewHol
     private OnItemClickListener onItemClickListener;
     private ArrayList<Classifier.Recognition> recognitions;
     private Context context;
-    private EditRecognitionType editRecognitionType;
+    private RecognitionType recognitionType;
 
-    EditRecognitionAdapter(Context context, EditRecognitionType editRecognitionType) {
+    EditRecognitionAdapter(Context context, RecognitionType recognitionType) {
         this.context = context;
         this.recognitions = new ArrayList<>();
-        this.editRecognitionType = editRecognitionType;
+        this.recognitionType = recognitionType;
     }
 
     @NonNull
@@ -91,9 +91,9 @@ class EditRecognitionAdapter extends RecyclerView.Adapter<EditRecognitionViewHol
     public void onBindViewHolder(@NonNull EditRecognitionViewHolder editRecognitionViewHolder, int position) {
         if(editRecognitionViewHolder == null)
             return;
-        if(editRecognitionType == EditRecognitionType.CATEGORY) {
+        if(recognitionType == RecognitionType.CATEGORY) {
             editRecognitionViewHolder.onCategoryBind(recognitions.get(position));
-        } else if(editRecognitionType == EditRecognitionType.COLOR) {
+        } else if(recognitionType == RecognitionType.COLOR) {
             editRecognitionViewHolder.onColorBind(recognitions.get(position));
         }
     }

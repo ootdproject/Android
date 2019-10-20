@@ -194,7 +194,10 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
         setupTabIcons();
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
-        locationProvider = LocationManager.NETWORK_PROVIDER;
+        locationProvider = LocationManager.PASSIVE_PROVIDER;
+        if(locationProvider == null) {
+            locationProvider = LocationManager.NETWORK_PROVIDER;
+        }
 
         mainPresenter = new MainPresenter();
         mainPresenter.attachView(this);

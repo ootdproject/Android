@@ -39,24 +39,12 @@ import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.TensorFlowImageClassifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.presenter.UploadContract;
 import itmediaengineering.duksung.ootd.main.tab.upload.presenter.UploadPresenter;
-import itmediaengineering.duksung.ootd.search.view.RecognitionManager;
 import itmediaengineering.duksung.ootd.utils.BundleKey;
+import itmediaengineering.duksung.ootd.utils.DeepModelPath;
 import itmediaengineering.duksung.ootd.utils.PaymentTextWatcher;
 
 public class UploadActivity extends AppCompatActivity implements UploadContract.View {
     public static final String TAG = UploadActivity.class.getSimpleName();
-
-    private static final int INPUT_SIZE = 224;
-    private static final int IMAGE_MEAN = 128;
-    private static final float IMAGE_STD = 128.0f;
-    private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "MobilenetV1/Predictions/Softmax";
-
-    //private static final String MODEL_FILE = "file:///android_asset/20000_2.pb";
-    private static final String MODEL_FILE = "file:///android_asset/opt.pb";
-    private static final String LABEL_FILE = "file:///android_asset/labels.txt";
-    private static final String COLOR_MODEL_FILE = "file:///android_asset/color_test.pb";
-    private static final String COLOR_LABEL_FILE = "file:///android_asset/color_labels.txt";
 
     private Classifier categoryClassifier;
     private Classifier colorClassifier;
@@ -158,7 +146,7 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     void onCategoryBtnClick(){
         Intent intent = new Intent(this, EditCategoryPopUpActivity.class);
         intent.putParcelableArrayListExtra("recognition", recognitions);
-        intent.putExtra(BundleKey.CORRECT_RECOGNITION, EditRecognitionType.CATEGORY);
+        intent.putExtra(BundleKey.CORRECT_RECOGNITION, RecognitionType.CATEGORY);
         startActivityForResult(intent, GET_CORRECT_CATEGORY_RECOGNITION);
     }
 
@@ -166,7 +154,7 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     void onColorBtnClick(){
         Intent intent = new Intent(this, EditCategoryPopUpActivity.class);
         intent.putParcelableArrayListExtra("recognition", colorRecognitions);
-        intent.putExtra(BundleKey.CORRECT_RECOGNITION, EditRecognitionType.COLOR);
+        intent.putExtra(BundleKey.CORRECT_RECOGNITION, RecognitionType.COLOR);
         startActivityForResult(intent, GET_CORRECT_COLOR_RECOGNITION);
     }
 
@@ -279,24 +267,24 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
         categoryClassifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
-                        MODEL_FILE,
-                        LABEL_FILE,
-                        INPUT_SIZE,
-                        IMAGE_MEAN,
-                        IMAGE_STD,
-                        INPUT_NAME,
-                        OUTPUT_NAME);
+                        DeepModelPath.MODEL_FILE,
+                        DeepModelPath.LABEL_FILE,
+                        DeepModelPath.INPUT_SIZE,
+                        DeepModelPath.IMAGE_MEAN,
+                        DeepModelPath.IMAGE_STD,
+                        DeepModelPath.INPUT_NAME,
+                        DeepModelPath.OUTPUT_NAME);
 
         colorClassifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
-                        COLOR_MODEL_FILE,
-                        COLOR_LABEL_FILE,
-                        INPUT_SIZE,
-                        IMAGE_MEAN,
-                        IMAGE_STD,
-                        INPUT_NAME,
-                        OUTPUT_NAME);
+                        DeepModelPath.COLOR_MODEL_FILE,
+                        DeepModelPath.COLOR_LABEL_FILE,
+                        DeepModelPath.INPUT_SIZE,
+                        DeepModelPath.IMAGE_MEAN,
+                        DeepModelPath.IMAGE_STD,
+                        DeepModelPath.INPUT_NAME,
+                        DeepModelPath.OUTPUT_NAME);
 
         /*if (handler != null) {
             handler.post(

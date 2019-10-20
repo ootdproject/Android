@@ -20,6 +20,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -33,30 +34,25 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import itmediaengineering.duksung.ootd.R;
 import itmediaengineering.duksung.ootd.data.post.Post;
 import itmediaengineering.duksung.ootd.main.tab.detail.view.PostDetailActivity;
+import itmediaengineering.duksung.ootd.main.tab.upload.EditCategoryPopUpActivity;
+import itmediaengineering.duksung.ootd.main.tab.upload.RecognitionType;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
 import itmediaengineering.duksung.ootd.main.tab.upload.classifier.TensorFlowImageClassifier;
 import itmediaengineering.duksung.ootd.search.adapter.SearchResultAdapter;
 import itmediaengineering.duksung.ootd.search.presenter.SearchContract;
 import itmediaengineering.duksung.ootd.search.presenter.SearchPresenter;
+import itmediaengineering.duksung.ootd.utils.BundleKey;
+import itmediaengineering.duksung.ootd.utils.DeepModelPath;
 
 public class SearchActivity extends AppCompatActivity implements RecognitionContract,
         SearchContract.View {
 
     private final int GET_GALLERY_IMAGE = 200;
-
-    private static final int INPUT_SIZE = 224;
-    private static final int IMAGE_MEAN = 128;
-    private static final float IMAGE_STD = 128.0f;
-    private static final String INPUT_NAME = "input";
-    private static final String OUTPUT_NAME = "MobilenetV1/Predictions/Softmax";
-    //private static final String MODEL_FILE = "file:///android_asset/20000_2.pb";
-    private static final String MODEL_FILE = "file:///android_asset/opt.pb";
-    private static final String LABEL_FILE = "file:///android_asset/labels.txt";
-    private static final String COLOR_MODEL_FILE = "file:///android_asset/color_test.pb";
-    private static final String COLOR_LABEL_FILE = "file:///android_asset/color_labels.txt";
+    private final int GET_CORRECT_FILTER_ITEM = 201;
 
     private Handler handler;
     private HandlerThread handlerThread;
@@ -77,6 +73,8 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
     TextView recognitionTag;
     @BindView(R.id.search_result_recycler_view)
     RecyclerView resultRecyclerView;
+    @BindView(R.id.search_activity_filter)
+    LinearLayout filterBtn;
 
     protected SearchPresenter presenter;
     protected SearchResultAdapter adapter;
@@ -133,6 +131,7 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
         handlerThread = new HandlerThread("inference");
         handlerThread.start();
         handler = new Handler(handlerThread.getLooper());
+        // classifier 인식 결과를 콜백으로 알려주기 위한 Contract 설정 1
         RecognitionManager.getInstance().addRecognitionContract(this);
         /*RecognitionManager.getInstance().addRecognitionContract(new RecognitionContract() {
             @Override
@@ -199,31 +198,32 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
         categoryClassifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
-                        MODEL_FILE,
-                        LABEL_FILE,
-                        INPUT_SIZE,
-                        IMAGE_MEAN,
-                        IMAGE_STD,
-                        INPUT_NAME,
-                        OUTPUT_NAME);
+                        DeepModelPath.MODEL_FILE,
+                        DeepModelPath.LABEL_FILE,
+                        DeepModelPath.INPUT_SIZE,
+                        DeepModelPath.IMAGE_MEAN,
+                        DeepModelPath.IMAGE_STD,
+                        DeepModelPath.INPUT_NAME,
+                        DeepModelPath.OUTPUT_NAME);
 
         colorClassifier =
                 TensorFlowImageClassifier.create(
                         getAssets(),
-                        COLOR_MODEL_FILE,
-                        COLOR_LABEL_FILE,
-                        INPUT_SIZE,
-                        IMAGE_MEAN,
-                        IMAGE_STD,
-                        INPUT_NAME,
-                        OUTPUT_NAME);
+                        DeepModelPath.COLOR_MODEL_FILE,
+                        DeepModelPath.COLOR_LABEL_FILE,
+                        DeepModelPath.INPUT_SIZE,
+                        DeepModelPath.IMAGE_MEAN,
+                        DeepModelPath.IMAGE_STD,
+                        DeepModelPath.INPUT_NAME,
+                        DeepModelPath.OUTPUT_NAME);
 
         if (handler != null) {
             handler.post(
                     () -> {
-                        List<Classifier.Recognition> results = categoryClassifier.recognizeImage(img);
+                        List<Classifier.Recognition> categoryResults = categoryClassifier.recognizeImage(img);
                         List<Classifier.Recognition> colorResults = colorClassifier.recognizeImage(img);
-                        RecognitionManager.getInstance().setCategoryRecognitions((ArrayList<Classifier.Recognition>) results);
+                        // 결과 값이 나오면 알 수 있도록 콜백 설정 2
+                        RecognitionManager.getInstance().setCategoryRecognitions((ArrayList<Classifier.Recognition>) categoryResults);
                         RecognitionManager.getInstance().setColorRecognitions((ArrayList<Classifier.Recognition>) colorResults);
                     });
         }
@@ -232,30 +232,41 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
 
     @Override
     public void onCategoryRecognitionChanged(ArrayList<Classifier.Recognition> recognitions) {
-        //ArrayList<String> categoryList = new ArrayList<>();
-        /*for(Classifier.Recognition categoryStr : recognitions){
-            final String categoryA = categoryStr.getTitle().split(":")[1].split("_")[0];
-            final String categoryB = categoryStr.getTitle().split(":")[1].split(categoryA + "_")[1];
+        for (int i = 0; i < recognitions.size(); i++) {
+            final String categoryA = recognitions.get(i).getTitle().split(":")[1].split("_")[0];
+            final String categoryB = recognitions.get(i).getTitle().split(":")[1].split(categoryA + "_")[1];
             categoryList.add(categoryB);
-        }*/
-        final String categoryA = recognitions.get(0).getTitle().split(":")[1].split("_")[0];
-        final String categoryB = recognitions.get(0).getTitle().split(":")[1].split(categoryA + "_")[1];
-        categoryList.add(categoryB);
+        }
+
         if(!colorList.isEmpty()) {
             presenter.getSearchImgResult(categoryList, colorList);
-            //presenter.getCategoryPost(categoryList);
         }
     }
 
     @Override
     public void onColorRecognitionChanged(ArrayList<Classifier.Recognition> recognitions) {
-        //ArrayList<String> colorList = new ArrayList<>();
-        final String color = recognitions.get(0).getTitle().split(":")[1].split("_")[0];
-        colorList.add(color);
+        for (int i = 0; i < recognitions.size(); i++){
+            final String color = recognitions.get(i).getTitle().split(":")[1].split("_")[0];
+            colorList.add(color);
+        }
+
         if(!categoryList.isEmpty()) {
             presenter.getSearchImgResult(categoryList, colorList);
-            //presenter.getCategoryPost(colorList);
         }
+    }
+
+    @Override
+    public void setTagText(String str) {
+        recognitionTag.setText(str);
+    }
+
+    @OnClick(R.id.search_activity_filter)
+    public void onFilterClick() {
+        Intent intent = new Intent(this, SearchFilterPopUpActivity.class);
+        intent.putStringArrayListExtra(BundleKey.CATEGORY_LIST, categoryList);
+        intent.putStringArrayListExtra(BundleKey.COLOR_LIST, colorList);
+        startActivity(intent);
+        //startActivityForResult(intent, GET_CORRECT_FILTER_ITEM);
     }
 
     @Override
@@ -274,11 +285,6 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
                 sharedView, "movieWork");
 
         startActivity(intent, options.toBundle());
-    }
-
-    @Override
-    public void setTagText(String str) {
-        recognitionTag.setText(str);
     }
 
     public interface onBackPressedListener {
