@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="5dp"
             android:fontFamily="sans-serif-condensed"
-            android:text="당신을 위한 추천"
+            android:text="따끈따끈한 업로드"
             android:textAlignment="center"
             android:textSize="18sp"/>
 

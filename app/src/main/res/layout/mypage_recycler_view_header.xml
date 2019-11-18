@@ -6,7 +6,7 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/mypage_user_image"
+        android:id="@+id/my_page_user_image"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginStart="40dp"
@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/mypage_user_nickname"
+        android:id="@+id/my_page_user_nickname"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
@@ -26,22 +26,22 @@
         android:layout_marginEnd="24dp"
         android:text="Duksung"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mypage_user_image"
+        app:layout_constraintStart_toEndOf="@+id/my_page_user_image"
         app:layout_constraintTop_toTopOf="parent"/>
 
     <TextView
-        android:id="@+id/mypage_user_description"
+        android:id="@+id/my_page_user_description"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="24dp"
         android:layout_marginTop="12dp"
         android:layout_marginEnd="24dp"
         android:maxLines="3"
-        android:text="아미공 사학년이에오"
+        android:text="아미공 사학년이에오\n졸업하고 싶어요 흑흑"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toEndOf="@+id/mypage_user_image"
-        app:layout_constraintTop_toBottomOf="@+id/mypage_user_nickname"/>
+        app:layout_constraintStart_toEndOf="@+id/my_page_user_image"
+        app:layout_constraintTop_toBottomOf="@+id/my_page_user_nickname"/>
 
 
 </android.support.constraint.ConstraintLayout>

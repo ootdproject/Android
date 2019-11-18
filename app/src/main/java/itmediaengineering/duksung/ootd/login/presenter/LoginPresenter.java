@@ -1,13 +1,11 @@
 package itmediaengineering.duksung.ootd.login.presenter;
 
 
-import android.util.Log;
-
-import java.util.ArrayList;
-
+import itmediaengineering.duksung.ootd.data.ResponseAuth;
 import itmediaengineering.duksung.ootd.login.model.LoginCallback;
 import itmediaengineering.duksung.ootd.login.model.LoginRetrofitModel;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
+import itmediaengineering.duksung.ootd.utils.PreferenceUtils;
 
 public class LoginPresenter
         implements LoginContract.Presenter, LoginCallback.RetrofitCallback {
@@ -21,12 +19,13 @@ public class LoginPresenter
     }
 
     @Override
-    public void login(String userId) {
-        retrofitModel.login(userId);
+    public void login(String providerUserId) {
+        PreferenceUtils.setProviderUserId(providerUserId);
+        retrofitModel.login(providerUserId);
     }
 
     @Override
-    public void onSuccess(int code) {
+    public void onSuccess(int code, ResponseAuth responseAuth) {
         if (code == ResponseCode.NOT_FOUND) {
             view.startIntroActivity();
             return;
@@ -38,6 +37,8 @@ public class LoginPresenter
         }
 
         if (code == ResponseCode.CREATED) {
+            PreferenceUtils.setAuth(responseAuth.getAuthorization());
+            PreferenceUtils.setNickname(responseAuth.getNickname());
             view.startMainActivity(code);
             return;
         }

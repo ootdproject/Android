@@ -1,5 +1,10 @@
 <resources>
-    <string name="app_name">OOTD</string>
+    <string name="app_name">옷:장</string>
+
+    <string name="tab_category_title">카테고리</string>
+    <string name="tab_upload_title">나의 물품 판매하기</string>
+    <string name="tab_chatting_title">채팅</string>
+    <string name="tab_my_page_title">마이 페이지</string>
 
     <string name="default_web_client_id">861114963652-bv1aptkblv0r5p73hqkqhonhj8stj9bt.apps.googleusercontent.com</string>
 
@@ -66,4 +71,19 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <string name="download">Download</string>
+    <string name="cancel">Cancel</string>
+    <string name="upload">Upload</string>
+    <string name="resend_message">Resend</string>
+    <string name="delete_message">Delete</string>
+
+    <string name="all_group_channels">판매 채팅</string>
+
+    <string name="group_channel_list_file_message_text">%1$s has uploaded a file.</string>
+
+    <!-- Message Status -->
+    <string name="message_sending">Sending</string>
+    <string name="message_failed">Failed</string>
+
 </resources>

@@ -5,6 +5,7 @@ import java.util.ArrayList;
 public interface FeedAdapterContract {
     interface View {
         void setOnPositionListener(OnPositionListener onPositionListener);
+        void setOnClickListener(OnItemClickListener onClickListener);
         void notifyAdapter();
     }
 

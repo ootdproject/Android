@@ -1,13 +1,9 @@
 package itmediaengineering.duksung.ootd.intro.model;
 
-import android.util.Log;
-
-import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
 
 import itmediaengineering.duksung.ootd.data.User;
-import itmediaengineering.duksung.ootd.data.mygallery.GalleryResponse;
+import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.retrofit.ResponseCode;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitService;
 import itmediaengineering.duksung.ootd.retrofit.RetrofitServiceManager;
@@ -28,27 +24,27 @@ public class IntroConnectRetrofitModel {
         this.callback = callback;
     }
 
-    public void join(User user) {
+    public void createUser(User user) {
         //JsonParser jsonParser = new JsonParser();
         JsonObject jsonObject = new JsonObject();
         jsonObject.addProperty ("gender", user.getGender());
         jsonObject.addProperty ("nickname", user.getNickname());
         jsonObject.addProperty ("providerType", "GOOGLE");
         jsonObject.addProperty ("providerUserId", user.getProviderUserId());
-        jsonObject.addProperty ("token", "toohhfghgoken");
-        Call<Void> call = retrofitService.createUser(jsonObject);
-        call.enqueue(new Callback<Void>() {
+        jsonObject.addProperty ("token", "");
+        Call<User> call = retrofitService.createUser(jsonObject);
+        call.enqueue(new Callback<User>() {
             @Override
-            public void onResponse(Call<Void> call, Response<Void> response) {
+            public void onResponse(Call<User> call, Response<User> response) {
                 if (response.code() == ResponseCode.BAD_REQUEST) {
-                    callback.onSuccess(ResponseCode.BAD_REQUEST);
+                    callback.onSuccess(ResponseCode.BAD_REQUEST, null);
                     return;
                 }
-                callback.onSuccess(ResponseCode.SUCCESS);
+                callback.onSuccess(ResponseCode.CREATED, response.body().getNickname());
             }
 
             @Override
-            public void onFailure(Call<Void> call, Throwable t) {
+            public void onFailure(Call<User> call, Throwable t) {
                 t.printStackTrace();
                 callback.onFailure();
             }

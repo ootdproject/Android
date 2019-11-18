@@ -3,6 +3,7 @@ package itmediaengineering.duksung.ootd.intro.presenter;
 import itmediaengineering.duksung.ootd.data.User;
 import itmediaengineering.duksung.ootd.intro.model.IntroConnectCallback;
 import itmediaengineering.duksung.ootd.intro.model.IntroConnectRetrofitModel;
+import itmediaengineering.duksung.ootd.utils.PreferenceUtils;
 
 public class IntroConnectPresenter
         implements IntroConnectContract.Presenter, IntroConnectCallback.RetrofitCallback {
@@ -16,19 +17,10 @@ public class IntroConnectPresenter
     }
 
     @Override
-    public void onSuccess(int code){//, UserResponse response) {
-        view.startMainActivity(code);//, response);
+    public void onSuccess(int code, String nickname){
+        PreferenceUtils.setNickname(nickname);
+        view.startMainActivity(code);
     }
-
-    /*@Override
-    public void onSuccessJoin(int code) {
-        view.startLoginActivity(code);
-    }
-
-    @Override
-    public void onFailure() {
-        view.setProgressbar(false);
-    }*/
 
     @Override
     public void onFailure() {
@@ -47,6 +39,6 @@ public class IntroConnectPresenter
 
     @Override
     public void join(User user) {
-        retrofitModel.join(user);
+        retrofitModel.createUser(user);
     }
 }

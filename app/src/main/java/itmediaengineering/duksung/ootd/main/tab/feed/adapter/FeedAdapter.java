@@ -4,17 +4,14 @@ import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-
 import java.util.ArrayList;
 
-import itmediaengineering.duksung.ootd.data.feed.Post;
+import itmediaengineering.duksung.ootd.data.post.Post;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         implements FeedAdapterContract.View, FeedAdapterContract.Model{
-    private static final String TAG = FeedAdapter.class.getSimpleName();
     private ArrayList<Post> items;
-    private AdapterView.OnItemClickListener onItemClickListener;
+    private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
     private Context context;
 
@@ -25,8 +22,8 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
 
     @NonNull
     @Override
-    public FeedViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int i) {
-        return new FeedViewHolder(context, parent, onItemClickListener);
+    public FeedViewHolder onCreateViewHolder(ViewGroup parent, int i) {
+        return new FeedViewHolder(context, parent, onItemClickListener, onPositionListener);
     }
 
     @Override
@@ -41,6 +38,11 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         if(items == null)
             return 0;
         return items.size();
+    }
+
+    @Override
+    public void setOnClickListener(OnItemClickListener onClickListener) {
+        this.onItemClickListener = onClickListener;
     }
 
     @Override
@@ -64,12 +66,12 @@ public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
     @Override
     public void addPosts(ArrayList items) {
         this.items.addAll(items);
-        notifyDataSetChanged();
+        notifyAdapter();
     }
 
     @Override
     public void clearFeed() {
         items.clear();
-        notifyDataSetChanged();
+        notifyAdapter();
     }
 }

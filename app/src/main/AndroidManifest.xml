@@ -6,19 +6,49 @@
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.CAMERA"/>
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
     <uses-permission android:name="android.permission.INTERNET"/> <!-- NETWORK_PROVIDER 만 지원 -->
     <uses-feature android:name="android.hardware.location.network"/>
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
+    <meta-data
+        android:name="com.kakao.sdk.AppKey"
+        android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
+
     <application
-        android:usesCleartextTraffic="true"
+        android:name=".BaseApplication"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/closet_logo"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/closet_logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".search.view.SearchFilterPopUpActivity"
+                  android:theme="@style/CustomPopup"/>
+        <activity android:name=".search.view.SearchActivity">
+        </activity>
+        <activity
+            android:name=".main.tab.upload.EditCategoryPopUpActivity"
+            android:theme="@style/CustomPopup"/>
+        <activity android:name=".main.tab.upload.ClassifierActivity">
+        </activity>
+        <activity
+            android:name=".main.tab.mypage.view.EditPostPopUpActivity"
+            android:theme="@style/CustomPopup"/>
+        <activity android:name=".map.LocationDemoActivity">
+        </activity>
+        <activity android:name=".map.MapViewDemoActivity">
+        </activity>
+        <activity android:name=".chat_list.view.ChatListActivity">
+        </activity>
+        <activity android:name=".chat_detail.ChatActivity">
+        </activity>
+        <activity android:name=".main.tab.detail.view.PostDetailActivity">
+        </activity>
+        <activity android:name=".main.tab.upload.UploadActivity">
+        </activity>
         <activity android:name=".intro.IntroActivity">
         </activity>
         <activity android:name=".login.GoogleSignInActivity">
@@ -30,6 +60,10 @@
         </activity>
         <activity android:name=".MainActivity">
         </activity>
+
+        <meta-data
+            android:name="com.kakao.sdk.AppKey"
+            android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
     </application>
 
 </manifest>
