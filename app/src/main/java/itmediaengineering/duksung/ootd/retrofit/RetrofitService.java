@@ -146,23 +146,4 @@ public interface RetrofitService {
             @Path("postId") int postId,
             @Header("x-providerUserId") String pUid
     );
-
-    /*@GET(FLICKR_SUB_URL)
-    Call<GalleryResponse> getMyPosts(
-            @Query("api_key") String key,
-            @Query ("method") String method,
-            @Query("format") String format,
-            @Query("nojsoncallback") String jsoncallback,
-            @Query("extras") String extras
-    );*/
-
-    /*@GET("service/SecndSrtpFrcstInfoService2/ForecastGridb")
-    Call<WeatherResponse> getNowWeather(
-            @Query(value = "ServiceKey", encoded = true)String serviceKey,
-            @Query("base_date")String baseDate,
-            @Query("base_time")String baseTime,
-            @Query("nx")String nx,
-            @Query("ny")String ny,
-            @Query("_type")String type
-    );*/
 }

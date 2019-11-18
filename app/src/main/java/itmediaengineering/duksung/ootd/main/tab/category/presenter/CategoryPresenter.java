@@ -7,9 +7,7 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.data.post.Post;
-import itmediaengineering.duksung.ootd.data.weather.Item;
 import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryAdapterContract;
 import itmediaengineering.duksung.ootd.main.tab.category.adapter.CategoryBAdapterContract;
 import itmediaengineering.duksung.ootd.main.tab.category.adapter.OnItemClickListener;

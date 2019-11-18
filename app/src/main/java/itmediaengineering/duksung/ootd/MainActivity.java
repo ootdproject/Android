@@ -6,18 +6,12 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Environment;
 import android.os.Handler;
-import android.os.HandlerThread;
-import android.os.Trace;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
@@ -34,18 +28,9 @@ import android.widget.Toast;
 
 import com.sendbird.android.SendBird;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import itmediaengineering.duksung.ootd.chat_list.view.ChatListActivity;
 import itmediaengineering.duksung.ootd.chat_list.view.GroupChannelListFragment;
 import itmediaengineering.duksung.ootd.data.location.Document;
 import itmediaengineering.duksung.ootd.login.GoogleSignInActivity;
@@ -54,14 +39,11 @@ import itmediaengineering.duksung.ootd.main.adapter.MainPagerAdapter;
 import itmediaengineering.duksung.ootd.main.presenter.MainContract;
 import itmediaengineering.duksung.ootd.main.presenter.MainPresenter;
 import itmediaengineering.duksung.ootd.main.tab.category.view.CategoryFragment;
-import itmediaengineering.duksung.ootd.main.tab.detail.view.PostDetailActivity;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 import itmediaengineering.duksung.ootd.main.tab.feed.view.LocationUpdatable;
 import itmediaengineering.duksung.ootd.main.tab.mypage.view.MyPageFragment;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadActivity;
 import itmediaengineering.duksung.ootd.main.tab.upload.UploadFragment;
-import itmediaengineering.duksung.ootd.main.tab.upload.classifier.Classifier;
-import itmediaengineering.duksung.ootd.main.tab.upload.classifier.TensorFlowImageClassifier;
 import itmediaengineering.duksung.ootd.map.LocationDemoActivity;
 import itmediaengineering.duksung.ootd.search.view.SearchActivity;
 import itmediaengineering.duksung.ootd.utils.BundleKey;
@@ -341,11 +323,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
             // Update the user's nickname
             updateCurrentUserInfo(userNickname);
             updateCurrentUserPushToken();
-
-            // Proceed to MainActivity
-            /*Intent intent = new Intent(PostDetailActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();*/
         });
     }
 

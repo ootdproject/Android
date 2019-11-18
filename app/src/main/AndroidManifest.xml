@@ -32,8 +32,6 @@
         <activity
             android:name=".main.tab.upload.EditCategoryPopUpActivity"
             android:theme="@style/CustomPopup"/>
-        <activity android:name=".main.tab.upload.ClassifierActivity">
-        </activity>
         <activity
             android:name=".main.tab.mypage.view.EditPostPopUpActivity"
             android:theme="@style/CustomPopup"/>

@@ -49,16 +49,9 @@ public class GoogleSignInActivity extends BaseActivity implements
     private FirebaseAuth auth;
     // [END declare_auth]
 
-    // ?
-    //private FirebaseAuth.AuthStateListener mAuthListener;
-
-    //private GoogleApiClient mGoogleApiClient;
-
     // 구글 로그인 관리 클래스
     private GoogleSignInClient googleSignInClient;
     private Boolean toLogin;
-
-    //SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
 
     @BindView(R.id.status)
     TextView mStatusTextView;
@@ -89,9 +82,6 @@ public class GoogleSignInActivity extends BaseActivity implements
             e.printStackTrace();
         }
 
-        // ?
-        // FirebaseApp.initializeApp(GoogleSignInActivity.this);
-
         // Button listeners 구글 로그인 버튼 이벤트
         findViewById(R.id.signInButton).setOnClickListener(this);
         findViewById(R.id.signOutButton).setOnClickListener(this);
@@ -99,23 +89,6 @@ public class GoogleSignInActivity extends BaseActivity implements
 
         presenter = new LoginPresenter();
         presenter.attachView(this);
-
-        // ?
-        /*mAuthListener = firebaseAuth -> {
-            FirebaseUser user = firebaseAuth.getCurrentUser();
-            if (user != null) {
-                // User is signed in
-                Log.d(TAG, "onAuthStateChanged:signed_in:" + user.getUid());
-                *//*Intent intent = new Intent(GoogleSignInActivity.this, IntroActivity.class);
-                intent.putExtra("userId", user.getUid());
-                startActivity(intent);
-                finish();*//*
-            } else {
-                // User is signed out
-                Log.d(TAG, "onAuthStateChanged:signed_out");
-            }
-            // ...
-        };*/
 
         // [START config_signin]
         // Configure Google Sign In 구글 로그인 옵션
@@ -223,11 +196,6 @@ public class GoogleSignInActivity extends BaseActivity implements
         intent.putExtra(BundleKey.LOGIN_STATE, LoginState.login.toLogin);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
         startActivity(intent);
-
-        // Google sign out
-        /*googleSignInClient.signOut().addOnCompleteListener(this,
-                task -> updateUI(null));
-        ActivityCompat.finishAffinity(this);*/
     }
 
     private void revokeAccess() {

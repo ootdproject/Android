@@ -138,9 +138,6 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     void onGalleryIntentBtnClick() {
         Intent intent = new Intent(Intent.ACTION_PICK);
         intent.setDataAndType(android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
-        /*Intent intent = new Intent();
-        intent.setType("image/*");
-        intent.setAction(Intent.ACTION_GET_CONTENT);*/
         startActivityForResult(intent, GET_GALLERY_IMAGE);
         Log.d(TAG, "clicked!");
     }
@@ -212,7 +209,6 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
         Bitmap resized = null;
 
         if (requestCode == GET_GALLERY_IMAGE) {
-            // Make sure the request was successful
             if (resultCode == RESULT_OK) {
                 try {
                     // 선택한 이미지에서 비트맵 생성
@@ -290,16 +286,6 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
                         DeepModelPath.INPUT_NAME,
                         DeepModelPath.OUTPUT_NAME);
 
-        /*if (handler != null) {
-            handler.post(
-                    () -> {
-                        List<Classifier.Recognition> results = categoryClassifier.recognizeImage(img);
-                        List<Classifier.Recognition> colorResults = colorClassifier.recognizeImage(img);
-                        RecognitionManager.getInstance().setCategoryRecognitions((ArrayList<Classifier.Recognition>) results);
-                        RecognitionManager.getInstance().setColorRecognitions((ArrayList<Classifier.Recognition>) colorResults);
-                    });
-        }*/
-
         if (handler != null) {
             handler.post(
                     () -> {
@@ -342,26 +328,5 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
     @Override
     public void connectFail() {
 
-    }
-
-    private File bitmapToFile(Bitmap bitmap, String fileName) {
-        File file = new File(this.getCacheDir(), fileName);
-        OutputStream outputStream = null;
-
-        try {
-            file.createNewFile();
-            outputStream = new FileOutputStream(file);
-            bitmap.compress(Bitmap.CompressFormat.PNG, 90, outputStream);
-        } catch (IOException e) {
-            e.printStackTrace();
-        } finally {
-            try {
-                if (outputStream != null)
-                    outputStream.close();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-        return file;
     }
 }
