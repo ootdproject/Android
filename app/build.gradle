@@ -4,8 +4,10 @@ apply plugin: 'com.google.gms.google-services'
 
 project.ext.ASSET_DIR = projectDir.toString() + '/src/main/assets'
 
-assert file(project.ext.ASSET_DIR + "/20000_2.pb").exists()
+assert file(project.ext.ASSET_DIR + "/clothes.pb").exists()
 assert file(project.ext.ASSET_DIR + "/labels.txt").exists()
+assert file(project.ext.ASSET_DIR + "/color.pb").exists()
+assert file(project.ext.ASSET_DIR + "/color_labels.txt").exists()
 
 android {
     compileSdkVersion 28
@@ -57,7 +59,6 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.7.1'
     implementation 'com.google.code.gson:gson:2.8.5'
     implementation 'id.zelory:compressor:2.1.0'
-    //implementation 'com.github.KwabenBerko:OpenWeatherMap-Android-Library:2.0.1'
 
     implementation 'com.sendbird.sdk:sendbird-android-sdk:3.0.96'
     implementation 'com.sendbird.sdk:sendbird-syncmanager:1.1.1'

@@ -29,13 +29,4 @@ public class LocationApiManager {
         }
         return locationApi;
     }
-
-    /*public static void setUrl(String url) {
-        LocationApiManager.url = url;
-    }
-
-    public static <S> S createService(Class<S> serviceClass) {
-        return retrofit.create(serviceClass);
-    }*/
-
 }

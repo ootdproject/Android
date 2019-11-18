@@ -1,7 +1,6 @@
 package itmediaengineering.duksung.ootd.retrofit;
 
 import itmediaengineering.duksung.ootd.data.location.LocationResponse;
-import itmediaengineering.duksung.ootd.data.weather.WeatherResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Header;
