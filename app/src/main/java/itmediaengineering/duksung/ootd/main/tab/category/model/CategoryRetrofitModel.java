@@ -51,8 +51,8 @@ public class CategoryRetrofitModel {
         };
 
         final Call<List<Post>> call = categoryType.type == CategoryType.categoryA.type ?
-                retrofitService.getCategoryAPosts(auth, category, page, SortType.DESC.key, 60) :
-                retrofitService.getCategoryBPosts(auth, category, page, SortType.DESC.key, 60);
+                retrofitService.getCategoryAPosts(auth, category, page, SortType.DESC.key, 100) :
+                retrofitService.getCategoryBPosts(auth, category, page, SortType.DESC.key, 100);
 
         call.enqueue(callback);
     }

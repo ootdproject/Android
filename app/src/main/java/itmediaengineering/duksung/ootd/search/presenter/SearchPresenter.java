@@ -75,11 +75,10 @@ public class SearchPresenter implements SearchContract.Presenter, SearchCallback
     }
 
     @Override
-    public void getSearchImgResult(ArrayList<String> categoryList, ArrayList<String> colorList) {
+    public void getSearchImgResult(String category, String color) {
         page = 0;
-        category = categoryList.get(0);
-        color = colorList.get(0);
-        tagStr += "#" + category + "  " + "#" + color + "  ";
+        tagStr = "#" + category + "  " + "#" + color + "  ";
+        //tagStr += "#" + category + "  " + "#" + color + "  ";
         retrofitModel.getCategoryAndColorSearchPosts(category, color, page);
     }
 
@@ -117,6 +116,7 @@ public class SearchPresenter implements SearchContract.Presenter, SearchCallback
 
         if (code == ResponseCode.SUCCESS && posts != null) {
             view.setTagText(tagStr);
+            adapterModel.clearFeed();
             adapterModel.addPosts(new ArrayList(posts));
             return;
         }

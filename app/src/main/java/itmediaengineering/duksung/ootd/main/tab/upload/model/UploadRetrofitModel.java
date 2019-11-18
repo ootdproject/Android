@@ -50,6 +50,7 @@ public class UploadRetrofitModel {
         map.put("imageUrl", "");
         map.put("sale", "true");
         map.put("title", postRequest.getTitle());
+        map.put("color", postRequest.getColor());
         MultipartBody.Part requestJson = MultipartBody.Part.createFormData(
                 "postRequest"
                 , "postRequest.json"
@@ -94,6 +95,7 @@ public class UploadRetrofitModel {
         jsonObject.addProperty("imageUrl", post.getImageUrl());
         jsonObject.addProperty ("sale", post.getSale());
         jsonObject.addProperty ("title", post.getTitle());
+        jsonObject.addProperty("color", post.getColor());
 
         Call<Void> call = retrofitService.editPost(auth, postId, jsonObject, providerUserId);
         call.enqueue(new Callback<Void>() {

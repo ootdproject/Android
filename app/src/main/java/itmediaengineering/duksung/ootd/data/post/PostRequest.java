@@ -29,6 +29,9 @@ public class PostRequest {
     @SerializedName("title")
     @Expose
     private String title;
+    @SerializedName("color")
+    @Expose
+    private String color;
 
     public PostRequest(
             String categoryA,
@@ -37,7 +40,8 @@ public class PostRequest {
             String description,
             String dong,
             Boolean sale,
-            String title
+            String title,
+            String color
     ) {
         this.categoryA = categoryA;
         this.categoryB = categoryB;
@@ -46,6 +50,7 @@ public class PostRequest {
         this.dong = dong;
         this.sale = sale;
         this.title = title;
+        this.color = color;
     }
 
     public String getCategoryA() {
@@ -112,4 +117,11 @@ public class PostRequest {
         this.title = title;
     }
 
+    public String getColor() {
+        return color;
+    }
+
+    public void setColor(String color) {
+        this.color = color;
+    }
 }

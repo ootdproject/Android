@@ -80,24 +80,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
     private static final int CHATTING_TAB = 3;
     private static final int MY_PAGE_TAB = 4;
 
-    /*private enum TAB_LIST {
-        FEED_TAB(0),
-        CATEGORY_TAB(1),
-        UPLOAD_TAB(2),
-        CHATTING_TAB(3),
-        MY_PAGE_TAB(4);
-
-        public int getTab() {
-            return tab;
-        }
-
-        public final int tab;
-
-        TAB_LIST(int tab) {
-            this.tab = tab;
-        }
-    }*/
-
     @BindView(R.id.viewpager_content)
     ViewPager viewpagerContent;
     @BindView(R.id.tab_content)

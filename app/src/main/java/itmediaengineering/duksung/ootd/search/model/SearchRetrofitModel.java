@@ -26,7 +26,7 @@ public class SearchRetrofitModel {
 
     public void getSearchPosts(String category, int page, int listCount) {
         final String auth = PreferenceUtils.getAuth();
-        Call<List<Post>> call = retrofitService.getCategoryBPosts(auth, category, page, SortType.DESC.key, 60);
+        Call<List<Post>> call = retrofitService.getCategoryBPosts(auth, category, page, SortType.DESC.key, 100);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -52,7 +52,7 @@ public class SearchRetrofitModel {
 
     public void getColorSearchPosts(String color, int page, int listCount) {
         final String auth = PreferenceUtils.getAuth();
-        Call<List<Post>> call = retrofitService.getColorQueryPosts(auth, color, page, SortType.DESC.key, 60);
+        Call<List<Post>> call = retrofitService.getColorQueryPosts(auth, color, page, SortType.DESC.key, 100);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {
@@ -79,7 +79,7 @@ public class SearchRetrofitModel {
     public void getCategoryAndColorSearchPosts(String category, String color, int page) {
         final String auth = PreferenceUtils.getAuth();
         Call<List<Post>> call = retrofitService.getCategoryAndColorQueryPosts(
-                auth, category, color, page, SortType.DESC.key, 60);
+                auth, category, color, page, SortType.DESC.key, 100);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {

@@ -12,31 +12,32 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
-        app:layout_constraintGuide_begin="236dp"/>
+        app:layout_constraintGuide_percent="0.25"/>
 
     <ImageView
-        android:id="@+id/intro_user_image"
+        android:id="@+id/intro_shirt_image"
         android:layout_width="120dp"
         android:layout_height="120dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/guideline"
-        app:srcCompat="@drawable/user"/>
+        app:srcCompat="@drawable/shirt_intro_icon"/>
 
     <EditText
         android:id="@+id/intro_nickname"
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="8dp"
         android:ems="10"
         android:hint="Nickname"
         android:inputType="textPersonName"
         android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/intro_user_image"/>
+        app:layout_constraintTop_toBottomOf="@+id/textView"/>
 
     <RadioGroup
         android:id="@+id/radio_group"
@@ -74,10 +75,12 @@
     <Button
         android:id="@+id/intro_save_btn"
         android:layout_width="0dp"
-        android:layout_height="50dp"
+        android:layout_height="60dp"
         android:background="#B679D6"
-        android:text="Done"
+        android:text="가입하기"
+        android:textColor="@color/app_point_white"
         android:textSize="24sp"
+        android:textStyle="bold"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -88,17 +91,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
         android:fontFamily="sans-serif"
         android:gravity="center"
-        android:text="닉네임과 성별을\n 입력해주세요"
+        android:text="옷:장에 오신걸 환영합니다"
+        android:textColor="@color/app_point_black"
         android:textSize="24sp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.706"/>
+        app:layout_constraintTop_toBottomOf="@+id/intro_shirt_image"/>
 
 
 </android.support.constraint.ConstraintLayout>

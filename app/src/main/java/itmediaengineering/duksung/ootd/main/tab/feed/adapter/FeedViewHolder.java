@@ -21,7 +21,6 @@ import itmediaengineering.duksung.ootd.main.tab.feed.view.FeedFragment;
 import itmediaengineering.duksung.ootd.utils.LikeType;
 
 public class FeedViewHolder extends RecyclerView.ViewHolder {
-    private static final String TAG = FeedViewHolder.class.getSimpleName();
     private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;
 

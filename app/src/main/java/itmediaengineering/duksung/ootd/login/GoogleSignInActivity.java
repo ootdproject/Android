@@ -39,7 +39,7 @@ import itmediaengineering.duksung.ootd.login.presenter.LoginState;
 import itmediaengineering.duksung.ootd.utils.BundleKey;
 
 public class GoogleSignInActivity extends BaseActivity implements
-        View.OnClickListener, LoginContract.View{
+        View.OnClickListener, LoginContract.View {
 
     private static final String TAG = "GoogleActivity";
     private static final int RC_SIGN_IN = 9001;

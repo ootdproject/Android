@@ -1,13 +1,12 @@
 package itmediaengineering.duksung.ootd.search.view;
 
 import android.content.Intent;
-import android.support.design.chip.Chip;
+import android.os.Bundle;
 import android.support.design.chip.ChipGroup;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.Toast;
+import android.widget.Button;
 
 import java.util.ArrayList;
 
@@ -27,6 +26,8 @@ public class SearchFilterPopUpActivity extends AppCompatActivity {
     RecyclerView colorRecyclerView;
     @BindView(R.id.chipGroupColor)
     ChipGroup chipGroupColor;
+    @BindView(R.id.search_filter_research_btn)
+    Button researchBtn;
 
     protected ChipAdapter categoryAdapter;
     protected ChipAdapter colorAdapter;
@@ -56,15 +57,12 @@ public class SearchFilterPopUpActivity extends AppCompatActivity {
         colorRecyclerView.setLayoutManager(colorLinearLayoutManager);
         colorRecyclerView.setAdapter(colorAdapter);
 
-        //chipGroupCategory.getCheckedChipId();
-        //chipGroupCategory.setSingleSelection(true);
-        chipGroupCategory.setOnCheckedChangeListener(new ChipGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(ChipGroup chipGroup, int i) {
-                Chip chip = chipGroup.findViewById(i);
-                if (chip != null)
-                    Toast.makeText(getApplicationContext(), "Chip is " + chip.getText().toString(), Toast.LENGTH_SHORT).show();
-            }
+        researchBtn.setOnClickListener(v -> {
+            Intent resultIntent = new Intent();
+            resultIntent.putExtra(BundleKey.RESEARCH_CATEGORY, categoryAdapter.getResearchCombi());
+            resultIntent.putExtra(BundleKey.RESEARCH_COLOR, colorAdapter.getResearchCombi());
+            setResult(RESULT_OK, resultIntent);
+            finish();
         });
     }
 

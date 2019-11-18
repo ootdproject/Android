@@ -24,7 +24,7 @@ public interface SearchContract {
     interface Presenter {
         void getCategoryPost(ArrayList<String> categoryList);
         void getColorPost(ArrayList<String> categoryAndColorList);
-        void getSearchImgResult(ArrayList<String> categoryList, ArrayList<String> colorList);
+        void getSearchImgResult(String category, String color);
         //void getWeather(String baseDate, String baseTime, String nx, String ny);
         void attachView(View view);
         void detachView();

@@ -105,6 +105,9 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
         setContentView(R.layout.activity_upload);
         ButterKnife.bind(this);
 
+        uploadImgBtn.setFocusableInTouchMode(true);
+        uploadImgBtn.requestFocus();
+
         cost.addTextChangedListener(new PaymentTextWatcher(cost));
 
         presenter = new UploadPresenter();
@@ -186,8 +189,9 @@ public class UploadActivity extends AppCompatActivity implements UploadContract.
         } else {
             String categoryStrA = category.getText().toString().split(" > ")[0];
             String categoryStrB = category.getText().toString().split(" > ")[1];
+            String colorText = color.getText().toString();
             PostRequest postRequest = new PostRequest(
-                    categoryStrA, categoryStrB, costStr, descStr, dongStr, isUploadMode, titleStr);
+                    categoryStrA, categoryStrB, costStr, descStr, dongStr, isUploadMode, titleStr, colorText);
             if (isUploadMode) {
                 presenter.upload(postRequest, file);
             } else {

@@ -1,7 +1,6 @@
 package itmediaengineering.duksung.ootd.intro;
 
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +11,6 @@ import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.sendbird.android.SendBird;
-import com.sendbird.android.SendBirdException;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,7 +36,7 @@ public class IntroActivity extends AppCompatActivity implements IntroConnectCont
 
     //SharedPreferences sharedPreferences = getSharedPreferences("sFile",MODE_PRIVATE);
 
-    @BindView(R.id.intro_user_image)
+    @BindView(R.id.intro_shirt_image)
     ImageView userImage;
     @BindView(R.id.intro_nickname)
     EditText nickname;

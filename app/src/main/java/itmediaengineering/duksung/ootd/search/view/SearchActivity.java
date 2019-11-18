@@ -192,6 +192,15 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
                 classifierImg(resized);
             }
         }
+        if (requestCode == GET_CORRECT_FILTER_ITEM) {
+            // Make sure the request was successful
+            if (resultCode == RESULT_OK) {
+                String category = data.getStringExtra(BundleKey.RESEARCH_CATEGORY);
+                String color = data.getStringExtra(BundleKey.RESEARCH_COLOR);
+                presenter.getSearchImgResult(category, color);
+            }
+        }
+
     }
 
     protected synchronized void classifierImg(Bitmap img) {
@@ -239,7 +248,7 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
         }
 
         if(!colorList.isEmpty()) {
-            presenter.getSearchImgResult(categoryList, colorList);
+            presenter.getSearchImgResult(categoryList.get(0), colorList.get(0));
         }
     }
 
@@ -251,7 +260,7 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
         }
 
         if(!categoryList.isEmpty()) {
-            presenter.getSearchImgResult(categoryList, colorList);
+            presenter.getSearchImgResult(categoryList.get(0), colorList.get(0));
         }
     }
 
@@ -265,8 +274,8 @@ public class SearchActivity extends AppCompatActivity implements RecognitionCont
         Intent intent = new Intent(this, SearchFilterPopUpActivity.class);
         intent.putStringArrayListExtra(BundleKey.CATEGORY_LIST, categoryList);
         intent.putStringArrayListExtra(BundleKey.COLOR_LIST, colorList);
-        startActivity(intent);
-        //startActivityForResult(intent, GET_CORRECT_FILTER_ITEM);
+        //startActivity(intent);
+        startActivityForResult(intent, GET_CORRECT_FILTER_ITEM);
     }
 
     @Override

@@ -10,7 +10,6 @@ import itmediaengineering.duksung.ootd.data.post.Post;
 
 public class FeedAdapter extends RecyclerView.Adapter<FeedViewHolder>
         implements FeedAdapterContract.View, FeedAdapterContract.Model{
-    private static final String TAG = FeedAdapter.class.getSimpleName();
     private ArrayList<Post> items;
     private OnItemClickListener onItemClickListener;
     private OnPositionListener onPositionListener;

@@ -38,6 +38,7 @@ public class LoginPresenter
 
         if (code == ResponseCode.CREATED) {
             PreferenceUtils.setAuth(responseAuth.getAuthorization());
+            PreferenceUtils.setNickname(responseAuth.getNickname());
             view.startMainActivity(code);
             return;
         }

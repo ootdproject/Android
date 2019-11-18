@@ -4,6 +4,7 @@ import android.content.Context;
 import android.support.design.chip.Chip;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.View;
 import android.view.ViewGroup;
 
 import butterknife.BindView;
@@ -22,7 +23,8 @@ public class ChipViewHolder extends RecyclerView.ViewHolder {
         this.context = context;
     }
 
-    public void onBind(String title) {
-        chip.setText(title);
+    public void onBind(String category) {
+        chip.setText(category);
+
     }
 }

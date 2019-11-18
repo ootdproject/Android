@@ -21,9 +21,6 @@ import retrofit2.http.Path;
 import retrofit2.http.Query;
 
 public interface RetrofitService {
-    //String FLICKR_SUB_URL = "/services/rest/";
-    //String API_KEY = "b727dc9341180f8b23d6b4a3043f687e";
-
     @POST("/members")
     Call<User> createUser(
             @Body JsonObject userData

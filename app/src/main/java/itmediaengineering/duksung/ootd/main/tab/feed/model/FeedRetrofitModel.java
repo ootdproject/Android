@@ -82,7 +82,7 @@ public class FeedRetrofitModel {
 
     public void getRecommendLocationPosts(String dong, int page){
         final String auth = PreferenceUtils.getAuth();
-        Call<List<Post>> call = retrofitService.getRecommendGuPosts(auth, dong, page, SortType.DESC2.key, 60);
+        Call<List<Post>> call = retrofitService.getRecommendGuPosts(auth, dong, page, SortType.DESC2.key, 100);
         call.enqueue(new Callback<List<Post>>() {
             @Override
             public void onResponse(Call<List<Post>> call, Response<List<Post>> response) {

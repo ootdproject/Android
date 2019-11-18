@@ -7,4 +7,7 @@ public class BundleKey {
 
     public static final String CATEGORY_LIST = "category_list";
     public static final String COLOR_LIST = "color_list";
+
+    public static final String RESEARCH_CATEGORY = "research_category";
+    public static final String RESEARCH_COLOR = "research_color";
 }

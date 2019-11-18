@@ -10,7 +10,7 @@ public class CategoryBList {
     public ArrayList<String> bottomList = new ArrayList<>(
             Arrays.asList("leggings", "longskirt", "miniskirt", "pants", "shorts"));
     public ArrayList<String> outerList = new ArrayList<>(
-            Arrays.asList("cardigan", "coat", "hoody", "hoodzipup", "jacket", "padding"));
+            Arrays.asList("cardigan", "coat", "hoodzipup", "jacket", "padding"));
     public ArrayList<String> pairList = new ArrayList<>(
             Arrays.asList("jump_suit", "longdress", "minidress", "suit_twopiece"));
 
