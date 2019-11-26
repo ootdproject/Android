@@ -240,11 +240,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @OnClick(R.id.main_toolbar_title)
     public void onChangeLocationBtnClick() {
-        /*Intent intent = new Intent(this, AppPermissionHandlerActivity.class);
-        String[] permissions = {Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
-        intent.putExtra(PERMISSION_STRINGS, permissions);
-        startActivity(intent);*/
-
         if (!HasLocationPermission()) { return; }
             Intent intent = new Intent(this, LocationDemoActivity.class);
             startActivityForResult(intent, INTENT_REQUEST_LOCATION);
@@ -290,19 +285,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
             double latitude = data.getDoubleExtra("latitude", 0.0d);
             double longitude = data.getDoubleExtra("longitude", 0.0d);
-            //locationView.setText(data.getStringExtra("location"));
             refreshLocation(longitude, latitude);
         }
     }
 
     private void connectToSendBird(final String userId, final String userNickname) {
-        // Show the loading indicator
-        //showProgressBar(true);
-        //mConnectButton.setEnabled(false);
-
         ConnectionManager.login(userId, (user, e) -> {
-            // Callback received; hide the progress bar.
-            //showProgressBar(false);
 
             if (e != null) {
                 // Error!
@@ -311,9 +299,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                         Toast.LENGTH_SHORT)
                         .show();
 
-                // Show login failure snackbar
-                //showSnackbar("Login to SendBird failed");
-                //mConnectButton.setEnabled(true);
                 PreferenceUtils.setConnected(false);
                 return;
             }
@@ -339,8 +324,6 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
                         Toast.LENGTH_SHORT)
                         .show();
 
-                // Show update failed snackbar
-                //showSnackbar("Update user nickname failed");
                 return;
             }
             PreferenceUtils.setNickname(userNickname);
@@ -355,12 +338,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onUnauthorizedError() {
-
+        toast("권한이 없습니다");
     }
 
     @Override
     public void onUnknownError() {
-
+        toast("알 수 없는 에러");
     }
 
     @Override
@@ -374,12 +357,12 @@ public class MainActivity extends AppCompatActivity implements MainContract.View
 
     @Override
     public void onConnectFail() {
-
+        toast("서버 연결 실패");
     }
 
     @Override
     public void onNotFound() {
-
+        toast("내용을 찾을 수 없습니다");
     }
 
     public interface onBackPressedListener {

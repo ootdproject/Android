@@ -412,31 +412,6 @@ public class GroupChatFragment extends Fragment {
         super.onSaveInstanceState(outState);
     }
 
-    /*@Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.menu_group_chat, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }*/
-
-    /*@Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-
-        if (id == R.id.action_group_channel_invite) {
-            Intent intent = new Intent(getActivity(), InviteMemberActivity.class);
-            intent.putExtra(EXTRA_CHANNEL_URL, mChannelUrl);
-            startActivity(intent);
-            return true;
-        } else if (id == R.id.action_group_channel_view_members) {
-            Intent intent = new Intent(getActivity(), MemberListActivity.class);
-            intent.putExtra(EXTRA_CHANNEL_URL, mChannelUrl);
-            startActivity(intent);
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }*/
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, final Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
