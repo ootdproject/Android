@@ -110,7 +110,6 @@ public class CategoryPresenter implements CategoryContract.Presenter, CategoryCa
         page = 0;
         category = categoryBName;
         adapterModel.clearFeed();
-        //categoryBAdapterModel.clearCategoryBView();
         retrofitModel.getCategoryPosts(categoryBName, page, CategoryType.categoryB);
     }
 

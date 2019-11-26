@@ -25,43 +25,30 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true">
-        <activity android:name=".search.view.SearchFilterPopUpActivity"
-                  android:theme="@style/CustomPopup"/>
-        <activity android:name=".search.view.SearchActivity">
-        </activity>
+        <activity
+            android:name=".search.view.SearchFilterPopUpActivity"
+            android:theme="@style/CustomPopup"/>
+        <activity android:name=".search.view.SearchActivity"/>
         <activity
             android:name=".main.tab.upload.EditCategoryPopUpActivity"
             android:theme="@style/CustomPopup"/>
         <activity
             android:name=".main.tab.mypage.view.EditPostPopUpActivity"
             android:theme="@style/CustomPopup"/>
-        <activity android:name=".map.LocationDemoActivity">
-        </activity>
-        <activity android:name=".map.MapViewDemoActivity">
-        </activity>
-        <activity android:name=".chat_list.view.ChatListActivity">
-        </activity>
-        <activity android:name=".chat_detail.ChatActivity">
-        </activity>
-        <activity android:name=".main.tab.detail.view.PostDetailActivity">
-        </activity>
-        <activity android:name=".main.tab.upload.UploadActivity">
-        </activity>
-        <activity android:name=".intro.IntroActivity">
-        </activity>
-        <activity android:name=".login.GoogleSignInActivity">
+        <activity android:name=".map.LocationDemoActivity"/>
+        <activity android:name=".map.MapViewDemoActivity"/>
+        <activity android:name=".chat_list.view.ChatListActivity"/>
+        <activity android:name=".main.tab.detail.view.PostDetailActivity"/>
+        <activity android:name=".main.tab.upload.UploadActivity"/>
+        <activity android:name=".intro.IntroActivity"/>
+        <activity
+            android:name=".login.GoogleSignInActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
-
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-        </activity>
-
-        <meta-data
-            android:name="com.kakao.sdk.AppKey"
-            android:value="d1fdc7581f2ca5d3b7e8f5ed7c7c1d68"/>
+        <activity android:name=".MainActivity"/>
     </application>
 
 </manifest>
